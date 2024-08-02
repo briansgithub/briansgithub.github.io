@@ -1,0 +1,91 @@
+/* styles.css */
+
+body {
+    font-family: Calibri, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #f4f4f4;
+    padding: 15px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: 100vh;
+    position: fixed;
+}
+
+.sidebar a {
+    font-weight: bold;
+    font-size: 1.35em; /* Increase font size here */
+    display: block;
+    color: #333;
+    text-decoration: none;
+    padding: 10px 0;
+    margin: 5px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.sidebar a:hover {
+    background-color: #ddd;
+}
+
+.content {
+    margin-left: 220px;
+    /* Width of the sidebar + padding */
+    padding: 20px;
+    flex-grow: 1;
+}
+
+header {
+    position: relative;
+    background-color: #333;
+    color: white;
+    padding: 0.001em 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 3em; /* Adjust the font size as needed */
+}
+
+.container {
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 2em;
+}
+
+.image-container {
+    display: flex;
+    gap: 1em;
+    /* Space between images */
+    margin-bottom: 1em;
+    /* Space between images and heading */
+}
+
+.section-image {
+    height: 300px;
+    /* Set a fixed height for images */
+    width: auto;
+    /* Maintain original aspect ratio */
+    object-fit: cover;
+    /* Crop if necessary to fit height while maintaining aspect ratio */
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 0.0em 0;
+    position: fixed;
+    bottom: 0;
+    font-size: 0.7em;
+    width: calc(100% - 200px); /* Adjust based on your sidebar's width */
+    left: 240px; /* Adjust based on your sidebar's width */
+}
+
+.sidebar a.active {
+    font-weight: bold;
+    background-color: #ddd; /* Background color when highlighted */
+}

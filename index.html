@@ -1,22 +1,60 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Website Title</title>
+    <title>My Personal Website</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
-
-
 <body>
-
-    hello world
-
-
-
-
+    <div class="sidebar">
+        <a href="index.html" id="home">Home</a>
+        <a href="projects.html" id="projects">Projects</a>
+        <a href="blog.html" id="blog">Blog</a>
+        <a href="quotes.html" id="quotes">Quotes</a>
+        <a href="assets/resume.pdf" id="resume">Resumé</a>
+    </div>
+    <div class="content">
+        <header>
+            <h1>Welcome!</h1>
+        </header>
+        <div class="container">
+            <section id="home">
+                <div class="image-container">
+                    <img src="assets/images/image2.jpg" alt="Image 2 description" class="section-image">
+                    <img src="assets/images/image1.jpg" alt="Image 1 description" class="section-image">
+                    <img src="assets/images/image3.jpg" alt="Image 3 description" class="section-image">
+                </div>
+                <h2>About Me</h2>
+                <p>Hello, my name is Brian Ellsworth. I have degrees in Physics and Electrical & Computer Engineering. Originally from New Jersey, I am currently based in Huntsville, Alabama. 
+                    <br>Welcome to my personal website where I share my projects and write about topics that interest me.</p>
+            </section>
+            <section id="projects">
+                <h2>Projects</h2>
+                <p>Here are some of my projects:</p>
+                <ul>
+                    <li><a href="#">Project 1</a>: A brief description of your project.</li>
+                    <li><a href="#">Project 2</a>: A brief description of your project.</li>
+                    <li><a href="#">Project 3</a>: A brief description of your project.</li>
+                </ul>
+            </section>
+            <section id="blog">
+                <h2>My Writing</h2>
+                <p>Welcome to my website. Here are some of my latest posts:</p>
+                <ul>
+                    <li><a href="#">Blog Post 1</a>: A brief description of your blog post.</li>
+                    <li><a href="#">Blog Post 2</a>: A brief description of your blog post.</li>
+                    <li><a href="#">Blog Post 3</a>: A brief description of your blog post.</li>
+                </ul>
+            </section>
+        </div>
+        <footer>
+            <p>&copy; 2024 All rights reserved.</p>
+        </footer>
+    </div>
+    <script src="assets/js/highlight.js"></script>
 </body>
 
 </html>
