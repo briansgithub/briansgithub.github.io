@@ -5,11 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Extract the filename from the URL path
     const currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1);
-    
+
     // Highlight the corresponding sidebar link
     const links = document.querySelectorAll('.sidebar a');
     links.forEach(link => {
-        if (link.getAttribute('href') === currentPage) {
+        // Handle the home link separately if it's the root URL
+        if ((link.getAttribute('href') === 'https://bellsworth.info/' && currentPage === '') ||
+            (link.getAttribute('href') === currentPage)) {
             link.classList.add('active');
         }
     });
