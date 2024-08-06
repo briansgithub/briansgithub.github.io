@@ -50,6 +50,10 @@ header h1 {
     font-size: 3em; /* Adjust the font size as needed */
 }
 
+h2, h3, h4, h5, h6 {
+    color: #000;
+}
+
 .container {
     max-width: 950px;
     margin: 0 auto;
@@ -88,4 +92,23 @@ footer {
 .sidebar a.active {
     font-weight: bold;
     background-color: #ddd; /* Background color when highlighted */
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+article {
+    margin-bottom: 40px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+.post-title {
+    color: #007acc;
 }
