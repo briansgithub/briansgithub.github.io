@@ -176,15 +176,44 @@
                 single point, but must be represented by a sweep along the curve corresponding 
                 to the interval of the refresh period (2 hours).
             </p>
+            <h4>Power</h4>
+            <p>
+                On the back of the device, there are five JST connectors for connecting solar panels and 
+                a USB-C port for charging. The battery inside the device is a 4500mAH LiPo.
+                <br>Note that for the second tide tracker (image on the right, below), I created an extension cable for the 
+                solar panels' JST connectors so that the device could stay inside while the solar panels could
+                go outside.
+            </p>
+
+            <div class="image-container">
+                <img src="../assets/images/tide_tracker_basic/solar_panels_1.jpg" class="section-image">
+                <img src="../assets/images/tide_tracker_basic/solar_panels_2.jpg" class="section-image">
+            </div>  
+            <p>
+               I also designed and resin printed custom stands for the solar panels, which I think turned
+               out quite nicely.
+               <br>3D model outlines shown below.
+            </p>
+            <div class="image-container">
+                <img src="../assets/images/tide_tracker_basic/solar_stand.jpg" 
+                class="section-image-screenshot"
+                style="display: block; margin-left: auto; margin-right: auto; margin-top: 10px"
+                >
+                <img src="../assets/images/tide_tracker_basic/solar_stand2.jpg" 
+                class="section-image-screenshot"
+                style="display: block; margin-left: auto; margin-right: auto; margin-top: 10px"
+                >
+            </div>  
 
             <h4>Extensibility: Varying the Location or Network</h4>
+
             <p>What if my friend moves to a new address and wants to track the tides at a different body of water? 
                 What if they change their Wi-Fi network? These were two questions that needed to be
                 addressed when building the project. To this end, I included a webpage hosted on the device for configuring the
                 settings.
                 <br>
                 If the device becomes disconnected from the Wi-Fi network (which is necessary for the device to 
-                retrieve data from NOAA)
+                retrieve tide data from NOAA)
                 then the the error image below appears on the screen.  
             </p>
             <div class="image-container">
