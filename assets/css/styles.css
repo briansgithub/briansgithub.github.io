@@ -50,10 +50,6 @@ header h1 {
     font-size: 3em; /* Adjust the font size as needed */
 }
 
-h2, h3, h4, h5, h6 {
-    color: #000;
-}
-
 .container {
     max-width: 950px;
     margin: 0 auto;
@@ -68,6 +64,14 @@ h2, h3, h4, h5, h6 {
     /* Space between images and heading */
 }
 
+.image-container-tide-tracker {
+    display: flex;
+    gap: 0.1em;
+    /* Space between images */
+    margin-bottom: 0.2em;
+    /* Space between images and heading */
+}
+
 .section-image {
     height: 300px;
     /* Set a fixed height for images */
@@ -75,6 +79,26 @@ h2, h3, h4, h5, h6 {
     /* Maintain original aspect ratio */
     object-fit: cover;
     /* Crop if necessary to fit height while maintaining aspect ratio */
+}
+
+.section-image-tide-tracker {
+    height: 250px;
+    /* Set a fixed height for images */
+    width: auto;
+    /* Maintain original aspect ratio */
+    object-fit: cover;
+    /* Crop if necessary to fit height while maintaining aspect ratio */
+}
+
+.section-image-tide-tracker-screen{
+    height: 400px;
+    border: 1px solid black; /* Adjust the thickness (2px) as needed */
+    width: auto;
+    object-fit: cover;
+}
+.section-image-screenshot {
+    width: 300px;
+    border: 1px solid black;
 }
 
 footer {
@@ -106,9 +130,32 @@ article {
 }
 
 p {
-    line-height: 1.6;
+    line-height: 1.2;
+    margin-top: 0.0em;
+    margin-bottom: 0.2em;
 }
+
+h2, h3, h4, h5, h6 {
+    color: #000;
+    margin-top: 0.5em;
+    margin-bottom: 0.2em;
+}
+
 
 .post-title {
     color: #007acc;
+    font-size: 2em;
+    text-decoration: underline;
+}
+
+ol {
+    margin-left: 20px; /* Adjust this value as needed */
+    margin-top: 0.0em;
+    margin-bottom: 0.0em;
+}
+
+ul {
+    margin-left: 20px; /* Adjust this value as needed */
+    margin-top: 0.0em;
+    margin-bottom: 0.0em;
 }
