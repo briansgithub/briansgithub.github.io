@@ -92,7 +92,7 @@ body {
 /* Type */
 body, input, select, textarea {
   color: #7f888f;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Calibri", "Open Sans", sans-serif;
   font-size: 13pt;
   font-weight: 400;
   line-height: 1.65; }
@@ -113,10 +113,14 @@ a {
   transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
   border-bottom: dotted 1px;
   color: #0000D0;
-  text-decoration: none; }
+  text-decoration: none; 
+  background-color: transparent; /* Ensure default background is transparent */
+}
   a:hover {
     border-bottom-color: #0000D0;
-    color: #0000D0 !important; }
+    color: #000 !important; /*edited by brian for on-hover color*/
+    background-color: #B8B8B8;
+  }
     a:hover strong {
       color: inherit; }
 
@@ -131,7 +135,7 @@ p {
   margin: 0 0 2em 0; }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #3d4449;
+  color: #000; /*menu and other H2 items changed by brian from #3d4449 to #000*/
   font-family: "Roboto Slab", serif;
   font-weight: 700;
   line-height: 1.5;
@@ -2198,21 +2202,23 @@ button,
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  color: #3d4449;
-  font-family: "Roboto Slab", serif;
-  font-weight: 400;
+  color: #000; /*sidebar list items edited by brian from #3d4449 to #000*
+  font-family: "Calibri", "Roboto Slab", serif; /*edited by brian*/
+  font-weight: 700; /*edited from 400 to 700 by brian*/
   letter-spacing: 0.075em;
   list-style: none;
   margin-bottom: 0;
   padding: 0;
-  text-transform: uppercase; }
+  /* text-transform: uppercase; */ /*edited by brian*/
+}
   #menu ul a, #menu ul span {
     border-bottom: 0;
     color: inherit;
     cursor: pointer;
     display: block;
-    font-size: 0.9em;
-    padding: 0.625em 0; }
+    font-size: 1.7em; /*brian edited*/
+    padding: 0 0; /*brian edited*/
+  }
     #menu ul a:hover, #menu ul span:hover {
       color: #0000D0; }
     #menu ul a.opener, #menu ul span.opener {
