@@ -25,8 +25,10 @@ document.addEventListener("DOMContentLoaded", function() {
             (menuItem.href === "https://bellsworth.info/" && 
                 (currentPath === "/" 
                 || currentPath === "/index.html"
-                || currentUrl === "https://bellsworth.info/")
-            )
+                || currentUrl === "https://bellsworth.info/")  
+            ) 
+            || parentDirectory === 'projects' 
+            || parentDirectory === 'blog' 
         ) 
         {
             // Manually trigger hover styles by adding the necessary styles
