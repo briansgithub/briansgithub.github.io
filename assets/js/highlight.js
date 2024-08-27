@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function() {
             ) 
             || (parentDirectory === 'projects' && anchorPage === "projects.html")
             || (parentDirectory === 'blog' && anchorPage === "blog.html")
-            || (parentDirectory === 'quotes' && anchorPage === "quotess.html")
         ) 
         {
             // Manually trigger hover styles by adding the necessary styles
