@@ -91,7 +91,7 @@ body {
 
 /* Type */
 body, input, select, textarea {
-  color: #7f888f;
+  color: #000;
   font-family: "Calibri", "Open Sans", sans-serif;
   font-size: 13pt;
   font-weight: 400;
@@ -1223,9 +1223,9 @@ input[type="radio"] + label:before {
   .image img {
     border-radius: 0.375em;
     display: block; }
-  .image.left, .image.right {
+  .image.left, .image.right, .image.centered{
     max-width: 40%; }
-    .image.left img, .image.right img {
+    .image.left img, .image.right img{
       width: 100%; }
   .image.left {
     float: left;
@@ -1235,6 +1235,22 @@ input[type="radio"] + label:before {
     float: right;
     padding: 0 0 1em 1.5em;
     top: 0.25em; }
+
+  /* Center-aligned image container */
+  .image.centered {
+    display: block;
+    margin: 1em auto 2em auto;
+    /* Centers the container and provides spacing below */
+    width: 35%;
+    /* You can adjust this if you want different sizing */
+  }
+
+  /* Center-aligned image container image */
+  .image.centered img {
+    width: 100%;
+    /* Ensures image fills its container */
+  }
+
   .image.fit {
     display: block;
     margin: 0 0 2em 0;
