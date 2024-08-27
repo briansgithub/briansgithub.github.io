@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Create an anchor element to parse the href
         const tempAnchor = document.createElement('a');
         tempAnchor.href = menuItem.href;
+        const anchorPage = menuItem.href.substring(menuItem.href.lastIndexOf('/') + 1);
 
         // Check if the current URL path matches the href of the menu item
         if (tempAnchor.pathname === currentPath 
@@ -25,10 +26,12 @@ document.addEventListener("DOMContentLoaded", function() {
             (menuItem.href === "https://bellsworth.info/" && 
                 (currentPath === "/" 
                 || currentPath === "/index.html"
-                || currentUrl === "https://bellsworth.info/")  
+                || currentUrl === "https://bellsworth.info/"
+                )  
             ) 
-            || parentDirectory === 'projects' 
-            || parentDirectory === 'blog' 
+            || (parentDirectory === 'projects' && anchorPage === "projects.html")
+            || (parentDirectory === 'blog' && anchorPage === "blog.html")
+            || (parentDirectory === 'quotes' && anchorPage === "quotess.html")
         ) 
         {
             // Manually trigger hover styles by adding the necessary styles
