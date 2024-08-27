@@ -18,41 +18,23 @@ document.addEventListener("DOMContentLoaded", function() {
         // Create an anchor element to parse the href
         const tempAnchor = document.createElement('a');
         tempAnchor.href = menuItem.href;
-        const anchorPage = menuItem.href.substring(menuItem.href.lastIndexOf('/') + 1);
+        const menuItemRef = menuItem.href.substring(menuItem.href.lastIndexOf('/') + 1);
 
         // Check if the current URL path matches the href of the menu item
-        if (tempAnchor.pathname === currentPath 
-            || 
-            (menuItem.href === "https://bellsworth.info/" && 
-                (currentPath === "/" 
-                || currentPath === "/index.html"
-                || currentUrl === "https://bellsworth.info/"
-                )  
-            ) 
-            || (parentDirectory === 'projects' && anchorPage === "projects.html")
-            || (parentDirectory === 'blog' && anchorPage === "blog.html")
-        ) 
-        {
+        const isCurrentPath = tempAnchor.pathname === currentPath;
+        const isHomePage = menuItem.href === "https://bellsworth.info/" && 
+            (currentPath === "/" || 
+            currentPath === "/index.html" || 
+            currentUrl === "https://bellsworth.info/");
+        const isProjectsPageChild = menuItemRef === "projects.html" && parentDirectory === 'projects';
+        const isBlogPageChild = menuItemRef === "blog.html" && parentDirectory === 'blog';
+        
+        if (isCurrentPath || isHomePage || isProjectsPageChild || isBlogPageChild) {
             // Manually trigger hover styles by adding the necessary styles
             menuItem.style.borderBottomColor = '#0000D0';
             menuItem.style.color = '#000';
             menuItem.style.backgroundColor = '#B8B8B8';
         }
+
     });
 });
-
-/*
-
-if (linkHref === 'https://bellsworth.info/' && currentPage === '') {
-    link.classList.add('active');
-// Handle index.html, project.html, blog.html pages
-} else if (linkHref === currentPage) {
-    link.classList.add('active');
-// Handles sub-pages of "Projects"
-} else if (parentDirectory === 'projects' && linkId === 'projects') {
-    link.classList.add('active');
-// Handles sub-pages of "Blog"
-} else if (parentDirectory === 'blog' && linkId === 'blog') {
-    link.classList.add('active');
-
-*/
