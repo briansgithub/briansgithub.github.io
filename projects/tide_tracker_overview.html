@@ -1,0 +1,346 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+	<title>Tide Tracker Project - Overview</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="../assets/css/main.css" />
+</head>
+
+<body class="is-preload">
+
+	<!-- Wrapper -->
+	<div id="wrapper">
+
+		<!-- Main -->
+		<div id="main">
+			<div class="inner">
+
+				<!-- Header -->
+				<header id="header">
+					<a href="../index.html" class="logo"><strong>Website</strong> by Brian Ellsworth</a>
+					<ul class="icons">
+						<!--<li><a href="https://x.com/bellsworth137" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li> -->
+						<!--<li><a href="https://www.facebook.com/bellsworth137" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li> -->
+						<!--<li><a href="https://snapchat.com/add/bellsworth137" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li> -->
+						<li><a href="https://www.linkedin.com/in/brian-ellsworth/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+						<li><a href="https://github.com/briansgithub" class="icon brands fa-github-square"><span class="label">github</span></a></li>
+						<li><a href="https://www.instagram.com/bellsworth137" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+					</ul>
+				</header>
+
+				<!-- Content -->
+				<section>
+					<header class="main">
+						<h1>Tide Tracker - Overview</h1>
+					</header>
+
+
+					<p><strong>Published on: August 8, 2024</strong></p>
+					<p>For a more comprehensive writeup of this project and the details of what
+						went into it, see <a href="https://bellsworth.info/projects/tide_tracker_advanced.html">Tide Tracker Project - Advanced</a>
+					</p>
+		
+					<h3>Introduction and Motivation</h3>
+					<p style="margin-bottom: 0px;">
+						I designed and assembled two solar-powered tide trackers. The graph of each tide tracker plots the tide height vs. time 
+						at a given location and is displayed on an e-ink display.
+						The data is publicly available online from the National Oceanic and Atmospheric Administration (NOAA).
+						The first tide tracker was a gift for a friend who lives directly on the water, and the second was a gift for a family member who likes to go sailing on a nearby river. 
+						In the gif below, you can see the graph undergoing an update, which occurs every two hours. 
+						Notice how after the update, the black bar on the graph progresses further along to the right. The black bar indicates the 
+						section of the graph corresponding to "now." More on that in the <a href="#now_definition">Description</a> section below.
+					</p>
+
+					<span class="image centered">
+						<img src="../assets/images/tide_tracker_overview/tidetracker_540x304_16fps_cropped.gif" alt="Tide Tracker 2 Updating">
+					</span>
+					
+
+					
+
+					<h3>Tide Tracker 1 - Location: Fort Myers, FL</h4>
+					<div class="box alt">
+						<div class="row gtr-50 gtr-uniform">
+							<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/tidetracker1_front_1600x1200.jpg" alt="Tide Tracker 1 Front" /></span></div>
+							<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/tidetracker1_back_1600x1200.jpg" alt="Tide Tracker 1 Back" /></span></div>
+						</div>
+					</div>
+
+          
+					<h3>Tide Tracker 2 - Location: Red Bank, NJ</h4>
+						<div class="box alt">
+							<div class="row gtr-50 gtr-uniform">
+								<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/tidetracker2_front_1600x1200.jpg" alt="Tide Tracker 2 Front" /></span></div>
+								<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/tidetracker2_back_1600x1200.jpg" alt="Tide Tracker 2 Back" /></span></div>
+							</div>
+						</div>
+
+						<br>I decided to make two tide trackers for several reasons:</p>
+					<ol style="margin-top: 0;">
+						<li>
+							The two recipients live near different rivers.
+						</li>
+						<li>
+							The picture frames ship from Amazon as a four-pack at a low unit price. 
+							In order to fit all of the components into one enclosure, I had to stack 
+							and glue two frames on top of each other.
+							Two of the frames match the lighter, sandy color scheme of my friend's house, 
+							and the other two match the darker, rustic color scheme of my family member's house.
+							Perfect.
+						</li>
+						<li>
+							Nearly 80% of the total time and effort for the project went into designing the physical layout and writing the code. 
+							These are one-time overhead costs, so the development work from the first unit can simply be used for free on all subsequent units
+							 (except for the cost of the parts and the time and energy required for the assembly of each unit,
+							 which are still substantial).
+							</li>
+					</ol>
+
+					
+					<h3>Constraints</h3>
+					<ol style="margin-top: 0;">
+						<li>
+							<strong>Monetary cost</strong><br>
+							What am I, made of money? This constraint usually applies to most projects.
+						</li>
+						<li>
+							<strong>Aesthetics</strong><br>
+							The display had to be large enough to be readable and stand out, but not so large to be 
+							prohibitively expensive (mainly due to the cost of a larger battery and screen). 
+							I also had to make a suitable frame to encase all of the electronics.
+							The decision was also made to use a black-and-white-only e-ink display over a multicolored e-ink
+							display for cost and simplicity.
+						</li>
+						<li>
+							<strong>Solar powered</strong><br>
+							It only seemed natural for a device that tracks the tides to be solar powered. This also gives the project a 
+							unique and challenging constraint. 
+							Being a low-power device also means that it could be battery powered and therefore portable! 
+							Even after a few cloudy days, I still want the tide tracker to be able to run on its own for a few days, 
+							which affects the selected battery capacity.
+						</li>
+						<li>
+							<strong>Time frame</strong><br>
+							The inception for the idea was September of 2023 upon visiting my friend's house for the first time. 
+							I didn't have any materials or implementation in mind until Black Friday in November of 2023, whereupon I began searching online for
+							comparable project ideas. Ideally, I could just recreate an open-source project entirely,
+							but I was not fully satisfied with what I saw, so I decided to make mine from scratch. 
+							The deadline was approximately one month later on Christmas of 2023.  
+						</li>
+					</ol>
+		
+		
+					<h3 id="description">Description</h3>
+					<p>The plot below displays one snapshot of the tides in Fort Myers, FL on January 5, 2024.  
+					</p>
+					<div class="image fit" style=" 
+											border: 1px solid black; 
+											width: 60%;
+											margin: 1em auto 2em auto;">
+						<img src="../assets/images/tide_tracker_overview/plot_image.bmp">
+					</div>
+		
+					<h4>Chart Elements:</h4>
+					<ul>
+						<li>The <strong>y-axis</strong> represents the tide <strong>height*</strong></strong>, and the <strong>x-axis</strong> represents time.</li>
+						<li>The <strong>black bar</strong> along the curve of the plot represents the current 
+							section of the graph corresponding to <strong>"now."**</strong>
+		
+						</li>
+						<li>The <strong>light regions</strong> represent the daytime and the <strong>dark shaded regions</strong> represent the nighttime.</li>
+						<li>When the present time passes midnight and transitions into tomorrow, the entire graph
+							shifts to the left so that <strong>the center of the screen always focuses on noon of "today,"</strong>
+							the left side of the screen always extends 12 hours into "yesterday,"
+							and the right side always extends 12 hours into "tomorrow."
+							<br>
+							(One interesting observation is that as the year progresses toward the solstices and equinoxes,
+							you can see the days get shorter/longer and the shaded sections of the nights get longer/shorter.)
+						</li>
+						<li>
+							<strong>Sunrise</strong> and <strong>sunset</strong> are displayed both in the upper-right corner 
+							of the screen as well as directly on the plot, centered on the verticals demarcating the 
+							separation between night and day.
+						</li>
+						<li>
+							<strong>High tide</strong> and <strong>low tide</strong> times are displayed nearby to the 
+							corresponding peaks and valleys on the graph. 
+		
+						</li>
+					</ul>
+
+					
+					<p> <br>*height: You can just plot water height (in feet) on the y-axis and time on the x-axis, right?
+						I wish it were that simple. The depth of the water is not constant everywhere along the floor of the riverbed. 
+						In some places, the riverbed is shallower and in other places, it is deeper. So relative to what point
+						do we measure the water surface height if not relative the continually fluctuating riverbed? 
+						I have only barely scratched the surface, but to the best of my
+						understanding, the data used for the y-axis is measured as the present water level height relative
+						to a standard average water level height (aka the reference datum). But the average water level height
+						can be calculated a variety of different ways. Do you use the average water level at high tide? 
+						At low tide? Over what time interval do you measure the water height to calculate the average height?
+						A standardized method for determining the average water height must be used.
+						The reference point used for this project is the mean lower low water (MLLW) level,
+						which is the standard water level reference point used for maritime navigation. The MLLW is defined
+						as the average low tide level over the past measurement period (typically 19 years).
+						The values on the graph's y-axis represent the height of the water relative to the MLLW of the geographic region.
+						<br>
+					</p>
+					<p id="now_definition">
+						<br>
+						**"now": My initial desire was to represent "<strong>now</strong>" by using a single point or a vertical line on the graph.
+						However, this is not possible because it would require the entire screen to be continuously refreshed in order to
+						update where the "now" indicator is on the screen.
+						Continuously updating the screen would consume a lot more power, and in order to make the device solar powered, 
+						I needed to limit the power used by the device.
+						To that end, I designed the device to only update once every two hours. 
+						An indicator of where "now" is on the plot
+						would still be helpful, but
+						due to the low refresh rate, when you look at the screen, "now" could correspond to 
+						any section of the curve between the previous screen update and the next screen update. 
+						Therefore, "now" cannot be represented by a
+						single point, but must be represented by a sweep along the curve corresponding 
+						to the interval of the refresh period (2 hours).
+					</p>
+					<h4>Power</h4>
+					<p>
+						On the back of the device, there are five JST connectors for connecting solar panels and 
+						a USB-C port for charging. The battery inside the device is a 4500mAH LiPo.
+						<br>Note that for the second tide tracker (image on the right, below), I created an extension cable for the 
+						solar panels' JST connectors so that the device could stay inside while the solar panels could
+						go outside.
+					</p>
+		
+					<div class="box alt">
+						<div class="row gtr-50 gtr-uniform">
+							<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/solar_panels_1.jpg" alt="" /></span></div>
+							<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/solar_panels_2.jpg" alt="" /></span></div>
+						</div>
+					</div>
+
+
+					<p>
+					   I also designed and resin printed custom stands for the solar panels, which I think turned
+					   out quite nicely.
+					   <br>3D model outlines shown below.
+					</p>
+					<div class="box alt">
+						<div class="row gtr-50 gtr-uniform">
+							<div class="col-6"><span class="image fit"
+								style=" 
+								border: 1px solid black; 
+								width: 60%;
+								margin: 0 auto 2em auto;">
+								<img src="../assets/images/tide_tracker_overview/solar_stand.jpg" alt="" /></span></div>
+							<div class="col-6"><span class="image fit"
+								style=" 
+								border: 1px solid black; 
+								width: 60%;
+								margin: 0 auto 2em auto;">
+								<img src="../assets/images/tide_tracker_overview/solar_stand2.jpg" alt="" /></span></div>
+						</div>
+					</div>
+
+		
+					<h4>Extensibility: Varying the Location or Network</h4>
+
+					
+					<p>What if my friend moves to a new address and wants to track the tides at a different body of water? 
+						What if they change their Wi-Fi network? These were two questions that needed to be
+						addressed when building the project. To this end, I included a webpage hosted on the device for configuring the
+						settings.
+						<br>
+						If the device becomes disconnected from the Wi-Fi network (which is necessary for the device to 
+						retrieve tide data from NOAA)
+						then the the error image below appears on the screen.  
+					</p>
+
+					<div class="box alt">
+						<div class="row gtr-50 gtr-uniform">
+							<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/no_wifi_pic.jpg" alt="" /></span></div>
+							<div class="col-6"><span class="image fit" style="border: 1px solid black; width: 95%"><img src="../assets/images/tide_tracker_overview/no_wifi.bmp" alt="" /></span></div>
+						</div>
+					</div>
+
+
+					<p>
+					The user can then open the back of the frame, locate the settings switch, and then toggle the switch 
+					to the "Setup" position, as shown below. This will boot the device into a different mode 
+					in which the on-board Raspberry Pi Zero W (controlling the entire device) broadcasts a Wi-Fi hotspot and hosts
+					the settings webpage. 
+					</p>
+					<div class="box alt">
+						<div class="row gtr-50 gtr-uniform">
+							<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/internals.jpg" alt="" /></span></div>
+							<div class="col-6"><span class="image fit"><img src="../assets/images/tide_tracker_overview/internal_switch.jpg" alt="" /></span></div>
+						</div>
+					</div>
+
+					<p>
+						On a mobile device, the Wi-Fi network named "tide-tracker" will then be visible. 
+					</p>
+					
+					<span class="image centered">
+						<img src="../assets/images/tide_tracker_overview/tide-tracker_network.png" alt="">
+					</span>
+
+					<p>
+					   Upon connecting to the Wi-Fi network, the configuration page will open in a web browser on the user's phone.
+					   <br>From here, the Wi-Fi network credentials that the tide tracker will connect to
+					   and the desired tide monitoring location can be set. 
+					   <br>The "NOAA Station ID#" dropdown will allow for any* of the
+					   NOAA tidal measuring stations to be selected. 
+					</p>
+					<span class="image centered"  style="border: 1px solid black;">
+						<img src="../assets/images/tide_tracker_overview/settings_page.png"> 
+					</span>  
+				<p>
+					* Please see the <a href="https://bellsworth.info/projects/tide_tracker_advanced.html">Advanced Tide Tracker Project</a>
+					writeup for more information about the NOAA stations and data processing. 
+				</p>
+
+				
+				</section>
+
+			</div>
+		</div>
+
+		<!-- Sidebar -->
+		<div id="sidebar">
+			<div class="inner">
+				<!-- Menu -->
+				<nav id="menu">
+					<header class="major">
+						<h2>Menu</h2>
+					</header>
+					<ul>
+						<li><a href="https://bellsworth.info/" id="home">Home</a></li>
+						<li><a href="../projects.html" id="projects">Projects</a></li>
+						<li><a href="../blog.html" id="blog">Blog</a></li>
+						<li><a href="../quotes.html" id="quotes">Quotes</a></li>
+						<li><a href="../assets/brian_ellsworth_resume.pdf" id="resume">Resumé</a></li>
+					</ul>
+				</nav>
+				<!-- Footer 
+							<footer id="footer">
+								<p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+							</footer>
+							-->
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="../assets/js/jquery.min.js"></script>
+	<script src="../assets/js/browser.min.js"></script>
+	<script src="../assets/js/breakpoints.min.js"></script>
+	<script src="../assets/js/util.js"></script>
+	<script src="../assets/js/main.js"></script>
+	<script src="../assets/js/highlight.js"></script>
+
+
+</body>
+
+</html>
