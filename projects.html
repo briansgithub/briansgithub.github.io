@@ -1,106 +1,64 @@
-<!DOCTYPE HTML>
-
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<title>bellsworth.info - Projects</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="assets/css/main.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects — Brian Ellsworth</title>
+  <meta name="description" content="Engineering projects by Brian Ellsworth including a solar-powered tide tracker and an 8-bit computer build." />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="assets/css/fontawesome-all.min.css" />
+  <link rel="stylesheet" href="assets/css/premium.css" />
 </head>
+<body>
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo"><span>B</span>ellsworth</a>
+      <button class="nav-toggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="quotes.html">Quotes</a></li>
+        <li><a href="assets/brian_ellsworth_resume.pdf">Resumé</a></li>
+      </ul>
+    </div>
+  </nav>
 
-<body class="is-preload">
+  <div class="page-wrapper">
+    <div class="page-header fade-in">
+      <h1>Projects</h1>
+      <p>Hardware and software builds — things I've designed, assembled, and learned from.</p>
+    </div>
 
-	<!-- Wrapper -->
-	<div id="wrapper">
+    <section class="section" style="padding-top: 1rem;">
+      <div class="cards-grid">
+        <div class="card fade-in">
+          <img src="assets/images/tide_tracker_overview/tidetracker2_front_1600x1200.jpg" alt="Tide Tracker" class="card-thumb" />
+          <div class="card-meta">August 8, 2024</div>
+          <h3 class="card-title"><a href="projects/tide_tracker_overview.html">Tide Tracker — Overview</a></h3>
+          <p class="card-desc">Two solar-powered tide trackers built with a Raspberry Pi Zero, e-ink display, and custom 3D-printed solar panel stands.</p>
+        </div>
 
-		<!-- Main -->
-		<div id="main">
-			<div class="inner">
+        <div class="card fade-in">
+          <div class="card-meta">January 20, 2021</div>
+          <h3 class="card-title">Building the Ben Eater 8-bit Computer</h3>
+          <p class="card-desc">A hands-on build of Ben Eater's breadboard 8-bit computer, exploring fundamental computer architecture from the ground up.</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
-				<!-- Header -->
-				<header id="header">
-					<a href="index.html" class="logo"><strong>Website</strong> by Brian Ellsworth</a>
-					<ul class="icons">
-						<!--<li><a href="https://x.com/bellsworth137" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li> -->
-						<!--<li><a href="https://www.facebook.com/bellsworth137" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li> -->
-						<!--<li><a href="https://snapchat.com/add/bellsworth137" class="icon brands fa-snapchat-ghost"><span class="label">Snapchat</span></a></li> -->
-						<li><a href="https://www.linkedin.com/in/brian-ellsworth/" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
-						<li><a href="https://github.com/briansgithub" class="icon brands fa-github-square"><span class="label">github</span></a></li>
-						<li><a href="https://www.instagram.com/bellsworth137" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-					</ul>
-				</header>
+  <footer class="site-footer">
+    <ul class="footer-socials">
+      <li><a href="https://www.linkedin.com/in/brian-ellsworth/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a></li>
+      <li><a href="https://github.com/briansgithub" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a></li>
+      <li><a href="https://www.instagram.com/bellsworth137" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a></li>
+    </ul>
+    <p>&copy; 2024 Brian Ellsworth. All rights reserved.</p>
+  </footer>
 
-				<!-- Content -->
-				<section>
-					<header class="main">
-						<h1>Projects</h1>
-					</header>
-
-					<!--<span class="image main"><img src="images/pic11.jpg" alt="" /></span>-->
-
-					<!-- 
-									<hr class="major" />
-									<h2>Tide Tracker Project - Comprehensive</h2>
-									<p><a href="projects/tide_tracker_advanced.html">08/05/2024 - Tide Tracker Project - Comprehensive</a>
-									</p>
-									-->
-
-					<hr class="major" />
-
-					<h2>Tide Tracker Project - Overview</h2>
-					<p><a href="projects/tide_tracker_overview.html">08/08/2024 - Tide Tracker Project - Overview</a>
-					</p>
-
-					<h2>Building the Ben Eater 8-bit Computer</h2>
-					<p>>01/20/2021 - Building the Ben Eater 8-bit Computer</a>
-					</p>
-
-					<!-- 
-									<hr class="major" />
-									<h2> Music Visualizer</h2>
-									<p><a href="projects/music_visualizer.html">05/08/2024 - Music Visualizer</a>
-									</p>
-									-->
-				</section>
-
-			</div>
-		</div>
-
-		<!-- Sidebar -->
-		<div id="sidebar">
-			<div class="inner">
-				<!-- Menu -->
-				<nav id="menu">
-					<header class="major">
-						<h2>Menu</h2>
-					</header>
-					<ul>
-						<li><a href="https://bellsworth.info/" id="home">Home</a></li>
-						<li><a href="projects.html" id="projects">Projects</a></li>
-						<li><a href="blog.html" id="blog">Blog</a></li>
-						<li><a href="quotes.html" id="quotes">Quotes</a></li>
-						<li><a href="assets/brian_ellsworth_resume.pdf" id="resume">Resumé</a></li>
-					</ul>
-				</nav>
-				<!-- Footer 
-							<footer id="footer">
-								<p class="copyright">&copy; Untitled. All rights reserved. Demo Images: <a href="https://unsplash.com">Unsplash</a>. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
-							</footer>
-							-->
-			</div>
-		</div>
-	</div>
-
-	<!-- Scripts -->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/js/browser.min.js"></script>
-	<script src="assets/js/breakpoints.min.js"></script>
-	<script src="assets/js/util.js"></script>
-	<script src="assets/js/main.js"></script>
-	<script src="assets/js/highlight.js"></script>
-
-
+  <script src="assets/js/premium.js"></script>
 </body>
-
 </html>
