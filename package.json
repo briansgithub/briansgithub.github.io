@@ -1,0 +1,49 @@
+{
+	"name": "briansgithub.github.io",
+	"type": "module",
+	"version": "0.0.1",
+	"private": true,
+	"description": "A quiet personal site for projects, writing, book notes, and quotations.",
+	"engines": {
+		"node": ">=24 <25"
+	},
+	"scripts": {
+		"dev": "astro dev",
+		"dev:status": "astro dev status",
+		"dev:logs": "astro dev logs",
+		"dev:stop": "astro dev stop",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"check:astro": "astro check",
+		"check:assets": "node scripts/check-assets.mjs source",
+		"check:assets:staged": "node scripts/check-assets.mjs staged",
+		"check:assets:outgoing": "node scripts/check-assets.mjs outgoing",
+		"check:assets:dist": "node scripts/check-assets.mjs dist",
+		"check:links": "node scripts/check-links.mjs source",
+		"check:links:dist": "node scripts/check-links.mjs dist",
+		"check:format": "prettier --check .",
+		"check:markdown": "markdownlint-cli2",
+		"format": "prettier --write .",
+		"check": "npm run check:assets && npm run check:links && npm run check:markdown && npm run check:format && npm run check:astro",
+		"verify": "npm run check && npm run build && npm run check:assets:dist && npm run check:links:dist",
+		"content:new": "node scripts/new-content.mjs",
+		"content:publish": "node scripts/publish-content.mjs",
+		"content:list": "node scripts/publish-content.mjs --list",
+		"media:import": "node scripts/import-media.mjs",
+		"setup:hooks": "git config core.hooksPath .githooks"
+	},
+	"dependencies": {
+		"@astrojs/rss": "^4.0.19",
+		"@astrojs/sitemap": "^3.7.3",
+		"astro": "^7.2.0",
+		"sharp": "^0.35.3"
+	},
+	"devDependencies": {
+		"@astrojs/check": "^0.9.10",
+		"markdownlint-cli2": "^0.23.2",
+		"prettier": "^3.9.6",
+		"prettier-plugin-astro": "^0.14.1",
+		"typescript": "^5.9.3"
+	}
+}

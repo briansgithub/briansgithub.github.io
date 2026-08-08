@@ -1,0 +1,157 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Site: start dev server",
+			"type": "process",
+			"command": "npm",
+			"args": ["run", "astro", "--", "dev", "--background"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Site: dev server status",
+			"type": "process",
+			"command": "npm",
+			"args": ["run", "astro", "--", "dev", "status"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Site: dev server logs",
+			"type": "process",
+			"command": "npm",
+			"args": ["run", "astro", "--", "dev", "logs"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Site: stop dev server",
+			"type": "process",
+			"command": "npm",
+			"args": ["run", "astro", "--", "dev", "stop"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Content: create draft",
+			"type": "process",
+			"command": "node",
+			"args": [
+				"scripts/new-content.mjs",
+				"${input:contentType}",
+				"${input:contentSlug}",
+				"--title",
+				"${input:contentTitle}"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Content: check current file for publication",
+			"type": "process",
+			"command": "node",
+			"args": ["scripts/publish-content.mjs", "${file}", "--check"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Content: publish current file",
+			"type": "process",
+			"command": "node",
+			"args": ["scripts/publish-content.mjs", "${file}"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Media: import image",
+			"type": "process",
+			"command": "node",
+			"args": [
+				"scripts/import-media.mjs",
+				"${input:mediaSource}",
+				"--name",
+				"${input:mediaName}",
+				"--alt",
+				"${input:mediaAlt}",
+				"--content",
+				"${file}"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "Check: source assets",
+			"type": "process",
+			"command": "node",
+			"args": ["scripts/check-assets.mjs", "source"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Check: source links",
+			"type": "process",
+			"command": "node",
+			"args": ["scripts/check-links.mjs", "source"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Check: build site",
+			"type": "process",
+			"command": "npm",
+			"args": ["run", "build"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Check: built assets",
+			"type": "process",
+			"command": "node",
+			"args": ["scripts/check-assets.mjs", "dist"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Check: built links",
+			"type": "process",
+			"command": "node",
+			"args": ["scripts/check-links.mjs", "dist"],
+			"problemMatcher": []
+		},
+		{
+			"label": "Check: complete local verification",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Check: source assets",
+				"Check: source links",
+				"Check: build site",
+				"Check: built assets",
+				"Check: built links"
+			],
+			"problemMatcher": []
+		}
+	],
+	"inputs": [
+		{
+			"id": "contentType",
+			"type": "pickString",
+			"description": "Content type",
+			"options": ["writing", "project", "book", "quotation", "page"],
+			"default": "writing"
+		},
+		{
+			"id": "contentSlug",
+			"type": "promptString",
+			"description": "Lowercase kebab-case slug"
+		},
+		{
+			"id": "contentTitle",
+			"type": "promptString",
+			"description": "Display title"
+		},
+		{
+			"id": "mediaSource",
+			"type": "promptString",
+			"description": "Absolute path to the original image"
+		},
+		{
+			"id": "mediaName",
+			"type": "promptString",
+			"description": "Lowercase kebab-case output name"
+		},
+		{
+			"id": "mediaAlt",
+			"type": "promptString",
+			"description": "Meaningful alternative text"
+		}
+	]
+}

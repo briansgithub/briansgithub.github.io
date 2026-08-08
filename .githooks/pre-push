@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-push: Node.js is required but was not found on PATH." >&2
+  exit 1
+fi
+
+# The outgoing checker reads the ref ranges that Git supplies on standard input.
+node scripts/check-assets.mjs outgoing "${1:-}"
+node scripts/check-links.mjs source

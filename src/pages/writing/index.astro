@@ -1,0 +1,39 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { contentSlug, formatDate, isVisible } from '../../utils/content';
+
+const entries = (await getCollection('writing', ({ data }) => isVisible(data))).sort(
+	(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+---
+
+<BaseLayout title="Writing" description="Essays, project logs, and notes in progress.">
+	<div class="shell">
+		<PageIntro
+			eyebrow="Archive 01"
+			title="Writing"
+			description="Essays, project logs, and notes on engineering, physics, software, and the methods between them."
+		/>
+		{
+			entries.length > 0 ? (
+				<div class="content-grid">
+					{entries.map((entry) => (
+						<ContentCard
+							href={`/writing/${contentSlug(entry.id)}/`}
+							title={entry.data.title}
+							description={entry.data.description}
+							meta={formatDate(entry.data.publishedAt)}
+							tags={entry.data.tags}
+							placeholder={entry.data.placeholder}
+						/>
+					))}
+				</div>
+			) : (
+				<p class="empty-state">No writing published yet.</p>
+			)
+		}
+	</div>
+</BaseLayout>

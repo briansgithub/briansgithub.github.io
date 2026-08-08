@@ -1,0 +1,11 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"command": "npm run astro -- dev --background",
+			"name": "Start Astro in background",
+			"request": "launch",
+			"type": "node-terminal"
+		}
+	]
+}

@@ -1,0 +1,9 @@
+---
+interface Props {
+	label?: string;
+}
+
+const { label = 'Placeholder' } = Astro.props;
+---
+
+<span class="placeholder-badge">{label}</span>

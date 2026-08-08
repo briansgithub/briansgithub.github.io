@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import PlaceholderBadge from '../components/PlaceholderBadge.astro';
+import { resume } from '../data/resume';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+	title="Résumé"
+	description="Experience, education, and technical practice."
+	placeholder={resume.placeholder}
+>
+	<div class="shell resume-shell">
+		<PageIntro eyebrow="Curriculum vitae" title="Résumé" description={resume.summary} placeholder />
+		<div class="resume-actions" role="note">
+			<PlaceholderBadge label="PDF needed" />
+			<p>
+				Add a current résumé PDF to enable a download link. The structured page below remains the
+				readable source.
+			</p>
+		</div>
+		<section class="resume-section" aria-labelledby="experience-heading">
+			<h2 id="experience-heading">Experience</h2>
+			<div>
+				{
+					resume.experience.map((item) => (
+						<article class="resume-item">
+							<header>
+								<>
+									<h3>{item.role}</h3>
+									<p>{item.organization}</p>
+									<span>
+										{item.period} · {item.location}
+									</span>
+								</>
+							</header>
+							<ul>
+								{item.highlights.map((highlight) => (
+									<li>{highlight}</li>
+								))}
+							</ul>
+						</article>
+					))
+				}
+			</div>
+		</section>
+		<section class="resume-section" aria-labelledby="education-heading">
+			<h2 id="education-heading">Education</h2>
+			<div>
+				{
+					resume.education.map((item) => (
+						<article class="resume-item">
+							<header>
+								<>
+									<h3>{item.credential}</h3>
+									<p>{item.institution}</p>
+									<span>{item.period}</span>
+								</>
+							</header>
+							<p>{item.details}</p>
+						</article>
+					))
+				}
+			</div>
+		</section>
+		<section class="resume-section" aria-labelledby="skills-heading">
+			<h2 id="skills-heading">Technical practice</h2>
+			<div class="skill-grid">
+				{
+					resume.skills.map((group) => (
+						<article>
+							<>
+								<h3>{group.category}</h3>
+								<p>{group.items.join(' · ')}</p>
+							</>
+						</article>
+					))
+				}
+			</div>
+		</section>
+		<footer class="resume-contact">
+			<p>Code and public work</p><a href={site.github}>{site.github.replace('https://', '')}</a>
+		</footer>
+	</div>
+</BaseLayout>
+
+<style>
+	.resume-shell {
+		padding-bottom: clamp(4rem, 9vw, 8rem);
+	}
+	.resume-actions {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 0;
+		border-bottom: 1px solid var(--line);
+		color: var(--ink-soft);
+		font-size: 0.82rem;
+	}
+	.resume-actions p {
+		margin: 0;
+	}
+	.resume-section {
+		display: grid;
+		grid-template-columns: minmax(10rem, 0.35fr) minmax(0, 1fr);
+		gap: 2rem 5rem;
+		padding-block: 3.5rem;
+		border-bottom: 1px solid var(--line);
+	}
+	.resume-section > h2 {
+		margin: 0;
+		font-size: 1.15rem;
+	}
+	.resume-item + .resume-item {
+		margin-top: 3rem;
+		padding-top: 3rem;
+		border-top: 1px solid var(--line);
+	}
+	.resume-item header {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 0.2rem 1.5rem;
+	}
+	.resume-item h3,
+	.skill-grid h3 {
+		margin: 0;
+		font-family: var(--serif);
+		font-size: 1.45rem;
+		font-weight: 500;
+	}
+	.resume-item header p,
+	.resume-item header span {
+		margin: 0;
+		color: var(--ink-soft);
+		font-size: 0.82rem;
+	}
+	.resume-item header span {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		text-align: right;
+	}
+	.skill-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 2rem;
+	}
+	.skill-grid p {
+		color: var(--ink-soft);
+	}
+	.resume-contact {
+		display: flex;
+		justify-content: space-between;
+		gap: 2rem;
+		padding-top: 2rem;
+		font-size: 0.82rem;
+	}
+	.resume-contact p {
+		margin: 0;
+		color: var(--ink-soft);
+	}
+	@media (max-width: 720px) {
+		.resume-section,
+		.skill-grid {
+			grid-template-columns: 1fr;
+		}
+		.resume-item header {
+			display: block;
+		}
+		.resume-item header span {
+			display: block;
+			margin-top: 0.25rem;
+			text-align: left;
+		}
+		.resume-actions,
+		.resume-contact {
+			align-items: flex-start;
+			flex-direction: column;
+		}
+	}
+</style>

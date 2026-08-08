@@ -1,0 +1,41 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PlaceholderBadge from '../components/PlaceholderBadge.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	meta?: string;
+	tags?: string[];
+	placeholder?: boolean;
+}
+
+const { title, description, meta, tags = [], placeholder = false } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} placeholder={placeholder}>
+	<article class="shell article-shell">
+		<header class="article-header">
+			<div class="article-header__meta">
+				{meta && <span>{meta}</span>}
+				{placeholder && <PlaceholderBadge label="Sample content" />}
+			</div>
+			<h1>{title}</h1>
+			<p class="lede">{description}</p>
+			{
+				tags.length > 0 && (
+					<ul class="tag-list" aria-label="Tags">
+						{tags.map((tag) => (
+							<li>
+								<a href={`/tags/${tag}/`}>{tag}</a>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</header>
+		<div class="prose">
+			<slot />
+		</div>
+	</article>
+</BaseLayout>

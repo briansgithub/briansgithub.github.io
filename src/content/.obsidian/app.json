@@ -1,0 +1,9 @@
+{
+	"alwaysUpdateLinks": true,
+	"attachmentFolderPath": "./images",
+	"newFileFolderPath": "_drafts",
+	"newFileLocation": "folder",
+	"newLinkFormat": "relative",
+	"showUnsupportedFiles": true,
+	"useMarkdownLinks": true
+}

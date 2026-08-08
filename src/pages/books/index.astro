@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { contentSlug, isVisible } from '../../utils/content';
+
+const books = (await getCollection('books', ({ data }) => isVisible(data))).sort(
+	(a, b) =>
+		(b.data.finishedAt?.valueOf() ?? 0) - (a.data.finishedAt?.valueOf() ?? 0) ||
+		a.data.title.localeCompare(b.data.title),
+);
+---
+
+<BaseLayout title="Book notes" description="Notes, arguments, and questions kept from reading.">
+	<div class="shell">
+		<PageIntro
+			eyebrow="Archive 03"
+			title="Book notes"
+			description="Not reviews so much as a record of arguments, questions, and connections I want to keep."
+		/>
+		{
+			books.length > 0 ? (
+				<div class="content-grid">
+					{books.map((book) => (
+						<ContentCard
+							href={`/books/${contentSlug(book.id)}/`}
+							title={book.data.title}
+							description={book.data.summary}
+							meta={`${book.data.author}${book.data.rating ? ` · ${book.data.rating}/5` : ''}`}
+							tags={book.data.tags}
+							placeholder={book.data.placeholder}
+						/>
+					))}
+				</div>
+			) : (
+				<p class="empty-state">No book notes published yet.</p>
+			)
+		}
+	</div>
+</BaseLayout>

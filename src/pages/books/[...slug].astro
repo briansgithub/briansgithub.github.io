@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { contentSlug, isVisible } from '../../utils/content';
+
+export async function getStaticPaths() {
+	const entries = await getCollection('books', ({ data }) => isVisible(data));
+	return entries.map((entry) => ({ params: { slug: contentSlug(entry.id) }, props: { entry } }));
+}
+
+interface Props {
+	entry: CollectionEntry<'books'>;
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const meta = `${entry.data.author}${entry.data.rating ? ` · ${entry.data.rating}/5` : ''}`;
+---
+
+<ContentLayout
+	title={entry.data.title}
+	description={entry.data.summary}
+	meta={meta}
+	tags={entry.data.tags}
+	placeholder={entry.data.placeholder}
+>
+	<Content />
+</ContentLayout>

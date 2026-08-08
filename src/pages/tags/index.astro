@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import { isVisible } from '../../utils/content';
+
+const [writing, projects, books] = await Promise.all([
+	getCollection('writing', ({ data }) => isVisible(data)),
+	getCollection('projects', ({ data }) => isVisible(data)),
+	getCollection('books', ({ data }) => isVisible(data)),
+]);
+const tagCounts = new Map<string, number>();
+for (const tags of [
+	...writing.map((x) => x.data.tags),
+	...projects.map((x) => x.data.tags),
+	...books.map((x) => x.data.tags),
+]) {
+	for (const tag of tags) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+}
+const tags = [...tagCounts.entries()].sort(([a], [b]) => a.localeCompare(b));
+---
+
+<BaseLayout title="Tags" description="Browse writing, projects, and book notes by subject.">
+	<div class="shell tags-page">
+		<PageIntro
+			eyebrow="Index"
+			title="Tags"
+			description="A compact subject index across writing, projects, and reading notes."
+		/>
+		<ul class="tag-index">
+			{
+				tags.map(([tag, count]) => (
+					<li>
+						<a href={`/tags/${tag}/`}>
+							<>
+								<span>#{tag}</span>
+								<small>{count}</small>
+							</>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+</BaseLayout>
+
+<style>
+	.tags-page {
+		padding-bottom: clamp(4rem, 9vw, 8rem);
+	}
+	.tag-index {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin: 0;
+		padding: 0;
+		border-top: 1px solid var(--line);
+		list-style: none;
+	}
+	.tag-index li {
+		border-right: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+	}
+	.tag-index li:nth-child(3n) {
+		border-right: 0;
+	}
+	.tag-index a {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1.25rem;
+		font-family: var(--mono);
+		font-size: 0.8rem;
+		text-decoration: none;
+	}
+	.tag-index small {
+		color: var(--ink-soft);
+	}
+	@media (max-width: 660px) {
+		.tag-index {
+			grid-template-columns: 1fr;
+		}
+		.tag-index li,
+		.tag-index li:nth-child(3n) {
+			border-right: 0;
+		}
+	}
+</style>

@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { contentSlug, isVisible } from '../../utils/content';
+
+const projects = (await getCollection('projects', ({ data }) => isVisible(data))).sort(
+	(a, b) =>
+		Number(b.data.featured) - Number(a.data.featured) ||
+		(a.data.order ?? 99) - (b.data.order ?? 99) ||
+		b.data.year - a.data.year,
+);
+---
+
+<BaseLayout title="Projects" description="Selected builds, investigations, and technical work.">
+	<div class="shell">
+		<PageIntro
+			eyebrow="Archive 02"
+			title="Projects"
+			description="Selected builds and investigations, documented with the decisions, tradeoffs, and evidence that shaped them."
+		/>
+		{
+			projects.length > 0 ? (
+				<div class="content-grid">
+					{projects.map((project) => (
+						<ContentCard
+							href={`/projects/${contentSlug(project.id)}/`}
+							title={project.data.title}
+							description={project.data.summary}
+							meta={`${project.data.year} · ${project.data.status}`}
+							tags={project.data.technologies}
+							placeholder={project.data.placeholder}
+						/>
+					))}
+				</div>
+			) : (
+				<p class="empty-state">No projects published yet.</p>
+			)
+		}
+	</div>
+</BaseLayout>

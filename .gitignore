@@ -1,0 +1,39 @@
+# Build output and generated types
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Authoring inboxes contain original media and are never committed
+media-inbox/
+media-originals/
+
+# Private Obsidian drafts. Keep the instructions, ignore every actual draft.
+src/content/_drafts/*
+!src/content/_drafts/README.md
+
+# Logs and coverage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+coverage/
+
+# Environment variables (keep a documented example if one is added)
+.env*
+!.env.example
+
+# Obsidian machine/session state. Stable vault settings may be committed.
+**/.obsidian/workspace*.json
+**/.obsidian/cache/
+**/.obsidian/plugins/
+
+# Editor and operating-system files
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Interrupted atomic writes from local helper scripts
+*.tmp-*

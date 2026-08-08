@@ -1,0 +1,10 @@
+{
+	"config": {
+		"default": true,
+		"MD013": false,
+		"MD024": { "siblings_only": true },
+		"MD033": false,
+		"MD041": false,
+	},
+	"globs": ["**/*.md", "!node_modules/**", "!dist/**", "!.astro/**", "!src/content/_drafts/**"],
+}

@@ -1,0 +1,21 @@
+---
+import PlaceholderBadge from './PlaceholderBadge.astro';
+
+interface Props {
+	eyebrow?: string;
+	title: string;
+	description: string;
+	placeholder?: boolean;
+}
+
+const { eyebrow, title, description, placeholder = false } = Astro.props;
+---
+
+<header class="page-intro">
+	{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+	<div class="page-intro__title">
+		<h1>{title}</h1>
+		{placeholder && <PlaceholderBadge />}
+	</div>
+	<p class="lede">{description}</p>
+</header>

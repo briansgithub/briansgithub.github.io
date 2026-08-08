@@ -1,0 +1,264 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContentCard from '../components/ContentCard.astro';
+import PlaceholderBadge from '../components/PlaceholderBadge.astro';
+import { site } from '../data/site';
+import { contentSlug, formatDate, isVisible } from '../utils/content';
+
+const [writing, projects, books] = await Promise.all([
+	getCollection('writing', ({ data }) => isVisible(data)),
+	getCollection('projects', ({ data }) => isVisible(data)),
+	getCollection('books', ({ data }) => isVisible(data)),
+]);
+
+const featuredWriting = writing
+	.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+	.slice(0, 2);
+const featuredProjects = projects
+	.sort(
+		(a, b) =>
+			Number(b.data.featured) - Number(a.data.featured) ||
+			(a.data.order ?? 99) - (b.data.order ?? 99),
+	)
+	.slice(0, 2);
+const latestBook = books.sort(
+	(a, b) => (b.data.finishedAt?.valueOf() ?? 0) - (a.data.finishedAt?.valueOf() ?? 0),
+)[0];
+---
+
+<BaseLayout>
+	{
+		site.preview && (
+			<div class="preview-notice">
+				<div class="shell">
+					<PlaceholderBadge label="Content preview" />
+					<p>
+						The structure is ready; the bracketed identity and sample entries are waiting for your
+						real material.
+					</p>
+				</div>
+			</div>
+		)
+	}
+
+	<section class="shell hero">
+		<div class="hero__main">
+			<p class="eyebrow">Personal notebook / selected work</p>
+			<h1>{site.name}</h1>
+			<p class="hero__tagline">{site.tagline}</p>
+		</div>
+		<aside class="hero__aside" aria-label="Introduction">
+			<div
+				class="portrait-placeholder"
+				role="img"
+				aria-label="Portrait placeholder; replace with a real portrait or representative image"
+			>
+				<span>YN</span>
+				<small>portrait placeholder</small>
+			</div>
+			<p>{site.shortBio}</p>
+			<a href="/about/">A little more about me <span aria-hidden="true">→</span></a>
+		</aside>
+	</section>
+
+	{
+		featuredProjects.length > 0 && (
+			<section class="shell home-section" aria-labelledby="projects-heading">
+				<div class="section-heading">
+					<h2 id="projects-heading">Selected projects</h2>
+					<a href="/projects/">All projects</a>
+				</div>
+				<div class="content-grid">
+					{featuredProjects.map((project) => (
+						<ContentCard
+							href={`/projects/${contentSlug(project.id)}/`}
+							title={project.data.title}
+							description={project.data.summary}
+							meta={`${project.data.year} · ${project.data.status}`}
+							tags={project.data.technologies}
+							placeholder={project.data.placeholder}
+						/>
+					))}
+				</div>
+			</section>
+		)
+	}
+
+	{
+		featuredWriting.length > 0 && (
+			<section class="shell home-section" aria-labelledby="writing-heading">
+				<div class="section-heading">
+					<h2 id="writing-heading">Recent writing</h2>
+					<a href="/writing/">All writing</a>
+				</div>
+				<div class="content-grid">
+					{featuredWriting.map((entry) => (
+						<ContentCard
+							href={`/writing/${contentSlug(entry.id)}/`}
+							title={entry.data.title}
+							description={entry.data.description}
+							meta={formatDate(entry.data.publishedAt)}
+							tags={entry.data.tags}
+							placeholder={entry.data.placeholder}
+						/>
+					))}
+				</div>
+			</section>
+		)
+	}
+
+	<section class="shell closing-grid">
+		<div>
+			<p class="eyebrow">Reading notebook</p>
+			{
+				latestBook ? (
+					<>
+						<h2>{latestBook.data.title}</h2>
+						<p>{latestBook.data.summary}</p>
+						<a href={`/books/${contentSlug(latestBook.id)}/`}>Read the note →</a>
+					</>
+				) : (
+					<p class="empty-state">Your first book note will appear here.</p>
+				)
+			}
+		</div>
+		<div>
+			<p class="eyebrow">Elsewhere</p>
+			<h2>Code, experiments, and unfinished things.</h2>
+			<p>Source code and smaller experiments live on GitHub.</p>
+			<a href={site.github}>Visit GitHub →</a>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.preview-notice {
+		border-bottom: 1px solid var(--line);
+		background: var(--paper-deep);
+	}
+
+	.preview-notice .shell {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		min-height: 3.2rem;
+	}
+
+	.preview-notice p {
+		margin: 0;
+		color: var(--ink-soft);
+		font-size: 0.78rem;
+	}
+
+	.hero {
+		display: grid;
+		grid-template-columns: minmax(0, 2.2fr) minmax(18rem, 0.8fr);
+		gap: clamp(3rem, 8vw, 8rem);
+		align-items: end;
+		padding-block: clamp(5rem, 13vw, 10rem);
+	}
+
+	.hero__tagline {
+		max-width: 25ch;
+		margin: 1.5rem 0 0;
+		font-family: var(--serif);
+		font-size: clamp(1.4rem, 3vw, 2rem);
+		line-height: 1.35;
+	}
+
+	.hero__aside p {
+		margin: 1.4rem 0;
+		color: var(--ink-soft);
+	}
+
+	.hero__aside > a,
+	.closing-grid a {
+		font-size: 0.82rem;
+		font-weight: 650;
+	}
+
+	.portrait-placeholder {
+		position: relative;
+		display: grid;
+		aspect-ratio: 4 / 3;
+		place-items: center;
+		border: 1px solid var(--line);
+		background:
+			linear-gradient(
+				135deg,
+				transparent 49.7%,
+				var(--line) 49.8%,
+				var(--line) 50.2%,
+				transparent 50.3%
+			),
+			linear-gradient(
+				45deg,
+				transparent 49.7%,
+				var(--line) 49.8%,
+				var(--line) 50.2%,
+				transparent 50.3%
+			);
+	}
+
+	.portrait-placeholder span {
+		padding: 0.5rem;
+		background: var(--paper);
+		font-family: var(--serif);
+		font-size: 2.4rem;
+	}
+
+	.portrait-placeholder small {
+		position: absolute;
+		right: 0.65rem;
+		bottom: 0.5rem;
+		font-family: var(--mono);
+		font-size: 0.58rem;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+
+	.home-section {
+		padding-top: 1rem;
+	}
+
+	.closing-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		margin-block: clamp(5rem, 10vw, 9rem);
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.closing-grid > div {
+		padding: clamp(2rem, 5vw, 4rem);
+	}
+
+	.closing-grid > div + div {
+		border-left: 1px solid var(--line);
+	}
+
+	.closing-grid h2 {
+		margin: 0 0 1rem;
+	}
+
+	.closing-grid p:not(.eyebrow) {
+		color: var(--ink-soft);
+	}
+
+	@media (max-width: 760px) {
+		.hero,
+		.closing-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.hero__aside {
+			max-width: 30rem;
+		}
+
+		.closing-grid > div + div {
+			border-top: 1px solid var(--line);
+			border-left: 0;
+		}
+	}
+</style>

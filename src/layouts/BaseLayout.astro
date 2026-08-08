@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import { navigation, site } from '../data/site';
+
+interface Props {
+	title?: string;
+	description?: string;
+	placeholder?: boolean;
+}
+
+const { title = site.title, description = site.description, placeholder = false } = Astro.props;
+const pageTitle = title === site.title ? title : `${title} — ${site.name}`;
+const canonical = new URL(Astro.url.pathname, site.url);
+const noIndex = site.preview || placeholder;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
+		<meta name="theme-color" content="#f4f0e8" />
+		{noIndex && <meta name="robots" content="noindex, nofollow" />}
+		<link rel="canonical" href={canonical} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="alternate" type="application/rss+xml" title={site.title} href="/rss.xml" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content="summary" />
+		<title>{pageTitle}</title>
+	</head>
+	<body>
+		<a class="skip-link" href="#main-content">Skip to content</a>
+		<header class="site-header">
+			<div class="shell site-header__inner">
+				<a class="wordmark" href="/" aria-label={`${site.name}, home`}>
+					<span aria-hidden="true">Field / Notes</span>
+					<span class="wordmark__name">{site.name}</span>
+				</a>
+				<nav aria-label="Primary navigation">
+					<ul>
+						{
+							navigation.map((item) => {
+								const active = Astro.url.pathname.startsWith(item.href);
+								return (
+									<li>
+										<a href={item.href} aria-current={active ? 'page' : undefined}>
+											{item.label}
+										</a>
+									</li>
+								);
+							})
+						}
+					</ul>
+				</nav>
+			</div>
+		</header>
+		<main id="main-content">
+			<slot />
+		</main>
+		<footer class="site-footer">
+			<div class="shell site-footer__inner">
+				<p>Built as a quiet place for work in progress and ideas worth keeping.</p>
+				<div class="site-footer__links">
+					<a href={site.github} rel="me">GitHub</a>
+					<a href="/rss.xml">RSS</a>
+				</div>
+				<p class="site-footer__meta">© {new Date().getFullYear()} {site.name}</p>
+			</div>
+		</footer>
+	</body>
+</html>

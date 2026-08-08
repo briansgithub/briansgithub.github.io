@@ -1,0 +1,35 @@
+---
+import PlaceholderBadge from './PlaceholderBadge.astro';
+
+interface Props {
+	href: string;
+	title: string;
+	description: string;
+	meta?: string;
+	tags?: string[];
+	placeholder?: boolean;
+}
+
+const { href, title, description, meta, tags = [], placeholder = false } = Astro.props;
+---
+
+<article class="content-card">
+	<a class="content-card__link" href={href} aria-label={`Read ${title}`}>
+		<div class="content-card__topline">
+			{meta && <span>{meta}</span>}
+			{placeholder && <PlaceholderBadge label="Sample" />}
+		</div>
+		<h2>{title}</h2>
+		<p>{description}</p>
+		{
+			tags.length > 0 && (
+				<ul class="tag-list" aria-label="Tags">
+					{tags.map((tag) => (
+						<li>{tag}</li>
+					))}
+				</ul>
+			)
+		}
+		<span class="content-card__arrow" aria-hidden="true">↗</span>
+	</a>
+</article>

@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import ContentLayout from '../../layouts/ContentLayout.astro';
+import { contentSlug, isVisible } from '../../utils/content';
+
+export async function getStaticPaths() {
+	const entries = await getCollection('projects', ({ data }) => isVisible(data));
+	return entries.map((entry) => ({ params: { slug: contentSlug(entry.id) }, props: { entry } }));
+}
+
+interface Props {
+	entry: CollectionEntry<'projects'>;
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<ContentLayout
+	title={entry.data.title}
+	description={entry.data.summary}
+	meta={`${entry.data.year} · ${entry.data.status}`}
+	tags={entry.data.tags}
+	placeholder={entry.data.placeholder}
+>
+	{
+		entry.data.links && (
+			<nav class="project-links" aria-label="Project links">
+				{Object.entries(entry.data.links).map(([label, href]) => (
+					<a href={href}>{label} ↗</a>
+				))}
+			</nav>
+		)
+	}
+	<Content />
+</ContentLayout>
+
+<style>
+	.project-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem 1.25rem;
+		margin-bottom: 2.5rem;
+		font-family: var(--sans);
+		font-size: 0.82rem;
+		font-weight: 650;
+	}
+</style>

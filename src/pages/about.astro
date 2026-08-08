@@ -1,0 +1,89 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderBadge from '../components/PlaceholderBadge.astro';
+import { site } from '../data/site';
+
+const page = await getEntry('pages', 'about');
+const rendered = page ? await render(page) : undefined;
+const Content = rendered?.Content;
+---
+
+<BaseLayout
+	title="About"
+	description={page?.data.description ?? site.shortBio}
+	placeholder={page?.data.placeholder ?? true}
+>
+	<div class="shell about-grid">
+		<header>
+			<p class="eyebrow">About</p>
+			<h1>A person behind the notes.</h1>
+		</header>
+		<aside>
+			<div class="about-mark" role="img" aria-label="Portrait placeholder"><span>YN</span></div>
+			<PlaceholderBadge label="Portrait needed" />
+		</aside>
+		<div class="prose about-copy">
+			{Content ? <Content /> : <p>{site.longBio}</p>}
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.about-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
+		gap: 2rem clamp(3rem, 9vw, 9rem);
+		padding-block: clamp(4rem, 10vw, 9rem);
+	}
+	.about-grid h1 {
+		max-width: 12ch;
+		font-size: clamp(3rem, 7vw, 6rem);
+	}
+	.about-grid aside {
+		align-self: start;
+	}
+	.about-mark {
+		display: grid;
+		aspect-ratio: 4 / 5;
+		margin-bottom: 1rem;
+		place-items: center;
+		border: 1px solid var(--line);
+		background:
+			repeating-linear-gradient(
+				0deg,
+				transparent 0,
+				transparent 2rem,
+				rgb(29 32 29 / 0.06) 2rem,
+				rgb(29 32 29 / 0.06) calc(2rem + 1px)
+			),
+			repeating-linear-gradient(
+				90deg,
+				transparent 0,
+				transparent 2rem,
+				rgb(29 32 29 / 0.06) 2rem,
+				rgb(29 32 29 / 0.06) calc(2rem + 1px)
+			);
+	}
+	.about-mark span {
+		padding: 0.6rem;
+		background: var(--paper);
+		font-family: var(--serif);
+		font-size: 3rem;
+	}
+	.about-copy {
+		grid-column: 1;
+		padding-top: 1rem;
+	}
+	@media (max-width: 760px) {
+		.about-grid {
+			grid-template-columns: 1fr;
+		}
+		.about-grid aside {
+			max-width: 20rem;
+		}
+		.about-copy {
+			grid-column: 1;
+		}
+	}
+</style>
