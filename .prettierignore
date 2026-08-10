@@ -3,5 +3,7 @@ dist/
 .astro/
 package-lock.json
 src/content/_drafts/
-**/.obsidian/workspace*.json
+# Obsidian writes its own vault config with two-space indentation and no trailing
+# newline, so Prettier's tabs would be undone the next time the app touches them.
+**/.obsidian/
 public/favicon.ico
