@@ -58,9 +58,9 @@ const items = [
 <BaseLayout title={`#${tag}`} description={`Items tagged ${tag}.`}>
 	<div class="shell">
 		<PageIntro
-			eyebrow="Subject index"
+			eyebrow="Index"
 			title={`#${tag}`}
-			description={`${items.length} ${items.length === 1 ? 'entry' : 'entries'} across the notebook.`}
+			description={`${items.length} ${items.length === 1 ? 'entry' : 'entries'} across the log.`}
 		/>
 		<div class="content-grid">{items.map((item) => <ContentCard {...item} />)}</div>
 	</div>

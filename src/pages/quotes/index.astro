@@ -13,7 +13,7 @@ const quotes = (await getCollection('quotes', ({ data }) => isVisible(data))).so
 <BaseLayout title="Quotations" description="Lines worth returning to.">
 	<div class="shell">
 		<PageIntro
-			eyebrow="Archive 04"
+			eyebrow="Index 04"
 			title="Quotations"
 			description="Lines worth returning to—kept with their source whenever I can find it."
 		/>
@@ -54,18 +54,19 @@ const quotes = (await getCollection('quotes', ({ data }) => isVisible(data))).so
 	}
 
 	.quote-number {
-		color: var(--accent-dark);
+		color: var(--accent-violet);
 		font-family: var(--mono);
 		font-size: 0.7rem;
 	}
 
 	blockquote {
-		max-width: 28ch;
+		max-width: 34ch;
 		margin: 0;
-		font-family: var(--serif);
-		font-size: clamp(1.7rem, 4vw, 3.4rem);
-		line-height: 1.2;
-		letter-spacing: -0.025em;
+		font-family: var(--sans);
+		font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+		font-weight: 500;
+		line-height: 1.35;
+		letter-spacing: -0.015em;
 	}
 
 	figcaption {
