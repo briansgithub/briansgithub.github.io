@@ -21,9 +21,24 @@ const noIndex = site.preview || placeholder;
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="description" content={description} />
-		<meta name="theme-color" content="#f4f0e8" />
+		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0e14" />
+		<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f8fa" />
 		{noIndex && <meta name="robots" content="noindex, nofollow" />}
 		<link rel="canonical" href={canonical} />
+		<link
+			rel="preload"
+			href="/fonts/ubuntu-latin-400-normal.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/ubuntu-latin-500-normal.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="alternate" type="application/rss+xml" title={site.title} href="/rss.xml" />
 		<meta property="og:type" content="website" />
@@ -38,7 +53,7 @@ const noIndex = site.preview || placeholder;
 		<header class="site-header">
 			<div class="shell site-header__inner">
 				<a class="wordmark" href="/" aria-label={`${site.name}, home`}>
-					<span aria-hidden="true">Field / Notes</span>
+					<span aria-hidden="true">Build / Log</span>
 					<span class="wordmark__name">{site.name}</span>
 				</a>
 				<nav aria-label="Primary navigation">
@@ -64,9 +79,23 @@ const noIndex = site.preview || placeholder;
 		</main>
 		<footer class="site-footer">
 			<div class="shell site-footer__inner">
-				<p>Built as a quiet place for work in progress and ideas worth keeping.</p>
+				<p>A running log of builds, notes, and work in progress.</p>
 				<div class="site-footer__links">
 					<a href={site.github} rel="me">GitHub</a>
+					{
+						site.linkedin && (
+							<a href={site.linkedin} rel="me">
+								LinkedIn
+							</a>
+						)
+					}
+					{
+						site.instagram && (
+							<a href={site.instagram} rel="me">
+								Instagram
+							</a>
+						)
+					}
 					<a href="/rss.xml">RSS</a>
 				</div>
 				<p class="site-footer__meta">© {new Date().getFullYear()} {site.name}</p>

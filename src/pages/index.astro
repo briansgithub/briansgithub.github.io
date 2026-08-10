@@ -1,10 +1,12 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ContentCard from '../components/ContentCard.astro';
 import PlaceholderBadge from '../components/PlaceholderBadge.astro';
 import { site } from '../data/site';
 import { contentSlug, formatDate, isVisible } from '../utils/content';
+import portrait from '../assets/images/portrait/brian-ellsworth-portrait.webp';
 
 const [writing, projects, books] = await Promise.all([
 	getCollection('writing', ({ data }) => isVisible(data)),
@@ -44,19 +46,18 @@ const latestBook = books.sort(
 
 	<section class="shell hero">
 		<div class="hero__main">
-			<p class="eyebrow">Personal notebook / selected work</p>
+			<p class="eyebrow">Build log / selected work</p>
 			<h1>{site.name}</h1>
 			<p class="hero__tagline">{site.tagline}</p>
 		</div>
 		<aside class="hero__aside" aria-label="Introduction">
-			<div
+			<Image
 				class="portrait-placeholder"
-				role="img"
-				aria-label="Portrait placeholder; replace with a real portrait or representative image"
-			>
-				<span>YN</span>
-				<small>portrait placeholder</small>
-			</div>
+				src={portrait}
+				alt="Brian Ellsworth smiling, wearing glasses"
+				widths={[400, 800, 1200]}
+				sizes="(max-width: 760px) 30rem, 22vw"
+			/>
 			<p>{site.shortBio}</p>
 			<a href="/about/">A little more about me <span aria-hidden="true">→</span></a>
 		</aside>
@@ -110,7 +111,7 @@ const latestBook = books.sort(
 
 	<section class="shell closing-grid">
 		<div>
-			<p class="eyebrow">Reading notebook</p>
+			<p class="eyebrow">Reading log</p>
 			{
 				latestBook ? (
 					<>
@@ -134,8 +135,8 @@ const latestBook = books.sort(
 
 <style>
 	.preview-notice {
-		border-bottom: 1px solid var(--line);
-		background: var(--paper-deep);
+		border-bottom: 1px solid var(--line-strong);
+		background: var(--surface-raised);
 	}
 
 	.preview-notice .shell {
@@ -160,11 +161,12 @@ const latestBook = books.sort(
 	}
 
 	.hero__tagline {
-		max-width: 25ch;
+		max-width: 30ch;
 		margin: 1.5rem 0 0;
-		font-family: var(--serif);
-		font-size: clamp(1.4rem, 3vw, 2rem);
-		line-height: 1.35;
+		color: var(--ink-soft);
+		font-family: var(--sans);
+		font-size: clamp(1.15rem, 2vw, 1.5rem);
+		line-height: 1.45;
 	}
 
 	.hero__aside p {
@@ -174,48 +176,18 @@ const latestBook = books.sort(
 
 	.hero__aside > a,
 	.closing-grid a {
+		color: var(--accent);
 		font-size: 0.82rem;
-		font-weight: 650;
+		font-weight: 500;
 	}
 
 	.portrait-placeholder {
-		position: relative;
-		display: grid;
+		width: 100%;
 		aspect-ratio: 4 / 3;
-		place-items: center;
 		border: 1px solid var(--line);
-		background:
-			linear-gradient(
-				135deg,
-				transparent 49.7%,
-				var(--line) 49.8%,
-				var(--line) 50.2%,
-				transparent 50.3%
-			),
-			linear-gradient(
-				45deg,
-				transparent 49.7%,
-				var(--line) 49.8%,
-				var(--line) 50.2%,
-				transparent 50.3%
-			);
-	}
-
-	.portrait-placeholder span {
-		padding: 0.5rem;
-		background: var(--paper);
-		font-family: var(--serif);
-		font-size: 2.4rem;
-	}
-
-	.portrait-placeholder small {
-		position: absolute;
-		right: 0.65rem;
-		bottom: 0.5rem;
-		font-family: var(--mono);
-		font-size: 0.58rem;
-		letter-spacing: 0.05em;
-		text-transform: uppercase;
+		border-radius: var(--radius);
+		object-fit: cover;
+		object-position: top;
 	}
 
 	.home-section {
@@ -226,8 +198,8 @@ const latestBook = books.sort(
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		margin-block: clamp(5rem, 10vw, 9rem);
-		border-top: 1px solid var(--line);
-		border-bottom: 1px solid var(--line);
+		border-top: 1px solid var(--line-strong);
+		border-bottom: 1px solid var(--line-strong);
 	}
 
 	.closing-grid > div {

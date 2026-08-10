@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageIntro from '../components/PageIntro.astro';
-import PlaceholderBadge from '../components/PlaceholderBadge.astro';
 import { resume } from '../data/resume';
 import { site } from '../data/site';
 ---
@@ -12,13 +11,15 @@ import { site } from '../data/site';
 	placeholder={resume.placeholder}
 >
 	<div class="shell resume-shell">
-		<PageIntro eyebrow="Curriculum vitae" title="Résumé" description={resume.summary} placeholder />
+		<PageIntro
+			eyebrow="Curriculum vitae"
+			title="Résumé"
+			description={resume.summary}
+			placeholder={resume.placeholder}
+		/>
 		<div class="resume-actions" role="note">
-			<PlaceholderBadge label="PDF needed" />
-			<p>
-				Add a current résumé PDF to enable a download link. The structured page below remains the
-				readable source.
-			</p>
+			<a href="/files/brian-ellsworth-resume.pdf" download>Download PDF</a>
+			<p>The structured page below is the same content in an easier-to-browse form.</p>
 		</div>
 		<section class="resume-section" aria-labelledby="experience-heading">
 			<h2 id="experience-heading">Experience</h2>
@@ -58,7 +59,7 @@ import { site } from '../data/site';
 									<span>{item.period}</span>
 								</>
 							</header>
-							<p>{item.details}</p>
+							{item.details && <p>{item.details}</p>}
 						</article>
 					))
 				}
@@ -101,6 +102,11 @@ import { site } from '../data/site';
 	.resume-actions p {
 		margin: 0;
 	}
+	.resume-actions a {
+		color: var(--accent);
+		font-weight: 500;
+		white-space: nowrap;
+	}
 	.resume-section {
 		display: grid;
 		grid-template-columns: minmax(10rem, 0.35fr) minmax(0, 1fr);
@@ -125,8 +131,8 @@ import { site } from '../data/site';
 	.resume-item h3,
 	.skill-grid h3 {
 		margin: 0;
-		font-family: var(--serif);
-		font-size: 1.45rem;
+		font-family: var(--sans);
+		font-size: 1.2rem;
 		font-weight: 500;
 	}
 	.resume-item header p,

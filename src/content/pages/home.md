@@ -1,30 +1,30 @@
 ---
-title: '[PLACEHOLDER] Home'
-description: '[PLACEHOLDER] Identity, introduction, contact links, portrait direction, and domain decision for the home page.'
+title: 'Home'
+description: 'Identity, introduction, contact links, portrait direction, and domain decision for the home page.'
 draft: false
-placeholder: true
+placeholder: false
 ---
 
 ## Identity
 
-- **Name:** [PLACEHOLDER] Brian — add the preferred full display name.
-- **Tagline:** [PLACEHOLDER] Computer engineer and physics graduate exploring software, hardware, and the physical world.
+- **Name:** Brian Ellsworth — transferred to `src/data/site.ts`.
+- **Tagline:** Transferred to `src/data/site.ts`.
 
 ## Short bio
 
-[PLACEHOLDER] I am a computer engineer and physics graduate interested in practical systems, careful measurement, and clear technical communication. This site collects projects, writing, reading notes, quotations, and selected photographs.
+Transferred to `src/data/site.ts` (`shortBio`).
 
 ## Contact and social links
 
-- **GitHub:** [briansgithub](https://github.com/briansgithub)
-- **Email:** [PLACEHOLDER] Add the public contact address.
-- **Professional profile:** [PLACEHOLDER] Add LinkedIn or another preferred profile, or remove this item.
-- **Other social links:** [PLACEHOLDER] Decide whether any belong on the site.
+- **GitHub:** [briansgithub](https://github.com/briansgithub) — live in `site.ts` and the site footer.
+- **Email:** <bellsworth137@gmail.com> — live in `site.ts`, shown on the About page.
+- **Professional profile:** LinkedIn — live in `site.ts` and the site footer.
+- **Other social links:** Instagram — live in `site.ts` and the site footer.
 
 ## Portrait instruction
 
-[PLACEHOLDER] Replace the temporary portrait treatment with an approved image before launch. Use a quiet, naturally lit portrait with an uncluttered background, crop it consistently with the home-page design, remove location metadata, and export a web-sized version rather than the camera original. Suggested delivery: WebP, approximately 1200 by 1500 pixels, under 500 KB, with alt text that describes only what is visually relevant.
+Resolved: `brian1.jpg` (a close-up portrait), imported via `npm run media:import` and wired into both the homepage hero and the About page as `src/assets/images/portrait/brian-ellsworth-portrait.webp`.
 
 ## Domain decision
 
-[PLACEHOLDER] Decide whether the launch address will remain on the free GitHub Pages domain or use a purchased custom domain. Do not configure a placeholder domain as the canonical URL.
+Not yet decided. The site remains on the default GitHub Pages domain (`briansgithub.github.io`) with `site.preview = true` in `src/data/site.ts`, which keeps every page `noindex`. Flip `preview` to `false` only once the domain question is settled and the site is ready to be publicly indexed.

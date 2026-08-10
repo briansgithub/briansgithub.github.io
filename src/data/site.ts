@@ -1,18 +1,19 @@
 export const site = {
-	name: '[Your Name]',
-	title: '[Your Name] — Projects & Notes',
+	name: 'Brian Ellsworth',
+	title: 'Brian Ellsworth — Projects & Notes',
 	description:
-		'[PLACEHOLDER] A concise sentence describing what you build, study, and write about.',
-	tagline: '[PLACEHOLDER] Computer engineer, physics graduate, and curious builder.',
+		'Software and embedded engineer writing about hardware builds, physics, and the tools between them.',
+	tagline: 'Embedded and software engineer with a physics research background.',
 	shortBio:
-		'[PLACEHOLDER] A two- or three-sentence introduction that gives readers a clear sense of your work and interests.',
+		'I build embedded systems and write software, with a background in applied physics and electrical engineering. This site collects hardware projects, technical writing, book notes, and quotations.',
 	longBio:
-		'[PLACEHOLDER] Expand this into a short personal biography: what you care about, the kinds of problems you enjoy, and why you keep this site.',
+		'I work across embedded software, project engineering, and hardware-software integration — most recently building bare-metal C/C++ firmware for RP2040-based devices and, before that, managing the electromechanical manufacturing of products from prototype through production. My background is in applied physics and electrical/computer engineering, with undergraduate research in graphene material characterization.',
 	url: 'https://briansgithub.github.io',
 	language: 'en-US',
 	github: 'https://github.com/briansgithub',
-	email: '',
-	linkedin: '',
+	email: 'bellsworth137@gmail.com',
+	linkedin: 'https://www.linkedin.com/in/brian-ellsworth/',
+	instagram: 'https://www.instagram.com/bellsworth137/',
 	preview: true,
 } as const;
 
