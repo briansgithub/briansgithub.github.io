@@ -9,8 +9,18 @@ const quotes = (await getCollection('quotes', ({ data }) => isVisible(data))).so
 	(a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
 );
 
-const items = [];
-let lastCategory;
+type Item =
+	| { kind: 'category'; label: string }
+	| {
+			kind: 'quote';
+			entry: (typeof quotes)[number];
+			number: number;
+			citationText: string | null;
+			citationHref: string | null;
+	  };
+
+const items: Item[] = [];
+let lastCategory: string | undefined;
 quotes.forEach((entry, index) => {
 	if (entry.data.category && entry.data.category !== lastCategory) {
 		items.push({ kind: 'category', label: entry.data.category });
