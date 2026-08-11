@@ -282,7 +282,8 @@ h2 {
 	text-transform: uppercase;
 }
 
-.content-card h2 {
+.content-card h2,
+.content-card h3 {
 	max-width: 17ch;
 	margin: 2.5rem 0 0.9rem;
 }
@@ -293,7 +294,8 @@ h2 {
 	color: var(--ink-soft);
 }
 
-.content-card:last-child:nth-child(odd) h2 {
+.content-card:last-child:nth-child(odd) h2,
+.content-card:last-child:nth-child(odd) h3 {
 	max-width: 24ch;
 }
 
@@ -317,6 +319,26 @@ h2 {
 	font-family: var(--mono);
 	font-size: 0.7rem;
 	letter-spacing: 0.025em;
+}
+
+.card-chip-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+	margin: 1.8rem 0 0;
+	padding: 0;
+	color: var(--ink-soft);
+	font-family: var(--mono);
+	font-size: 0.68rem;
+	letter-spacing: 0.025em;
+	list-style: none;
+}
+
+.card-chip-list li {
+	padding: 0.25rem 0.45rem;
+	border: 1px solid var(--line);
+	border-radius: 999px;
+	background: var(--surface-inset);
 }
 
 .tag-list li::before {

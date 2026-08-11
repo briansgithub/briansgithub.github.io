@@ -30,6 +30,7 @@ const projects = (await getCollection('projects', ({ data }) => isVisible(data))
 							description={project.data.summary}
 							meta={`${project.data.year} · ${project.data.status}`}
 							tags={project.data.technologies}
+							tagLabel="Technologies"
 							placeholder={project.data.placeholder}
 						/>
 					))}

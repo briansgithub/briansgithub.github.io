@@ -76,6 +76,8 @@ const latestBook = books.sort(
 							description={project.data.summary}
 							meta={`${project.data.year} · ${project.data.status}`}
 							tags={project.data.technologies}
+							tagLabel="Technologies"
+							headingLevel={3}
 							placeholder={project.data.placeholder}
 						/>
 					))}
@@ -99,6 +101,7 @@ const latestBook = books.sort(
 							description={entry.data.description}
 							meta={formatDate(entry.data.publishedAt)}
 							tags={entry.data.tags}
+							headingLevel={3}
 							placeholder={entry.data.placeholder}
 						/>
 					))}
