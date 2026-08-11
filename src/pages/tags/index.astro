@@ -4,15 +4,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import { isVisible } from '../../utils/content';
 
-const [writing, projects, books] = await Promise.all([
+const [writing, projects, prints, books] = await Promise.all([
 	getCollection('writing', ({ data }) => isVisible(data)),
 	getCollection('projects', ({ data }) => isVisible(data)),
+	getCollection('prints', ({ data }) => isVisible(data)),
 	getCollection('books', ({ data }) => isVisible(data)),
 ]);
 const tagCounts = new Map<string, number>();
 for (const tags of [
 	...writing.map((x) => x.data.tags),
 	...projects.map((x) => x.data.tags),
+	...prints.map((x) => x.data.tags),
 	...books.map((x) => x.data.tags),
 ]) {
 	for (const tag of tags) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
@@ -20,12 +22,12 @@ for (const tags of [
 const tags = [...tagCounts.entries()].sort(([a], [b]) => a.localeCompare(b));
 ---
 
-<BaseLayout title="Tags" description="Browse writing, projects, and book notes by subject.">
+<BaseLayout title="Tags" description="Browse writing, projects, prints, and book notes by subject.">
 	<div class="shell tags-page">
 		<PageIntro
 			eyebrow="Index"
 			title="Tags"
-			description="A compact subject index across writing, projects, and reading notes."
+			description="A compact subject index across writing, projects, prints, and reading notes."
 		/>
 		<ul class="tag-index">
 			{

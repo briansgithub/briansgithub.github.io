@@ -57,6 +57,7 @@ const quotes = defineCollection({
 		author: z.string().min(1),
 		source: z.string().optional(),
 		url: z.url().optional(),
+		category: z.string().optional(),
 		order: z.number().int().optional(),
 		...editorialFields,
 	}),
@@ -71,4 +72,25 @@ const pages = defineCollection({
 	}),
 });
 
-export const collections = { writing, projects, books, quotes, pages };
+const prints = defineCollection({
+	loader: glob({ base: './src/content/prints', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		title: z.string().min(1).max(120),
+		summary: z.string().min(1).max(240),
+		material: z.string().min(1).max(60),
+		printedAt: z.coerce.date().optional(),
+		tags: z.array(tag).default([]),
+		featured: z.boolean().default(false),
+		order: z.number().int().optional(),
+		model: z
+			.object({
+				file: z.string(),
+				sizeBytes: z.number().int().positive(),
+			})
+			.optional(),
+		links: z.record(z.string(), z.url()).optional(),
+		...editorialFields,
+	}),
+});
+
+export const collections = { writing, projects, books, quotes, pages, prints };

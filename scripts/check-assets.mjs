@@ -441,6 +441,10 @@ function createRules(budgets) {
 		html: extensionSet(budgets.extensions.html),
 		images: extensionSet(budgets.extensions.images),
 		inlineData: new RegExp(budgets.inlineDataUriPattern, 'i'),
+		scriptStyleExceptions: (budgets.dist.scriptStyleExceptions ?? []).map((entry) => ({
+			...entry,
+			regex: new RegExp(entry.pattern),
+		})),
 		scriptsAndStyles: extensionSet(budgets.extensions.scriptsAndStyles),
 		textInspection: extensionSet(budgets.textInspectionExtensions),
 	};
@@ -453,6 +457,20 @@ function displayPaths(item) {
 
 function strictestSizeRule(item, mode, budgets, rules) {
 	const limits = mode === 'dist' ? budgets.dist : budgets.source;
+
+	if (mode === 'dist') {
+		const exception = rules.scriptStyleExceptions.find((entry) =>
+			item.paths.some((path) => entry.regex.test(path)),
+		);
+		if (exception) {
+			return {
+				label: exception.reason,
+				maximum: exception.maximumBytes,
+				warning: exception.warningBytes,
+			};
+		}
+	}
+
 	const candidates = [{ label: 'ordinary file', maximum: limits.maximumFileBytes }];
 	const extensions = item.paths.map((path) => extname(path).toLowerCase());
 

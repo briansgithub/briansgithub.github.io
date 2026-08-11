@@ -20,6 +20,7 @@ export const site = {
 export const navigation = [
 	{ label: 'Writing', href: '/writing/' },
 	{ label: 'Projects', href: '/projects/' },
+	{ label: 'Prints', href: '/prints/' },
 	{ label: 'Books', href: '/books/' },
 	{ label: 'Quotes', href: '/quotes/' },
 	{ label: 'About', href: '/about/' },

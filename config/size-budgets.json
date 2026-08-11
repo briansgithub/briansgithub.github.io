@@ -21,7 +21,15 @@
 		"maximumHtmlBytes": 256000,
 		"warningScriptStyleBytes": 204800,
 		"maximumScriptStyleBytes": 307200,
-		"maximumDocumentBytes": 3145728
+		"maximumDocumentBytes": 3145728,
+		"scriptStyleExceptions": [
+			{
+				"pattern": "_astro/print-viewer\\..*\\.js$",
+				"warningBytes": 655360,
+				"maximumBytes": 786432,
+				"reason": "three.js print-viewer bundle (code-split, loads only on print pages with a 3D model)"
+			}
+		]
 	},
 	"extensions": {
 		"images": [".avif", ".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"],

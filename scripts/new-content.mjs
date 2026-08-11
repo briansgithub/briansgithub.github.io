@@ -18,6 +18,9 @@ const TYPE_ALIASES = new Map([
 	['book', 'book'],
 	['books', 'book'],
 	['book-note', 'book'],
+	['print', 'print'],
+	['prints', 'print'],
+	['3d-print', 'print'],
 	['quotation', 'quotation'],
 	['quote', 'quotation'],
 	['page', 'page'],
@@ -31,7 +34,7 @@ Usage:
   node scripts/new-content.mjs <type> <slug> [options]
 
 Types:
-  writing | project | book | quotation | page
+  writing | project | book | print | quotation | page
 
 Options:
   --title <text>         Display title (defaults from the slug)
@@ -194,6 +197,36 @@ What changed or became clearer after reading?
 		};
 	}
 
+	if (type === 'print') {
+		return {
+			relativePath: path.join('_drafts', 'prints', `${slug}.md`),
+			contents: `---
+title: ${yamlString(common.title)}
+summary: ${yamlString(common.description)}
+material: 'Replace with the print material, e.g. PLA'
+tags: []
+featured: false
+draft: true
+placeholder: false
+---
+
+## Notes
+
+What is it, why did you make it, and how did it turn out?
+
+Add build/result photos with \`npm run media:import\`. If you have an .stl to
+share, copy it into public/files/prints/${slug}.stl and add to the
+frontmatter:
+
+\`\`\`yaml
+model:
+  file: /files/prints/${slug}.stl
+  sizeBytes: 0
+\`\`\`
+`,
+		};
+	}
+
 	if (type === 'quotation') {
 		return {
 			relativePath: path.join('_drafts', 'quotes', `${slug}.md`),
@@ -229,7 +262,7 @@ async function promptForMissing(options) {
 	const prompt = createInterface({ input: process.stdin, output: process.stdout });
 	try {
 		const type =
-			options.type || (await prompt.question('Type (writing/project/book/quotation/page): '));
+			options.type || (await prompt.question('Type (writing/project/book/print/quotation/page): '));
 		const title = options.title || (await prompt.question('Title: '));
 		const slug =
 			options.slug || (await prompt.question(`Slug [${slugify(title)}]: `)) || slugify(title);
@@ -252,7 +285,7 @@ async function main() {
 
 	const type = TYPE_ALIASES.get(String(options.type || '').toLowerCase());
 	if (!type) {
-		throw new Error('Choose one of: writing, project, book, quotation, or page.');
+		throw new Error('Choose one of: writing, project, book, print, quotation, or page.');
 	}
 
 	const title = String(options.title || titleFromSlug(options.slug || '')).trim();

@@ -6,21 +6,23 @@ import ContentCard from '../../components/ContentCard.astro';
 import { contentSlug, formatDate, isVisible } from '../../utils/content';
 
 export async function getStaticPaths() {
-	const [writing, projects, books] = await Promise.all([
+	const [writing, projects, prints, books] = await Promise.all([
 		getCollection('writing', ({ data }) => isVisible(data)),
 		getCollection('projects', ({ data }) => isVisible(data)),
+		getCollection('prints', ({ data }) => isVisible(data)),
 		getCollection('books', ({ data }) => isVisible(data)),
 	]);
 	const tags = new Set([
 		...writing.flatMap((x) => x.data.tags),
 		...projects.flatMap((x) => x.data.tags),
+		...prints.flatMap((x) => x.data.tags),
 		...books.flatMap((x) => x.data.tags),
 	]);
-	return [...tags].map((tag) => ({ params: { tag }, props: { writing, projects, books } }));
+	return [...tags].map((tag) => ({ params: { tag }, props: { writing, projects, prints, books } }));
 }
 
 const { tag = '' } = Astro.params;
-const { writing, projects, books } = Astro.props;
+const { writing, projects, prints, books } = Astro.props;
 const items = [
 	...writing
 		.filter((x) => x.data.tags.includes(tag))
@@ -39,6 +41,16 @@ const items = [
 			title: entry.data.title,
 			description: entry.data.summary,
 			meta: `Project · ${entry.data.year}`,
+			tags: entry.data.tags,
+			placeholder: entry.data.placeholder,
+		})),
+	...prints
+		.filter((x) => x.data.tags.includes(tag))
+		.map((entry) => ({
+			href: `/prints/${contentSlug(entry.id)}/`,
+			title: entry.data.title,
+			description: entry.data.summary,
+			meta: `Print · ${entry.data.material}`,
 			tags: entry.data.tags,
 			placeholder: entry.data.placeholder,
 		})),

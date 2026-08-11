@@ -37,10 +37,12 @@
 		"@astrojs/rss": "^4.0.19",
 		"@astrojs/sitemap": "^3.7.3",
 		"astro": "^7.2.0",
-		"sharp": "^0.35.3"
+		"sharp": "^0.35.3",
+		"three": "^0.185.1"
 	},
 	"devDependencies": {
 		"@astrojs/check": "^0.9.10",
+		"@types/three": "^0.185.4",
 		"markdownlint-cli2": "^0.23.2",
 		"prettier": "^3.9.6",
 		"prettier-plugin-astro": "^0.14.1",

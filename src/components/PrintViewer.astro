@@ -1,0 +1,147 @@
+---
+interface Props {
+	file: string;
+	sizeBytes: number;
+}
+
+const { file, sizeBytes } = Astro.props;
+
+function formatBytes(bytes: number) {
+	if (bytes < 1024) return `${bytes} B`;
+	const units = ['KB', 'MB', 'GB'];
+	let value = bytes;
+	let unit = 'B';
+	for (const candidate of units) {
+		value /= 1024;
+		unit = candidate;
+		if (value < 10) break;
+	}
+	return `${value.toFixed(1)} ${unit}`;
+}
+---
+
+<div class="print-viewer">
+	<div class="print-viewer__stage" data-print-viewer data-model-src={file}>
+		<canvas
+			class="print-viewer__canvas"
+			data-print-viewer-canvas
+			aria-label="Interactive 3D preview — drag to rotate, scroll to zoom"></canvas>
+		<p class="print-viewer__status" data-print-viewer-status>Loading 3D preview…</p>
+	</div>
+	<a class="print-viewer__download" href={file} download>
+		Download .stl <span>· {formatBytes(sizeBytes)}</span>
+	</a>
+</div>
+
+<style>
+	.print-viewer {
+		margin-bottom: 2.5rem;
+	}
+
+	.print-viewer__stage {
+		position: relative;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		background: color-mix(in srgb, var(--line) 18%, var(--surface));
+		border: 1px solid var(--line);
+		border-radius: 4px;
+	}
+
+	.print-viewer__canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+		touch-action: none;
+	}
+
+	.print-viewer__status {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0;
+		padding: 1rem;
+		color: var(--ink-soft);
+		font-family: var(--mono);
+		font-size: 0.78rem;
+		text-align: center;
+		pointer-events: none;
+	}
+
+	.print-viewer__stage.is-ready .print-viewer__status {
+		display: none;
+	}
+
+	.print-viewer__stage.is-error .print-viewer__status {
+		color: var(--accent-violet);
+	}
+
+	.print-viewer__download {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.35rem;
+		margin-top: 0.9rem;
+		color: var(--accent);
+		font-family: var(--mono);
+		font-size: 0.82rem;
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.print-viewer__download:hover {
+		color: var(--accent-soft);
+	}
+
+	.print-viewer__download span {
+		color: var(--ink-soft);
+	}
+</style>
+
+<script>
+	function initViewer(stage: HTMLElement) {
+		const canvas = stage.querySelector<HTMLCanvasElement>('[data-print-viewer-canvas]');
+		const status = stage.querySelector<HTMLElement>('[data-print-viewer-status]');
+		const src = stage.dataset.modelSrc;
+		if (!canvas || !src) return;
+
+		let started = false;
+
+		async function start() {
+			if (started) return;
+			started = true;
+
+			try {
+				const { renderPrint } = await import('../scripts/print-viewer');
+				await renderPrint(stage, canvas!, src!);
+				status?.remove();
+				stage.classList.add('is-ready');
+			} catch (error) {
+				console.error('3D preview failed to load', error);
+				if (status) status.textContent = 'Preview unavailable — use the download link below.';
+				stage.classList.add('is-error');
+			}
+		}
+
+		if ('IntersectionObserver' in window) {
+			const observer = new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) {
+						if (entry.isIntersecting) {
+							start();
+							observer.disconnect();
+						}
+					}
+				},
+				{ rootMargin: '200px' },
+			);
+			observer.observe(stage);
+		} else {
+			start();
+		}
+	}
+
+	document
+		.querySelectorAll<HTMLElement>('[data-print-viewer]')
+		.forEach((stage) => initViewer(stage));
+</script>

@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import { contentSlug, isVisible } from '../../utils/content';
+
+const prints = (await getCollection('prints', ({ data }) => isVisible(data))).sort(
+	(a, b) =>
+		Number(b.data.featured) - Number(a.data.featured) ||
+		(a.data.order ?? 99) - (b.data.order ?? 99) ||
+		(b.data.printedAt?.valueOf() ?? 0) - (a.data.printedAt?.valueOf() ?? 0),
+);
+---
+
+<BaseLayout title="Prints" description="3D-printed objects, with photos and downloadable models.">
+	<div class="shell">
+		<PageIntro
+			eyebrow="Index 03"
+			title="Prints"
+			description="Designed and printed objects, shown with build photos and, where available, the source .stl to view or download."
+		/>
+		{
+			prints.length > 0 ? (
+				<div class="content-grid">
+					{prints.map((print) => (
+						<ContentCard
+							href={`/prints/${contentSlug(print.id)}/`}
+							title={print.data.title}
+							description={print.data.summary}
+							meta={print.data.material}
+							tags={print.data.tags}
+							placeholder={print.data.placeholder}
+						/>
+					))}
+				</div>
+			) : (
+				<p class="empty-state">No prints published yet.</p>
+			)
+		}
+	</div>
+</BaseLayout>

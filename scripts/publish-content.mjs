@@ -9,7 +9,14 @@ import { fileURLToPath } from 'node:url';
 
 const REPO_ROOT = fileURLToPath(new URL('../', import.meta.url));
 const CONTENT_ROOT = path.join(REPO_ROOT, 'src', 'content');
-const PUBLISHABLE_COLLECTIONS = new Set(['writing', 'projects', 'books', 'quotes', 'pages']);
+const PUBLISHABLE_COLLECTIONS = new Set([
+	'writing',
+	'projects',
+	'books',
+	'prints',
+	'quotes',
+	'pages',
+]);
 
 function usage() {
 	console.log(`Validate and explicitly publish one Markdown content file.
@@ -96,6 +103,7 @@ function collectionFor(filePath, values) {
 	if (values?.has('publishedAt')) return 'writing';
 	if (values?.has('quote')) return 'quotes';
 	if (values?.has('status') && values?.has('year')) return 'projects';
+	if (values?.has('material')) return 'prints';
 	if (values?.has('author') && values?.has('summary')) return 'books';
 	if (values?.has('title') && values?.has('description')) return 'pages';
 	return '_drafts';
@@ -115,6 +123,7 @@ function validateForPublication(contents, filePath, options) {
 		writing: ['title', 'description', 'publishedAt'],
 		projects: ['title', 'summary', 'status', 'year'],
 		books: ['title', 'author', 'summary'],
+		prints: ['title', 'summary', 'material'],
 		quotes: ['quote', 'author'],
 		galleries: ['title', 'description', 'date', 'coverImage', 'coverAlt'],
 		pages: ['title', 'description'],
