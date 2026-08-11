@@ -69,10 +69,15 @@ const noIndex = site.preview || placeholder;
 					<ul>
 						{
 							navigation.map((item) => {
-								const active = Astro.url.pathname.startsWith(item.href);
+								const exact = Astro.url.pathname === item.href;
+								const childRoute =
+									Astro.url.pathname.startsWith(item.href) ||
+									('matchPrefixes' in item &&
+										item.matchPrefixes.some((prefix) => Astro.url.pathname.startsWith(prefix)));
+								const current = exact ? 'page' : childRoute ? 'location' : undefined;
 								return (
 									<li>
-										<a href={item.href} aria-current={active ? 'page' : undefined}>
+										<a href={item.href} aria-current={current}>
 											{item.label}
 										</a>
 									</li>
