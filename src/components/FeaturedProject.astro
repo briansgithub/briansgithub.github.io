@@ -1,0 +1,167 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import PlaceholderBadge from './PlaceholderBadge.astro';
+
+interface Props {
+	href: string;
+	title: string;
+	description: string;
+	meta: string;
+	technologies?: string[];
+	cover: {
+		image: ImageMetadata;
+		alt: string;
+	};
+	headingLevel?: 2 | 3;
+	placeholder?: boolean;
+}
+
+const {
+	href,
+	title,
+	description,
+	meta,
+	technologies = [],
+	cover,
+	headingLevel = 2,
+	placeholder = false,
+} = Astro.props;
+const featureId = href.replace(/[^a-z0-9]+/gi, '-').replace(/(^-|-$)/g, '');
+const titleId = `${featureId}-feature-title`;
+const descriptionId = `${featureId}-feature-description`;
+---
+
+<article class="featured-project">
+	<a
+		class="featured-project__link"
+		href={href}
+		aria-labelledby={titleId}
+		aria-describedby={descriptionId}
+	>
+		<div class="featured-project__media">
+			<Image
+				src={cover.image}
+				alt={cover.alt}
+				widths={[480, 768, 1080, 1440]}
+				sizes="(max-width: 760px) 100vw, 62vw"
+			/>
+		</div>
+		<div class="featured-project__copy">
+			<div class="featured-project__topline">
+				<span>{meta}</span>
+				{placeholder && <PlaceholderBadge label="Sample" />}
+			</div>
+			{headingLevel === 2 ? <h2 id={titleId}>{title}</h2> : <h3 id={titleId}>{title}</h3>}
+			<p id={descriptionId}>{description}</p>
+			{
+				technologies.length > 0 && (
+					<ul class="card-chip-list" aria-label="Technologies">
+						{technologies.map((technology) => (
+							<li>{technology}</li>
+						))}
+					</ul>
+				)
+			}
+			<span class="featured-project__arrow" aria-hidden="true">→</span>
+		</div>
+	</a>
+</article>
+
+<style>
+	.featured-project {
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.featured-project__link {
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(20rem, 0.65fr);
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.featured-project__media {
+		overflow: hidden;
+		aspect-ratio: 4 / 3;
+		border-right: 1px solid var(--line);
+		background: var(--surface-inset);
+	}
+
+	.featured-project__media :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 180ms ease;
+	}
+
+	.featured-project__copy {
+		position: relative;
+		min-height: 24rem;
+		padding: clamp(1.75rem, 4vw, 3.5rem);
+		transition: background-color 120ms ease;
+	}
+
+	.featured-project__link:hover .featured-project__copy {
+		background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+	}
+
+	.featured-project__link:hover .featured-project__media :global(img) {
+		transform: scale(1.015);
+	}
+
+	.featured-project__topline {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		min-height: 1.5rem;
+		color: var(--ink-soft);
+		font-family: var(--mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.featured-project h2,
+	.featured-project h3 {
+		max-width: 15ch;
+		margin: clamp(2rem, 5vw, 4rem) 0 1rem;
+	}
+
+	.featured-project p {
+		max-width: 46ch;
+		margin: 0;
+		color: var(--ink-soft);
+	}
+
+	.featured-project__arrow {
+		position: absolute;
+		right: 1.75rem;
+		bottom: 1.5rem;
+		color: var(--accent);
+		font-size: 1.2rem;
+	}
+
+	@media (max-width: 760px) {
+		.featured-project__link {
+			grid-template-columns: 1fr;
+		}
+
+		.featured-project__media {
+			border-right: 0;
+			border-bottom: 1px solid var(--line);
+		}
+
+		.featured-project__copy {
+			min-height: 19rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.featured-project__copy,
+		.featured-project__media :global(img) {
+			transition: none;
+		}
+	}
+</style>

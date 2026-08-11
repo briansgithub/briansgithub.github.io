@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ActionLinks from '../components/ActionLinks.astro';
 import ContentCard from '../components/ContentCard.astro';
+import FeaturedProject from '../components/FeaturedProject.astro';
 import { site } from '../data/site';
 import { contentSlug, formatDate, isVisible } from '../utils/content';
 import portrait from '../assets/images/portrait/brian-ellsworth-portrait.webp';
@@ -23,7 +24,11 @@ const featuredProjects = projects
 			Number(b.data.featured) - Number(a.data.featured) ||
 			(a.data.order ?? 99) - (b.data.order ?? 99),
 	)
-	.slice(0, 2);
+	.slice(0, 3);
+const leadProject = featuredProjects.find((project) => project.data.cover);
+const secondaryProjects = leadProject
+	? featuredProjects.filter((project) => project.id !== leadProject.id)
+	: featuredProjects;
 const latestBook = books.sort(
 	(a, b) => (b.data.finishedAt?.valueOf() ?? 0) - (a.data.finishedAt?.valueOf() ?? 0),
 )[0];
@@ -68,8 +73,20 @@ const latestBook = books.sort(
 					<h2 id="projects-heading">Selected projects</h2>
 					<a href="/projects/">All projects</a>
 				</div>
-				<div class="content-grid">
-					{featuredProjects.map((project) => (
+				{leadProject?.data.cover && (
+					<FeaturedProject
+						href={`/projects/${contentSlug(leadProject.id)}/`}
+						title={leadProject.data.title}
+						description={leadProject.data.summary}
+						meta={`${leadProject.data.year} · ${leadProject.data.status}`}
+						technologies={leadProject.data.technologies}
+						cover={leadProject.data.cover}
+						headingLevel={3}
+						placeholder={leadProject.data.placeholder}
+					/>
+				)}
+				<div class:list={['content-grid', { 'project-grid--secondary': leadProject }]}>
+					{secondaryProjects.map((project) => (
 						<ContentCard
 							href={`/projects/${contentSlug(project.id)}/`}
 							title={project.data.title}
@@ -187,6 +204,10 @@ const latestBook = books.sort(
 
 	.home-section {
 		padding-top: 1rem;
+	}
+
+	.project-grid--secondary {
+		border-top: 0;
 	}
 
 	.closing-grid {

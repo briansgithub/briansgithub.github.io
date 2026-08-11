@@ -17,6 +17,9 @@ tags:
   - solar
 featured: true
 order: 1
+cover:
+  image: ../../assets/images/tide-tracker/tide-tracker-1-front.webp
+  alt: 'A working Tide Tracker in a sandy wood frame, displaying a tide-height chart on its e-ink screen.'
 links:
   Source: 'https://github.com/briansgithub/TideTracker_repo'
 draft: false

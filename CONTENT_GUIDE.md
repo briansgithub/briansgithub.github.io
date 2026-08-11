@@ -61,11 +61,24 @@ status: active | complete | archived
 year: number
 technologies: string[]
 featured: optional boolean
+cover: optional object containing image and alt text
 links: optional record of label to URL
 order: optional number
 draft: optional boolean
 placeholder: optional boolean
 ```
+
+Use a project cover only when an existing image adds useful context in project listings. Keep the
+image and its alternative text together in the nested `cover` field:
+
+```yaml
+cover:
+  image: ../../assets/images/project-name/cover.webp
+  alt: 'Describe the project image and the useful visual context it provides.'
+```
+
+The image path is relative to the project Markdown file. Astro validates and optimizes local cover
+images at build time. Projects without a cover continue to use the standard text-card layout.
 
 Example links when real URLs exist:
 
