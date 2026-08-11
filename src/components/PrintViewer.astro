@@ -5,6 +5,10 @@ interface Props {
 }
 
 const { file, sizeBytes } = Astro.props;
+const viewerKey = file.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '');
+const viewerId = `print-viewer-${viewerKey}`;
+const statusId = `${viewerId}-status`;
+const instructionsId = `${viewerId}-instructions`;
 
 function formatBytes(bytes: number) {
 	if (bytes < 1024) return `${bytes} B`;
@@ -21,13 +25,66 @@ function formatBytes(bytes: number) {
 ---
 
 <div class="print-viewer">
-	<div class="print-viewer__stage" data-print-viewer data-model-src={file}>
+	<div
+		class="print-viewer__stage"
+		id={viewerId}
+		data-print-viewer
+		data-model-src={file}
+		data-viewer-state="loading"
+		data-animation-state="paused"
+	>
 		<canvas
 			class="print-viewer__canvas"
 			data-print-viewer-canvas
-			aria-label="Interactive 3D preview — drag to rotate, scroll to zoom"></canvas>
-		<p class="print-viewer__status" data-print-viewer-status>Loading 3D preview…</p>
+			tabindex="0"
+			role="img"
+			aria-label="Interactive 3D model preview"
+			aria-describedby={`${instructionsId} ${statusId}`}
+		>
+			Interactive 3D model preview. Use the controls below or download the STL file.
+		</canvas>
+		<p
+			class="print-viewer__status"
+			id={statusId}
+			data-print-viewer-status
+			role="status"
+			aria-live="polite"
+			aria-atomic="true"
+		>
+			Loading 3D preview…
+		</p>
 	</div>
+	<div
+		class="print-viewer__controls"
+		data-print-viewer-controls
+		role="group"
+		aria-label="3D preview controls"
+	>
+		<button type="button" data-viewer-action="rotate-left" aria-controls={viewerId} disabled>
+			Rotate ←
+		</button>
+		<button type="button" data-viewer-action="rotate-right" aria-controls={viewerId} disabled>
+			Rotate →
+		</button>
+		<button type="button" data-viewer-action="tilt-up" aria-controls={viewerId} disabled>
+			Tilt ↑
+		</button>
+		<button type="button" data-viewer-action="tilt-down" aria-controls={viewerId} disabled>
+			Tilt ↓
+		</button>
+		<button type="button" data-viewer-action="zoom-in" aria-controls={viewerId} disabled>
+			Zoom +
+		</button>
+		<button type="button" data-viewer-action="zoom-out" aria-controls={viewerId} disabled>
+			Zoom −
+		</button>
+		<button type="button" data-viewer-action="reset" aria-controls={viewerId} disabled>Reset</button
+		>
+	</div>
+	<p class="print-viewer__instructions" id={instructionsId}>
+		Drag horizontally to rotate. Use Arrow keys to rotate and tilt, +/− to zoom, and Home to reset.
+		Vertical touch gestures scroll the page.
+	</p>
 	<a class="print-viewer__download" href={file} download>
 		Download .stl <span>· {formatBytes(sizeBytes)}</span>
 	</a>
@@ -51,7 +108,12 @@ function formatBytes(bytes: number) {
 		display: block;
 		width: 100%;
 		height: 100%;
-		touch-action: none;
+		touch-action: pan-y;
+	}
+
+	.print-viewer__canvas:focus-visible {
+		outline: 3px solid var(--accent);
+		outline-offset: -4px;
 	}
 
 	.print-viewer__status {
@@ -70,18 +132,62 @@ function formatBytes(bytes: number) {
 	}
 
 	.print-viewer__stage.is-ready .print-viewer__status {
-		display: none;
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+		clip-path: inset(50%);
 	}
 
 	.print-viewer__stage.is-error .print-viewer__status {
 		color: var(--accent-violet);
 	}
 
+	.print-viewer__controls {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 0.9rem;
+	}
+
+	.print-viewer__controls button {
+		min-height: 2.75rem;
+		padding: 0.55rem 0.75rem;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		background: transparent;
+		color: var(--ink);
+		font: 500 0.76rem/1 var(--sans);
+		cursor: pointer;
+	}
+
+	.print-viewer__controls button:hover:not(:disabled) {
+		border-color: var(--accent);
+		color: var(--accent-soft);
+	}
+
+	.print-viewer__controls button:disabled {
+		cursor: wait;
+		opacity: 0.45;
+	}
+
+	.print-viewer__instructions {
+		max-width: 68ch;
+		margin: 0.75rem 0 0;
+		color: var(--ink-soft);
+		font-size: 0.78rem;
+		line-height: 1.55;
+	}
+
 	.print-viewer__download {
 		display: inline-flex;
 		align-items: baseline;
 		gap: 0.35rem;
-		margin-top: 0.9rem;
+		min-height: 2.75rem;
+		margin-top: 0.5rem;
 		color: var(--accent);
 		font-family: var(--mono);
 		font-size: 0.82rem;
@@ -102,10 +208,69 @@ function formatBytes(bytes: number) {
 	function initViewer(stage: HTMLElement) {
 		const canvas = stage.querySelector<HTMLCanvasElement>('[data-print-viewer-canvas]');
 		const status = stage.querySelector<HTMLElement>('[data-print-viewer-status]');
+		const controls = stage.parentElement?.querySelector<HTMLElement>(
+			'[data-print-viewer-controls]',
+		);
+		const buttons = controls?.querySelectorAll<HTMLButtonElement>('[data-viewer-action]');
 		const src = stage.dataset.modelSrc;
 		if (!canvas || !src) return;
 
 		let started = false;
+		let controller: import('../scripts/print-viewer').PrintController | undefined;
+		const rotateStep = Math.PI / 12;
+		const zoomStep = 0.18;
+
+		function runAction(action: string) {
+			if (!controller) return;
+
+			switch (action) {
+				case 'rotate-left':
+					controller.rotate(-rotateStep);
+					break;
+				case 'rotate-right':
+					controller.rotate(rotateStep);
+					break;
+				case 'tilt-up':
+					controller.rotate(0, -rotateStep);
+					break;
+				case 'tilt-down':
+					controller.rotate(0, rotateStep);
+					break;
+				case 'zoom-in':
+					controller.zoom(zoomStep);
+					break;
+				case 'zoom-out':
+					controller.zoom(-zoomStep);
+					break;
+				case 'reset':
+					controller.reset();
+			}
+		}
+
+		controls?.addEventListener('click', (event) => {
+			const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
+				'[data-viewer-action]',
+			);
+			if (button) runAction(button.dataset.viewerAction ?? '');
+		});
+
+		canvas.addEventListener('keydown', (event) => {
+			const actions: Record<string, string> = {
+				ArrowLeft: 'rotate-left',
+				ArrowRight: 'rotate-right',
+				ArrowUp: 'tilt-up',
+				ArrowDown: 'tilt-down',
+				'+': 'zoom-in',
+				'=': 'zoom-in',
+				'-': 'zoom-out',
+				_: 'zoom-out',
+				Home: 'reset',
+			};
+			const action = actions[event.key];
+			if (!action) return;
+			event.preventDefault();
+			runAction(action);
+		});
 
 		async function start() {
 			if (started) return;
@@ -113,12 +278,16 @@ function formatBytes(bytes: number) {
 
 			try {
 				const { renderPrint } = await import('../scripts/print-viewer');
-				await renderPrint(stage, canvas!, src!);
-				status?.remove();
+				controller = await renderPrint(stage, canvas!, src!);
+				if (status) status.textContent = '3D preview ready.';
+				stage.dataset.viewerState = 'ready';
 				stage.classList.add('is-ready');
+				buttons?.forEach((button) => (button.disabled = false));
 			} catch (error) {
 				console.error('3D preview failed to load', error);
 				if (status) status.textContent = 'Preview unavailable — use the download link below.';
+				stage.dataset.viewerState = 'error';
+				stage.dataset.animationState = 'paused';
 				stage.classList.add('is-error');
 			}
 		}
