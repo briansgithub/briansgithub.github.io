@@ -18,7 +18,7 @@ const Content = rendered?.Content;
 	<div class="shell about-grid">
 		<header>
 			<p class="eyebrow">About</p>
-			<h1>A person behind the notes.</h1>
+			<h1>Engineering across hardware and software</h1>
 		</header>
 		<aside>
 			<Image
@@ -38,16 +38,26 @@ const Content = rendered?.Content;
 <style>
 	.about-grid {
 		display: grid;
-		grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
-		gap: 2rem clamp(3rem, 9vw, 9rem);
-		padding-block: clamp(4rem, 10vw, 9rem);
+		grid-template-areas:
+			'portrait intro'
+			'portrait copy';
+		grid-template-columns: minmax(17rem, 0.65fr) minmax(0, 1.15fr);
+		align-items: start;
+		gap: 2rem clamp(3rem, 8vw, 7rem);
+		padding-block: clamp(4rem, 8vw, 7rem);
+	}
+	.about-grid header {
+		grid-area: intro;
 	}
 	.about-grid h1 {
-		max-width: 14ch;
-		font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+		max-width: 16ch;
+		font-size: clamp(2.35rem, 4.5vw, 3.8rem);
 	}
 	.about-grid aside {
+		grid-area: portrait;
 		align-self: start;
+		justify-self: start;
+		width: min(100%, 28rem);
 	}
 	.about-mark {
 		width: 100%;
@@ -58,18 +68,27 @@ const Content = rendered?.Content;
 		object-fit: cover;
 	}
 	.about-copy {
-		grid-column: 1;
-		padding-top: 1rem;
+		grid-area: copy;
+		max-width: 68ch;
+		margin: 0;
+		padding-top: 0;
+	}
+	:global(.about-copy > h2:first-child) {
+		margin-top: 0;
 	}
 	@media (max-width: 760px) {
 		.about-grid {
+			grid-template-areas:
+				'intro'
+				'portrait'
+				'copy';
 			grid-template-columns: 1fr;
+			gap: 2rem;
+			padding-block: 3.5rem 4.5rem;
 		}
 		.about-grid aside {
-			max-width: 20rem;
-		}
-		.about-copy {
-			grid-column: 1;
+			justify-self: center;
+			width: min(100%, 24rem);
 		}
 	}
 </style>
