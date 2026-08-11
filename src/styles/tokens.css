@@ -25,7 +25,7 @@
 }
 
 :root {
-	color-scheme: dark light;
+	color-scheme: dark;
 
 	/* Surfaces: near-black with a faint blue undertone.
 	   --surface-raised sits above the page (cards, panels).
@@ -55,18 +55,18 @@
 	--radius: 0.25rem;
 }
 
-@media (prefers-color-scheme: light) {
-	:root {
-		--surface: #f7f8fa;
-		--surface-raised: #ffffff;
-		--surface-inset: #edf0f5;
-		--ink: #0b0e14;
-		--ink-soft: #545c6b;
-		--line: #dfe3ea;
-		--line-strong: #c3c9d4;
-		--accent: #1f57c3;
-		--accent-soft: #17439a;
-		--accent-violet: #6d47d9;
-		--selection: rgb(31 87 195 / 0.18);
-	}
+/* Light theme is a manual opt-in only (data-theme="light" on <html>), not automatic
+   from prefers-color-scheme — the site should always render dark by default. */
+:root[data-theme='light'] {
+	--surface: #f7f8fa;
+	--surface-raised: #ffffff;
+	--surface-inset: #edf0f5;
+	--ink: #0b0e14;
+	--ink-soft: #545c6b;
+	--line: #dfe3ea;
+	--line-strong: #c3c9d4;
+	--accent: #1f57c3;
+	--accent-soft: #17439a;
+	--accent-violet: #6d47d9;
+	--selection: rgb(31 87 195 / 0.18);
 }
