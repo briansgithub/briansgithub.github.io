@@ -207,7 +207,14 @@ const noIndex = site.preview || placeholder;
 				});
 
 				document.addEventListener('keydown', (event) => {
-					if (event.key === 'Escape') closeMenu();
+					if (event.key === 'Escape' && nav.classList.contains('is-open')) {
+						closeMenu();
+						toggle.focus();
+					}
+				});
+
+				window.matchMedia('(min-width: 861px)').addEventListener('change', (event) => {
+					if (event.matches) closeMenu();
 				});
 			}
 		</script>
