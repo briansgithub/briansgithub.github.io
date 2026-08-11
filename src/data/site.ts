@@ -8,7 +8,7 @@ export const site = {
 		'I build embedded systems and write software, with a background in applied physics and electrical engineering. This site collects hardware projects, technical writing, book notes, and quotations.',
 	longBio:
 		'I work across embedded software, project engineering, and hardware-software integration — most recently building bare-metal C/C++ firmware for RP2040-based devices and, before that, managing the electromechanical manufacturing of products from prototype through production. My background is in applied physics and electrical/computer engineering, with undergraduate research in graphene material characterization.',
-	url: 'https://briansgithub.github.io',
+	url: 'https://bellsworth.dev',
 	language: 'en-US',
 	github: 'https://github.com/briansgithub',
 	email: 'bellsworth137@gmail.com',

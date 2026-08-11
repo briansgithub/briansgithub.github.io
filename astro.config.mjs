@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-	site: 'https://briansgithub.github.io',
+	site: 'https://bellsworth.dev',
 	output: 'static',
 	build: {
 		format: 'directory',
