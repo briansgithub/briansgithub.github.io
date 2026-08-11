@@ -12,4 +12,5 @@ fi
 
 # The outgoing checker reads the ref ranges that Git supplies on standard input.
 node scripts/check-assets.mjs outgoing "${1:-}"
+node scripts/check-assets.mjs history
 node scripts/check-links.mjs source
