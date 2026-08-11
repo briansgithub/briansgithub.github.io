@@ -174,6 +174,17 @@ Obsidian places attachments in an `images` folder beneath the current note's dir
 - keep an individual content image below 2 MB, preferably below 500 KB; and
 - write useful alt text in standard syntax: `![Description](images/example.webp)`.
 
+To present two related images as an evidence gallery, place their Markdown image lines directly
+next to each other with no blank line between them. Leave a blank line before and after the pair:
+
+```md
+![Front view](images/device-front.webp)
+![Back view](images/device-back.webp)
+```
+
+The site displays the pair side by side on wider screens and stacks it on mobile. A single image,
+or images separated by a blank line, keeps the normal full-width reading flow.
+
 Do not commit camera RAW files, PSDs, TIFFs, large GIFs, audio, or video. Use the **Media: import image** VS Code task to make a web-safe copy before an image enters Git history; it preserves the original outside the repository.
 
 ## 8. Privacy and backup
