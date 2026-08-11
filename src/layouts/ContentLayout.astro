@@ -1,4 +1,5 @@
 ---
+import type { MarkdownHeading } from 'astro';
 import BaseLayout from './BaseLayout.astro';
 import PlaceholderBadge from '../components/PlaceholderBadge.astro';
 
@@ -8,13 +9,27 @@ interface Props {
 	meta?: string;
 	tags?: string[];
 	placeholder?: boolean;
+	headings?: MarkdownHeading[];
+	collectionHref?: string;
+	collectionLabel?: string;
 }
 
-const { title, description, meta, tags = [], placeholder = false } = Astro.props;
+const {
+	title,
+	description,
+	meta,
+	tags = [],
+	placeholder = false,
+	headings = [],
+	collectionHref,
+	collectionLabel,
+} = Astro.props;
+const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const hasToc = tocHeadings.length >= 3;
 ---
 
 <BaseLayout title={title} description={description} placeholder={placeholder}>
-	<article class="shell article-shell">
+	<article class:list={['shell', 'article-shell', { 'article-shell--with-toc': hasToc }]}>
 		<header class="article-header">
 			<div class="article-header__meta">
 				{meta && <span>{meta}</span>}
@@ -34,8 +49,150 @@ const { title, description, meta, tags = [], placeholder = false } = Astro.props
 				)
 			}
 		</header>
-		<div class="prose">
-			<slot />
+		<div class:list={['article-body', { 'article-body--with-toc': hasToc }]}>
+			{
+				hasToc && (
+					<aside class="entry-toc">
+						<details open>
+							<summary>On this page</summary>
+							<nav aria-label="Table of contents">
+								<ol>
+									{tocHeadings.map((heading) => (
+										<li class:list={{ 'entry-toc__item--nested': heading.depth === 3 }}>
+											<a href={`#${heading.slug}`}>{heading.text}</a>
+										</li>
+									))}
+								</ol>
+							</nav>
+						</details>
+					</aside>
+				)
+			}
+			<div class="prose">
+				<slot />
+				{
+					collectionHref && collectionLabel && (
+						<nav class="entry-return" aria-label="Entry navigation">
+							<span>Continue exploring</span>
+							<a href={collectionHref}>Back to {collectionLabel} →</a>
+						</nav>
+					)
+				}
+			</div>
 		</div>
 	</article>
 </BaseLayout>
+
+<style>
+	.article-body--with-toc {
+		display: grid;
+		grid-template-columns: minmax(0, var(--measure)) minmax(11rem, 14rem);
+		align-items: start;
+		justify-content: center;
+		gap: clamp(2rem, 5vw, 4rem);
+	}
+
+	.article-body--with-toc .prose {
+		max-width: none;
+		margin-inline: 0;
+	}
+
+	.entry-toc {
+		position: sticky;
+		top: 1.5rem;
+		grid-column: 2;
+		grid-row: 1;
+		padding-top: 2.5rem;
+		color: var(--ink-soft);
+		font-family: var(--mono);
+		font-size: 0.72rem;
+		line-height: 1.45;
+	}
+
+	.entry-toc details {
+		border-top: 1px solid var(--line-strong);
+		border-bottom: 1px solid var(--line);
+	}
+
+	.entry-toc summary {
+		padding-block: 0.85rem;
+		color: var(--ink);
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	.entry-toc ol {
+		margin: 0 0 1rem;
+		padding: 0;
+		list-style: none;
+	}
+
+	.entry-toc li + li {
+		margin-top: 0.6rem;
+	}
+
+	.entry-toc__item--nested {
+		padding-left: 0.8rem;
+	}
+
+	.entry-toc a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.entry-toc a:hover {
+		color: var(--accent);
+	}
+
+	.entry-return {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1.5rem;
+		margin-top: 4rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--line-strong);
+		font-size: 0.82rem;
+		font-weight: 500;
+	}
+
+	.entry-return span {
+		color: var(--ink-soft);
+		font-family: var(--mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.entry-return a {
+		color: var(--accent);
+	}
+
+	@media (max-width: 68rem) {
+		.article-body--with-toc {
+			display: block;
+		}
+
+		.entry-toc {
+			position: static;
+			margin-inline: auto;
+			max-width: var(--measure);
+			padding-top: 2.5rem;
+		}
+
+		.article-body--with-toc .prose {
+			max-width: var(--measure);
+			margin-inline: auto;
+		}
+	}
+
+	@media (max-width: 560px) {
+		.entry-return {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+	}
+</style>
