@@ -123,7 +123,7 @@ Before publishing real content:
 4. Set `draft: false`.
 5. Preview the rendered page and review the Git diff.
 
-Placeholder entries may remain visible during design work, but they should be excluded from RSS, search indexing, and the final sitemap until replaced.
+Placeholder entries remain visible only while `site.preview` is enabled. Public builds exclude them from lists, detail routes, tags, RSS, and the sitemap until replaced.
 
 ## 5. Create and write
 
@@ -193,6 +193,6 @@ The initial content set covers every decision needed before launch:
 - **First writing:** `writing/first-writing.md` provides a readable article structure without presenting sample prose as the author's work.
 - **Quotes:** Two ordered quote entries are ready for genuine selections.
 - **Book note:** `books/first-book-note.md` provides the note structure without claiming the book was read.
-- **Domain:** `pages/home.md` records the GitHub Pages versus custom-domain decision. A placeholder domain must never be used as the canonical URL.
+- **Domain:** `bellsworth.dev` is the configured canonical domain. Keep `site.preview` enabled until the launch checklist is complete.
 
 Replace these items deliberately rather than deleting all placeholder content at once; they collectively exercise the site's major content layouts.

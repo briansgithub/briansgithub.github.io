@@ -387,6 +387,20 @@ h2 {
 	grid-column: 1 / -1;
 }
 
+.preview-badge {
+	display: inline-flex;
+	align-items: center;
+	margin-right: 0.6rem;
+	padding: 0.12rem 0.35rem;
+	border: 1px solid var(--line-strong);
+	border-radius: var(--radius);
+	color: var(--ink-soft);
+	font-family: var(--mono);
+	font-size: 0.64rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
 .site-footer__links a {
 	display: inline-flex;
 	align-items: center;

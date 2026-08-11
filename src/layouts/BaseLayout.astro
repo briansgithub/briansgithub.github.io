@@ -159,7 +159,13 @@ const noIndex = site.preview || placeholder;
 						</svg>
 					</a>
 				</div>
-				<p class="site-footer__meta">© {new Date().getFullYear()} {site.name}</p>
+				<p class="site-footer__meta">
+					{site.preview && <span class="preview-badge">Preview</span>}
+					{' '}
+					© {new Date().getFullYear()}
+					{' '}
+					{site.name}
+				</p>
 			</div>
 		</footer>
 		<script>
