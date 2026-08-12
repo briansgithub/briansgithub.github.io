@@ -14,7 +14,7 @@ interface Props {
 	entry: CollectionEntry<'prints'>;
 }
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 const meta = entry.data.printedAt
 	? `${entry.data.material} · ${formatDate(entry.data.printedAt)}`
@@ -27,6 +27,9 @@ const meta = entry.data.printedAt
 	meta={meta}
 	tags={entry.data.tags}
 	placeholder={entry.data.placeholder}
+	headings={headings}
+	collectionHref="/prints/"
+	collectionLabel="Prints"
 >
 	{
 		entry.data.links && (

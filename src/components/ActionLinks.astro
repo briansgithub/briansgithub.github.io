@@ -1,0 +1,67 @@
+---
+interface Action {
+	label: string;
+	href: string;
+	download?: boolean;
+	variant?: 'primary' | 'secondary';
+}
+
+interface Props {
+	actions: Action[];
+	label?: string;
+}
+
+const { actions, label = 'Actions' } = Astro.props;
+---
+
+<nav class="action-links" aria-label={label}>
+	{
+		actions.map((action) => (
+			<a
+				class:list={['action-links__link', `action-links__link--${action.variant ?? 'secondary'}`]}
+				href={action.href}
+				download={action.download}
+			>
+				{action.label}
+			</a>
+		))
+	}
+</nav>
+
+<style>
+	.action-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 2rem;
+	}
+
+	.action-links__link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 2.75rem;
+		padding: 0.65rem 1rem;
+		border: 1px solid var(--line-strong);
+		border-radius: var(--radius);
+		font-size: 0.82rem;
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.action-links__link--primary {
+		border-color: var(--accent);
+		background: var(--accent);
+		color: var(--surface);
+	}
+
+	.action-links__link--primary:hover {
+		border-color: var(--accent-soft);
+		background: var(--accent-soft);
+		color: var(--surface);
+	}
+
+	.action-links__link--secondary:hover {
+		border-color: var(--accent-soft);
+	}
+</style>

@@ -18,11 +18,13 @@ export const site = {
 } as const;
 
 export const navigation = [
-	{ label: 'Writing', href: '/writing/' },
 	{ label: 'Projects', href: '/projects/' },
-	{ label: 'Prints', href: '/prints/' },
-	{ label: 'Books', href: '/books/' },
-	{ label: 'Quotes', href: '/quotes/' },
+	{ label: 'Writing', href: '/writing/' },
+	{
+		label: 'Collections',
+		href: '/collections/',
+		matchPrefixes: ['/prints/', '/books/', '/quotes/', '/tags/'],
+	},
 	{ label: 'About', href: '/about/' },
 	{ label: 'Résumé', href: '/resume/' },
 ] as const;

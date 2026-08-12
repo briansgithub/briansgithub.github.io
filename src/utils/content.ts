@@ -1,3 +1,6 @@
+import { site } from '../data/site';
+import { isContentVisible, type VisibilityData } from './visibility';
+
 export function contentSlug(id: string) {
 	return id.replace(/\\/g, '/').replace(/\/index$/, '');
 }
@@ -7,9 +10,11 @@ export function formatDate(date: Date) {
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric',
+		timeZone: 'UTC',
 	}).format(date);
 }
 
-export function isVisible(data: { draft?: boolean }) {
-	return !data.draft;
+export function isVisible(data: VisibilityData, options: { preview?: boolean } = {}) {
+	const preview = options.preview ?? site.preview;
+	return isContentVisible(data, preview);
 }

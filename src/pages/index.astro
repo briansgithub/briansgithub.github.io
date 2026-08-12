@@ -2,8 +2,9 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ActionLinks from '../components/ActionLinks.astro';
 import ContentCard from '../components/ContentCard.astro';
-import PlaceholderBadge from '../components/PlaceholderBadge.astro';
+import FeaturedProject from '../components/FeaturedProject.astro';
 import { site } from '../data/site';
 import { contentSlug, formatDate, isVisible } from '../utils/content';
 import portrait from '../assets/images/portrait/brian-ellsworth-portrait.webp';
@@ -23,43 +24,45 @@ const featuredProjects = projects
 			Number(b.data.featured) - Number(a.data.featured) ||
 			(a.data.order ?? 99) - (b.data.order ?? 99),
 	)
-	.slice(0, 2);
+	.slice(0, 3);
+const leadProject = featuredProjects.find((project) => project.data.cover);
+const secondaryProjects = leadProject
+	? featuredProjects.filter((project) => project.id !== leadProject.id)
+	: featuredProjects;
 const latestBook = books.sort(
 	(a, b) => (b.data.finishedAt?.valueOf() ?? 0) - (a.data.finishedAt?.valueOf() ?? 0),
 )[0];
 ---
 
 <BaseLayout>
-	{
-		site.preview && (
-			<div class="preview-notice">
-				<div class="shell">
-					<PlaceholderBadge label="Content preview" />
-					<p>
-						The structure is ready; the bracketed identity and sample entries are waiting for your
-						real material.
-					</p>
-				</div>
-			</div>
-		)
-	}
-
 	<section class="shell hero">
 		<div class="hero__main">
 			<p class="eyebrow">Build log / selected work</p>
 			<h1>{site.name}</h1>
 			<p class="hero__tagline">{site.tagline}</p>
+			<ActionLinks
+				label="Featured links"
+				actions={[
+					{ label: 'View projects', href: '/projects/', variant: 'primary' },
+					{
+						label: 'Download résumé',
+						href: '/files/brian-ellsworth-resume.pdf',
+						download: true,
+					},
+				]}
+			/>
 		</div>
-		<aside class="hero__aside" aria-label="Introduction">
+		<aside class="hero__aside" aria-label="About Brian Ellsworth">
 			<Image
 				class="portrait-placeholder"
 				src={portrait}
 				alt="Brian Ellsworth smiling, wearing glasses"
-				widths={[400, 800, 1200]}
-				sizes="(max-width: 760px) 30rem, 22vw"
+				widths={[320, 480, 640]}
+				sizes="17rem"
+				loading="eager"
+				fetchpriority="high"
 			/>
-			<p>{site.shortBio}</p>
-			<a href="/about/">A little more about me <span aria-hidden="true">→</span></a>
+			<a class="hero__about" href="/about/">About Brian <span aria-hidden="true">→</span></a>
 		</aside>
 	</section>
 
@@ -70,14 +73,28 @@ const latestBook = books.sort(
 					<h2 id="projects-heading">Selected projects</h2>
 					<a href="/projects/">All projects</a>
 				</div>
-				<div class="content-grid">
-					{featuredProjects.map((project) => (
+				{leadProject?.data.cover && (
+					<FeaturedProject
+						href={`/projects/${contentSlug(leadProject.id)}/`}
+						title={leadProject.data.title}
+						description={leadProject.data.summary}
+						meta={`${leadProject.data.year} · ${leadProject.data.status}`}
+						technologies={leadProject.data.technologies}
+						cover={leadProject.data.cover}
+						headingLevel={3}
+						placeholder={leadProject.data.placeholder}
+					/>
+				)}
+				<div class:list={['content-grid', { 'project-grid--secondary': leadProject }]}>
+					{secondaryProjects.map((project) => (
 						<ContentCard
 							href={`/projects/${contentSlug(project.id)}/`}
 							title={project.data.title}
 							description={project.data.summary}
 							meta={`${project.data.year} · ${project.data.status}`}
 							tags={project.data.technologies}
+							tagLabel="Technologies"
+							headingLevel={3}
 							placeholder={project.data.placeholder}
 						/>
 					))}
@@ -101,6 +118,7 @@ const latestBook = books.sort(
 							description={entry.data.description}
 							meta={formatDate(entry.data.publishedAt)}
 							tags={entry.data.tags}
+							headingLevel={3}
 							placeholder={entry.data.placeholder}
 						/>
 					))}
@@ -134,30 +152,16 @@ const latestBook = books.sort(
 </BaseLayout>
 
 <style>
-	.preview-notice {
-		border-bottom: 1px solid var(--line-strong);
-		background: var(--surface-raised);
-	}
-
-	.preview-notice .shell {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		min-height: 3.2rem;
-	}
-
-	.preview-notice p {
-		margin: 0;
-		color: var(--ink-soft);
-		font-size: 0.78rem;
-	}
-
 	.hero {
 		display: grid;
-		grid-template-columns: minmax(0, 2.2fr) minmax(18rem, 0.8fr);
-		gap: clamp(3rem, 8vw, 8rem);
-		align-items: end;
-		padding-block: clamp(5rem, 13vw, 10rem);
+		grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.55fr);
+		gap: clamp(2.5rem, 6vw, 6rem);
+		align-items: center;
+		padding-block: clamp(3.5rem, 6vw, 5.5rem);
+	}
+
+	.hero__main {
+		padding-block: 1rem;
 	}
 
 	.hero__tagline {
@@ -169,29 +173,41 @@ const latestBook = books.sort(
 		line-height: 1.45;
 	}
 
-	.hero__aside p {
-		margin: 1.4rem 0;
-		color: var(--ink-soft);
+	.hero__aside {
+		width: min(100%, 17rem);
+		justify-self: end;
 	}
 
-	.hero__aside > a,
+	.hero__about,
 	.closing-grid a {
 		color: var(--accent);
 		font-size: 0.82rem;
 		font-weight: 500;
 	}
 
+	.hero__about {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		min-height: 2.75rem;
+		margin-top: 0.5rem;
+	}
+
 	.portrait-placeholder {
 		width: 100%;
-		aspect-ratio: 4 / 3;
+		aspect-ratio: 4 / 5;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
 		object-fit: cover;
-		object-position: top;
+		object-position: 50% 38%;
 	}
 
 	.home-section {
 		padding-top: 1rem;
+	}
+
+	.project-grid--secondary {
+		border-top: 0;
 	}
 
 	.closing-grid {
@@ -225,7 +241,21 @@ const latestBook = books.sort(
 		}
 
 		.hero__aside {
-			max-width: 30rem;
+			width: min(100%, 15rem);
+			justify-self: center;
+		}
+
+		.hero {
+			gap: 1.5rem;
+			padding-block: 2.25rem 2.5rem;
+		}
+
+		.closing-grid {
+			margin-block: 3.5rem;
+		}
+
+		.closing-grid > div {
+			padding: 1.75rem;
 		}
 
 		.closing-grid > div + div {

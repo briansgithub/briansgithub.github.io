@@ -2,6 +2,10 @@
 	"version": 1,
 	"units": "bytes",
 	"distDirectory": "dist",
+	"history": {
+		"warningTotalBytes": 104857600,
+		"maximumTotalBytes": 262144000
+	},
 	"source": {
 		"warningTotalBytes": 104857600,
 		"maximumTotalBytes": 262144000,
@@ -9,7 +13,9 @@
 		"warningImageBytes": 1048576,
 		"maximumImageBytes": 2097152,
 		"warningDocumentBytes": 2097152,
-		"maximumDocumentBytes": 3145728
+		"maximumDocumentBytes": 3145728,
+		"warningModelBytes": 1048576,
+		"maximumModelBytes": 5242880
 	},
 	"dist": {
 		"warningTotalBytes": 104857600,
@@ -22,6 +28,8 @@
 		"warningScriptStyleBytes": 204800,
 		"maximumScriptStyleBytes": 307200,
 		"maximumDocumentBytes": 3145728,
+		"warningModelBytes": 1048576,
+		"maximumModelBytes": 5242880,
 		"scriptStyleExceptions": [
 			{
 				"pattern": "_astro/print-viewer\\..*\\.js$",
@@ -34,6 +42,7 @@
 	"extensions": {
 		"images": [".avif", ".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"],
 		"documents": [".pdf"],
+		"models": [".stl"],
 		"html": [".htm", ".html"],
 		"scriptsAndStyles": [".css", ".js", ".mjs"],
 		"forbidden": {

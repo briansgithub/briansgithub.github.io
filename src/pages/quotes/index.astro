@@ -9,66 +9,124 @@ const quotes = (await getCollection('quotes', ({ data }) => isVisible(data))).so
 	(a, b) => (a.data.order ?? 999) - (b.data.order ?? 999),
 );
 
-type Item =
-	| { kind: 'category'; label: string }
-	| {
-			kind: 'quote';
-			entry: (typeof quotes)[number];
-			number: number;
-			citationText: string | null;
-			citationHref: string | null;
-	  };
+function formatCategoryLabel(category: string) {
+	return category
+		.replace(/^On\s+/i, '')
+		.replace(/(?:\.\.\.|…)+$/, '')
+		.trim();
+}
 
-const items: Item[] = [];
-let lastCategory: string | undefined;
+function categorySlug(category: string) {
+	return formatCategoryLabel(category)
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, '-')
+		.replace(/(^-|-$)/g, '');
+}
+
+type QuoteItem = {
+	entry: (typeof quotes)[number];
+	number: number;
+	citationText: string | null;
+	citationHref: string | null;
+};
+
+type Category = {
+	id: string;
+	label: string;
+	quotes: QuoteItem[];
+};
+
+const categories: Category[] = [];
+const categoriesByLabel = new Map<string, Category>();
+const usedCategoryIds = new Set<string>();
+
 quotes.forEach((entry, index) => {
-	if (entry.data.category && entry.data.category !== lastCategory) {
-		items.push({ kind: 'category', label: entry.data.category });
-		lastCategory = entry.data.category;
+	const sourceLabel = entry.data.category ?? 'Uncategorized';
+	let category = categoriesByLabel.get(sourceLabel);
+	if (!category) {
+		const baseId = `category-${categorySlug(sourceLabel) || 'uncategorized'}`;
+		let id = baseId;
+		let suffix = 2;
+		while (usedCategoryIds.has(id)) {
+			id = `${baseId}-${suffix}`;
+			suffix += 1;
+		}
+		category = { id, label: formatCategoryLabel(sourceLabel), quotes: [] };
+		categoriesByLabel.set(sourceLabel, category);
+		usedCategoryIds.add(id);
+		categories.push(category);
 	}
-	// The original page hyperlinked the citation text itself (a title when
-	// there was one, otherwise the bare URL) — preserve that here rather
-	// than dropping the link when there's no separate source title.
-	const citationText = entry.data.source ?? entry.data.url ?? null;
-	const citationHref = entry.data.url ?? null;
-	items.push({ kind: 'quote', entry, number: index + 1, citationText, citationHref });
+
+	// The original page hyperlinked the citation text itself (a title when there
+	// was one, otherwise the bare URL) â€” retain that behavior for every quote.
+	category.quotes.push({
+		entry,
+		number: index + 1,
+		citationText: entry.data.source ?? entry.data.url ?? null,
+		citationHref: entry.data.url ?? null,
+	});
 });
 ---
 
 <BaseLayout title="Quotations" description="Lines worth returning to.">
 	<div class="shell">
 		<PageIntro
-			eyebrow="Index 04"
+			eyebrow="Collection 03"
 			title="Quotations"
 			description="Lines worth returning to—kept with their source whenever I can find it."
 		/>
+		{
+			categories.length > 0 && (
+				<nav id="quote-categories" class="quote-jump-grid" aria-label="Quote categories">
+					{categories.map((category) => (
+						<a href={`#${category.id}`}>
+							<span>{category.label}</span>
+							<span class="quote-jump-grid__count">{category.quotes.length}</span>
+						</a>
+					))}
+				</nav>
+			)
+		}
 		<div class="quotes-list">
 			{
-				items.map((item) =>
-					item.kind === 'category' ? (
-						<h2 class="quote-category">{item.label}</h2>
-					) : (
-						<figure>
-							<div class="quote-number">{String(item.number).padStart(2, '0')}</div>
-							<blockquote>“{item.entry.data.quote}”</blockquote>
-							<figcaption>
-								<span>
-									— {item.entry.data.author}
-									{item.citationText && ', '}
-									{item.citationText &&
-										(item.citationHref ? (
-											<a href={item.citationHref} target="_blank" rel="noopener noreferrer">
-												{item.citationText}
-											</a>
-										) : (
-											item.citationText
-										))}
-								</span>
-								{item.entry.data.placeholder && <PlaceholderBadge label="Sample selection" />}
-							</figcaption>
-						</figure>
-					),
-				)
+				categories.map((category) => (
+					<section
+						id={category.id}
+						class="quote-category-section"
+						aria-labelledby={`${category.id}-heading`}
+					>
+						<header class="quote-category-header">
+							<h2 id={`${category.id}-heading`} class="quote-category">
+								{category.label}
+							</h2>
+							<span class="quote-category__count">{category.quotes.length} quotes</span>
+						</header>
+						{category.quotes.map((item) => (
+							<figure>
+								<div class="quote-number">{String(item.number).padStart(2, '0')}</div>
+								<blockquote>“{item.entry.data.quote}”</blockquote>
+								<figcaption>
+									<span>
+										— {item.entry.data.author}
+										{item.citationText && ', '}
+										{item.citationText &&
+											(item.citationHref ? (
+												<a href={item.citationHref} target="_blank" rel="noopener noreferrer">
+													{item.citationText}
+												</a>
+											) : (
+												item.citationText
+											))}
+									</span>
+									{item.entry.data.placeholder && <PlaceholderBadge label="Sample selection" />}
+								</figcaption>
+							</figure>
+						))}
+						<a class="quote-category__back" href="#quote-categories">
+							Back to categories ↑
+						</a>
+					</section>
+				))
 			}
 			{quotes.length === 0 && <p class="empty-state">No quotations published yet.</p>}
 		</div>
@@ -76,19 +134,67 @@ quotes.forEach((entry, index) => {
 </BaseLayout>
 
 <style>
+	.quote-jump-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+		margin-top: clamp(2rem, 4vw, 3rem);
+		border-top: 1px solid var(--line);
+		border-left: 1px solid var(--line);
+	}
+
+	.quote-jump-grid a {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		min-height: 3rem;
+		padding: 0.65rem 0.85rem;
+		border-right: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+		color: var(--ink-soft);
+		font-family: var(--mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.03em;
+		text-decoration: none;
+	}
+
+	.quote-jump-grid a:hover {
+		background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+		color: var(--accent);
+	}
+
+	.quote-jump-grid__count,
+	.quote-category__count {
+		color: var(--accent-violet);
+		font-family: var(--mono);
+		font-size: 0.68rem;
+		letter-spacing: 0.04em;
+		white-space: nowrap;
+	}
+
 	.quotes-list {
 		margin-bottom: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.quote-category-section {
+		scroll-margin-top: 7rem;
 		border-top: 1px solid var(--line);
 	}
 
-	/* Section marker: label plus a trailing rule. Sized clearly above the
-	   quote text below it so it reads as a heading, not a footnote. */
+	.quote-category-header {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: clamp(1.75rem, 3.5vw, 2.5rem) 0 0.6rem;
+	}
+
 	.quote-category {
 		display: flex;
+		flex: 1;
 		align-items: baseline;
 		gap: 0.9rem;
 		margin: 0;
-		padding: clamp(1.75rem, 3.5vw, 2.5rem) 0 0.6rem;
 		color: var(--accent);
 		font-family: var(--mono);
 		font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem);
@@ -105,15 +211,9 @@ quotes.forEach((entry, index) => {
 		content: '';
 	}
 
-	/* The list already opens with a hairline, so the first marker sits tighter. */
-	.quote-category:first-child {
-		padding-top: clamp(1.25rem, 2.5vw, 1.75rem);
-	}
-
 	figure {
 		display: grid;
 		grid-template-columns: 2.25rem minmax(0, 1fr);
-		/* Sits the numeral on the quote's first baseline at every font size. */
 		align-items: baseline;
 		gap: 0.5rem 1rem;
 		margin: 0;
@@ -128,9 +228,6 @@ quotes.forEach((entry, index) => {
 		line-height: 1;
 	}
 
-	/* Quotes here range from six words to a 600-character passage, so this is
-	   sized as reading text, not as a pull quote — and kept below the
-	   category heading's size so the two don't compete. */
 	blockquote {
 		max-width: 62ch;
 		margin: 0;
@@ -163,9 +260,25 @@ quotes.forEach((entry, index) => {
 		color: var(--accent-soft);
 	}
 
+	.quote-category__back {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		margin-top: 0.5rem;
+		color: var(--accent);
+		font-size: 0.78rem;
+		font-weight: 500;
+	}
+
 	@media (max-width: 560px) {
+		.quote-category-header {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 0.4rem;
+		}
+
 		.quote-category {
-			padding-top: 1.5rem;
+			width: 100%;
 		}
 
 		figure {

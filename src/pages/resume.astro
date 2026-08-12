@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageIntro from '../components/PageIntro.astro';
+import ActionLinks from '../components/ActionLinks.astro';
 import { resume } from '../data/resume';
 import { site } from '../data/site';
 ---
@@ -17,9 +18,20 @@ import { site } from '../data/site';
 			description={resume.summary}
 			placeholder={resume.placeholder}
 		/>
-		<div class="resume-actions" role="note">
-			<a href="/files/brian-ellsworth-resume.pdf" download>Download PDF</a>
-			<p>The structured page below is the same content in an easier-to-browse form.</p>
+		<div class="resume-actions">
+			<ActionLinks
+				label="Résumé links"
+				actions={[
+					{
+						label: 'Download PDF',
+						href: '/files/brian-ellsworth-resume.pdf',
+						download: true,
+						variant: 'primary',
+					},
+					{ label: 'Email', href: `mailto:${site.email}` },
+					{ label: 'GitHub', href: site.github },
+				]}
+			/>
 		</div>
 		<section class="resume-section" aria-labelledby="experience-heading">
 			<h2 id="experience-heading">Experience</h2>
@@ -80,9 +92,6 @@ import { site } from '../data/site';
 				}
 			</div>
 		</section>
-		<footer class="resume-contact">
-			<p>Code and public work</p><a href={site.github}>{site.github.replace('https://', '')}</a>
-		</footer>
 	</div>
 </BaseLayout>
 
@@ -92,20 +101,13 @@ import { site } from '../data/site';
 	}
 	.resume-actions {
 		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1rem 0;
+		justify-content: flex-end;
+		padding: 1.25rem 0 1.5rem;
 		border-bottom: 1px solid var(--line);
-		color: var(--ink-soft);
-		font-size: 0.82rem;
 	}
-	.resume-actions p {
-		margin: 0;
-	}
-	.resume-actions a {
-		color: var(--accent);
-		font-weight: 500;
-		white-space: nowrap;
+	.resume-actions :global(.action-links) {
+		justify-content: flex-end;
+		margin-top: 0;
 	}
 	.resume-section {
 		display: grid;
@@ -148,26 +150,21 @@ import { site } from '../data/site';
 	}
 	.skill-grid {
 		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 2rem;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+		border-top: 1px solid var(--line);
+		border-left: 1px solid var(--line);
+	}
+	.skill-grid article {
+		padding: 1.25rem;
+		border-right: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
 	}
 	.skill-grid p {
-		color: var(--ink-soft);
-	}
-	.resume-contact {
-		display: flex;
-		justify-content: space-between;
-		gap: 2rem;
-		padding-top: 2rem;
-		font-size: 0.82rem;
-	}
-	.resume-contact p {
-		margin: 0;
+		margin-bottom: 0;
 		color: var(--ink-soft);
 	}
 	@media (max-width: 720px) {
-		.resume-section,
-		.skill-grid {
+		.resume-section {
 			grid-template-columns: 1fr;
 		}
 		.resume-item header {
@@ -179,9 +176,8 @@ import { site } from '../data/site';
 			text-align: left;
 		}
 		.resume-actions,
-		.resume-contact {
-			align-items: flex-start;
-			flex-direction: column;
+		.resume-actions :global(.action-links) {
+			justify-content: flex-start;
 		}
 	}
 </style>

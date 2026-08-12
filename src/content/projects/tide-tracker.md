@@ -17,6 +17,9 @@ tags:
   - solar
 featured: true
 order: 1
+cover:
+  image: ../../assets/images/tide-tracker/tide-tracker-1-front.webp
+  alt: 'A working Tide Tracker in a sandy wood frame, displaying a tide-height chart on its e-ink screen.'
 links:
   Source: 'https://github.com/briansgithub/TideTracker_repo'
 draft: false
@@ -30,7 +33,6 @@ A friend lives directly on the water; a family member likes to go sailing on a n
 The device plots tide height versus time for a given location and displays the plot on an e-ink display. The data comes from NOAA (the National Oceanic and Atmospheric Administration), refreshed every two hours.
 
 ![Tide Tracker unit one, front view, in a sandy-toned picture-frame enclosure](../../assets/images/tide-tracker/tide-tracker-1-front.webp)
-
 ![Tide Tracker unit one, back view showing the solar panel connectors](../../assets/images/tide-tracker/tide-tracker-1-back.webp)
 
 ## Constraints
@@ -47,7 +49,6 @@ I ended up building two units rather than one:
 3. Nearly 80% of the total time went into designing the physical layout and writing the code — a one-time cost. The work from the first unit could be reused for free on all subsequent units, aside from parts and assembly time.
 
 ![Tide Tracker unit two, front view, in a dark rustic-toned frame enclosure](../../assets/images/tide-tracker/tide-tracker-2-front.webp)
-
 ![Tide Tracker unit two, back view showing the solar panel connectors](../../assets/images/tide-tracker/tide-tracker-2-back.webp)
 
 ## Approach
@@ -72,13 +73,11 @@ Height is measured relative to the mean lower low water (MLLW) level — the ave
 The tracker runs on a 4500mAh LiPo battery and can go several days unattended. It charges over USB-C, with five JST connectors for solar panels.
 
 ![Solar panel array wired to the Tide Tracker enclosure](../../assets/images/tide-tracker/tide-tracker-solar-panels-1.webp)
-
 ![Second angle of the solar panel array setup](../../assets/images/tide-tracker/tide-tracker-solar-panels-2.webp)
 
 I also designed and resin-printed custom stands for the solar panels:
 
 ![Resin-printed stand holding a solar panel at an angle](../../assets/images/tide-tracker/tide-tracker-solar-stand-1.webp)
-
 ![Second resin-printed solar panel stand design](../../assets/images/tide-tracker/tide-tracker-solar-stand-2.webp)
 
 ### Extensibility: changing location or network
@@ -90,7 +89,6 @@ What if my friend moves, or changes their Wi-Fi? I built a configuration webpage
 If the device loses its Wi-Fi connection, an error screen appears:
 
 ![Tide Tracker display showing a no-WiFi connection error screen](../../assets/images/tide-tracker/tide-tracker-no-wifi-photo.webp)
-
 ![Close-up of the no-WiFi setup instructions shown on the e-ink display](../../assets/images/tide-tracker/tide-tracker-no-wifi-screen.webp)
 
 Flipping the internal setup switch boots the Raspberry Pi into a mode that broadcasts its own Wi-Fi hotspot and hosts the settings page:

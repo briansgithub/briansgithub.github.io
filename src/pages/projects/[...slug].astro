@@ -13,7 +13,7 @@ interface Props {
 	entry: CollectionEntry<'projects'>;
 }
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 ---
 
 <ContentLayout
@@ -22,6 +22,9 @@ const { Content } = await render(entry);
 	meta={`${entry.data.year} · ${entry.data.status}`}
 	tags={entry.data.tags}
 	placeholder={entry.data.placeholder}
+	headings={headings}
+	collectionHref="/projects/"
+	collectionLabel="Projects"
 >
 	{
 		entry.data.links && (

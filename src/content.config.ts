@@ -23,18 +23,25 @@ const writing = defineCollection({
 
 const projects = defineCollection({
 	loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
-	schema: z.object({
-		title: z.string().min(1).max(120),
-		summary: z.string().min(1).max(240),
-		status: z.enum(['active', 'complete', 'archived']),
-		year: z.number().int().min(1900).max(2200),
-		technologies: z.array(z.string()).default([]),
-		tags: z.array(tag).default([]),
-		featured: z.boolean().default(false),
-		links: z.record(z.string(), z.url()).optional(),
-		order: z.number().int().optional(),
-		...editorialFields,
-	}),
+	schema: ({ image }) =>
+		z.object({
+			title: z.string().min(1).max(120),
+			summary: z.string().min(1).max(240),
+			status: z.enum(['active', 'complete', 'archived']),
+			year: z.number().int().min(1900).max(2200),
+			technologies: z.array(z.string()).default([]),
+			tags: z.array(tag).default([]),
+			featured: z.boolean().default(false),
+			cover: z
+				.object({
+					image: image(),
+					alt: z.string().min(1).max(240),
+				})
+				.optional(),
+			links: z.record(z.string(), z.url()).optional(),
+			order: z.number().int().optional(),
+			...editorialFields,
+		}),
 });
 
 const books = defineCollection({
