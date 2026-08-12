@@ -1,7 +1,7 @@
 export const resume = {
 	placeholder: false,
 	summary:
-		'Software engineer with experience in embedded software, project engineering, product development, lab research, and manufacturing of electro-mechanical devices. Skilled in defining product specifications and developing software for both front- and back-end applications, with a detail-oriented approach to risk and security analysis. Known for driving designs from concept through implementation, ensuring compliance with industry standards, and collaborating effectively across disciplines.',
+		'Embedded and software engineer working across bare-metal C/C++, hardware–software integration, and electromechanical product development, with experience carrying designs from prototype through production.',
 	experience: [
 		{
 			role: 'Embedded Engineer',

@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import ContentCard from '../../components/ContentCard.astro';
+import FeaturedProject from '../../components/FeaturedProject.astro';
 import { contentSlug, isVisible } from '../../utils/content';
 
 const projects = (await getCollection('projects', ({ data }) => isVisible(data))).sort(
@@ -11,6 +12,10 @@ const projects = (await getCollection('projects', ({ data }) => isVisible(data))
 		(a.data.order ?? 99) - (b.data.order ?? 99) ||
 		b.data.year - a.data.year,
 );
+const leadProject = projects.find((project) => project.data.cover);
+const remainingProjects = leadProject
+	? projects.filter((project) => project.id !== leadProject.id)
+	: projects;
 ---
 
 <BaseLayout title="Projects" description="Selected builds, investigations, and technical work.">
@@ -22,21 +27,41 @@ const projects = (await getCollection('projects', ({ data }) => isVisible(data))
 		/>
 		{
 			projects.length > 0 ? (
-				<div class="content-grid">
-					{projects.map((project) => (
-						<ContentCard
-							href={`/projects/${contentSlug(project.id)}/`}
-							title={project.data.title}
-							description={project.data.summary}
-							meta={`${project.data.year} · ${project.data.status}`}
-							tags={project.data.technologies}
-							placeholder={project.data.placeholder}
+				<>
+					{leadProject?.data.cover && (
+						<FeaturedProject
+							href={`/projects/${contentSlug(leadProject.id)}/`}
+							title={leadProject.data.title}
+							description={leadProject.data.summary}
+							meta={`${leadProject.data.year} · ${leadProject.data.status}`}
+							technologies={leadProject.data.technologies}
+							cover={leadProject.data.cover}
+							placeholder={leadProject.data.placeholder}
 						/>
-					))}
-				</div>
+					)}
+					<div class:list={['content-grid', { 'project-grid--secondary': leadProject }]}>
+						{remainingProjects.map((project) => (
+							<ContentCard
+								href={`/projects/${contentSlug(project.id)}/`}
+								title={project.data.title}
+								description={project.data.summary}
+								meta={`${project.data.year} · ${project.data.status}`}
+								tags={project.data.technologies}
+								tagLabel="Technologies"
+								placeholder={project.data.placeholder}
+							/>
+						))}
+					</div>
+				</>
 			) : (
 				<p class="empty-state">No projects published yet.</p>
 			)
 		}
 	</div>
 </BaseLayout>
+
+<style>
+	.project-grid--secondary {
+		border-top: 0;
+	}
+</style>

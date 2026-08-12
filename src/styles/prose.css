@@ -13,6 +13,7 @@
 .prose h3 {
 	margin-top: 2.2em;
 	margin-bottom: 0.7em;
+	scroll-margin-top: 7rem;
 }
 
 .prose h2 {
@@ -26,6 +27,21 @@
 .prose p,
 .prose li {
 	max-width: 68ch;
+}
+
+/* Consecutive Markdown image lines become one paragraph. Treat runs of two or
+   more images as supporting evidence, while single images retain their normal
+   full-width presentation. */
+.prose p:has(> img + img) {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem;
+	max-width: none;
+}
+
+.prose p:has(> img + img) img {
+	width: 100%;
+	height: auto;
 }
 
 .prose a {
@@ -88,4 +104,10 @@
 
 .prose th {
 	font-weight: 500;
+}
+
+@media (max-width: 560px) {
+	.prose p:has(> img + img) {
+		grid-template-columns: 1fr;
+	}
 }

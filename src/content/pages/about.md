@@ -5,7 +5,7 @@ draft: false
 placeholder: false
 ---
 
-## Long bio
+## Background
 
 I work across embedded software, project engineering, and hardware-software integration — most recently building bare-metal C/C++ firmware for RP2040-based devices at Prong Technologies, and before that managing the electromechanical manufacturing of products from prototype through production at Everson Tesla. My background is in applied physics and electrical/computer engineering from Rutgers, including undergraduate research in graphene material characterization.
 

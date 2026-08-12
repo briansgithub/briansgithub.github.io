@@ -7,7 +7,7 @@ const SCRIPT_DIRECTORY = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(SCRIPT_DIRECTORY, '..');
 const BUDGET_PATH = join(PROJECT_ROOT, 'config', 'size-budgets.json');
 const GIT_MAX_BUFFER = 256 * 1024 * 1024;
-const VALID_MODES = new Set(['source', 'staged', 'outgoing', 'dist']);
+const VALID_MODES = new Set(['source', 'staged', 'outgoing', 'history', 'dist']);
 
 function toPosixPath(value) {
 	return value.replaceAll('\\', '/');
@@ -49,6 +49,10 @@ function loadBudgets() {
 		['source.maximumImageBytes', parsed.source?.maximumImageBytes],
 		['source.warningDocumentBytes', parsed.source?.warningDocumentBytes],
 		['source.maximumDocumentBytes', parsed.source?.maximumDocumentBytes],
+		['source.warningModelBytes', parsed.source?.warningModelBytes],
+		['source.maximumModelBytes', parsed.source?.maximumModelBytes],
+		['history.warningTotalBytes', parsed.history?.warningTotalBytes],
+		['history.maximumTotalBytes', parsed.history?.maximumTotalBytes],
 		['dist.warningTotalBytes', parsed.dist?.warningTotalBytes],
 		['dist.maximumTotalBytes', parsed.dist?.maximumTotalBytes],
 		['dist.maximumFileBytes', parsed.dist?.maximumFileBytes],
@@ -59,6 +63,8 @@ function loadBudgets() {
 		['dist.warningScriptStyleBytes', parsed.dist?.warningScriptStyleBytes],
 		['dist.maximumScriptStyleBytes', parsed.dist?.maximumScriptStyleBytes],
 		['dist.maximumDocumentBytes', parsed.dist?.maximumDocumentBytes],
+		['dist.warningModelBytes', parsed.dist?.warningModelBytes],
+		['dist.maximumModelBytes', parsed.dist?.maximumModelBytes],
 	];
 
 	for (const [name, value] of requiredNumbers) {
@@ -398,6 +404,37 @@ function collectOutgoing(budgets) {
 	}
 }
 
+function collectHistory() {
+	if (!isGitRepository()) {
+		throw new Error('The history mode requires an initialized Git repository');
+	}
+
+	const objectIds = requireGit(['rev-list', '--objects', 'HEAD'], 'Listing reachable Git objects')
+		.split(/\r?\n/)
+		.filter(Boolean)
+		.map((line) => line.split(' ', 1)[0]);
+	const metadata = objectMetadata(objectIds);
+	const items = [];
+	for (const [oid, details] of metadata) {
+		if (details.type === 'blob') {
+			items.push({
+				isSymlink: false,
+				oid,
+				path: `[Git blob ${oid}]`,
+				paths: [],
+				size: details.size,
+			});
+		}
+	}
+
+	return {
+		items,
+		notes: [
+			'Counted unique blob bytes reachable from HEAD; historical blobs are checked only against the aggregate budget.',
+		],
+	};
+}
+
 function collectDist(budgets) {
 	const distRoot = resolve(PROJECT_ROOT, budgets.distDirectory);
 	if (!existsSync(distRoot)) {
@@ -440,6 +477,7 @@ function createRules(budgets) {
 		forbidden,
 		html: extensionSet(budgets.extensions.html),
 		images: extensionSet(budgets.extensions.images),
+		models: extensionSet(budgets.extensions.models ?? []),
 		inlineData: new RegExp(budgets.inlineDataUriPattern, 'i'),
 		scriptStyleExceptions: (budgets.dist.scriptStyleExceptions ?? []).map((entry) => ({
 			...entry,
@@ -488,6 +526,13 @@ function strictestSizeRule(item, mode, budgets, rules) {
 			warning: mode === 'source' ? limits.warningDocumentBytes : undefined,
 		});
 	}
+	if (extensions.some((extension) => rules.models.has(extension))) {
+		candidates.push({
+			label: '3D model',
+			maximum: limits.maximumModelBytes,
+			warning: limits.warningModelBytes,
+		});
+	}
 	if (mode === 'dist' && extensions.some((extension) => rules.html.has(extension))) {
 		candidates.push({
 			label: 'generated HTML',
@@ -507,6 +552,22 @@ function strictestSizeRule(item, mode, budgets, rules) {
 }
 
 function inspect(items, mode, budgets) {
+	if (mode === 'history') {
+		const totalBytes = items.reduce((total, item) => total + item.size, 0);
+		const failures = [];
+		const warnings = [];
+		if (totalBytes > budgets.history.maximumTotalBytes) {
+			failures.push(
+				`total reachable history size ${formatBytes(totalBytes)} exceeds the ${formatBytes(budgets.history.maximumTotalBytes)} limit`,
+			);
+		} else if (totalBytes > budgets.history.warningTotalBytes) {
+			warnings.push(
+				`total reachable history size ${formatBytes(totalBytes)} exceeds the ${formatBytes(budgets.history.warningTotalBytes)} warning threshold`,
+			);
+		}
+		return { failures, totalBytes, warnings };
+	}
+
 	const rules = createRules(budgets);
 	const failures = [];
 	const warnings = [];
@@ -593,7 +654,9 @@ function printResult(mode, collection, result) {
 }
 
 function usage() {
-	console.error('Usage: node scripts/check-assets.mjs <source|staged|outgoing|dist> [remote-name]');
+	console.error(
+		'Usage: node scripts/check-assets.mjs <source|staged|outgoing|history|dist> [remote-name]',
+	);
 }
 
 function main() {
@@ -613,6 +676,7 @@ function main() {
 	if (mode === 'source') collection = collectSource(budgets);
 	if (mode === 'staged') collection = collectStaged();
 	if (mode === 'outgoing') collection = collectOutgoing(budgets);
+	if (mode === 'history') collection = collectHistory();
 	if (mode === 'dist') collection = collectDist(budgets);
 
 	const result = inspect(collection.items, mode, budgets);

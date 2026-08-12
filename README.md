@@ -1,52 +1,31 @@
 # Personal website
 
-A static personal site for writing, projects, book notes, quotations, and a résumé. It is built with Astro, authored primarily in Markdown, and prepared for free deployment to `briansgithub.github.io` with GitHub Pages.
+A static personal site for writing, projects, book notes, quotations, and a CV. It is built with Astro, authored primarily in Markdown, and deployed to `bellsworth.dev` with GitHub Pages.
 
 The site is currently in **content preview mode**. Placeholder material is visibly labeled and every page includes `noindex` metadata until the identity and launch content are ready.
 
 ## Start locally
 
-Node `24.11.1` is recorded in `.node-version`. The existing NVM-managed Node installation on this computer is the intended runtime; no global Astro installation is needed.
+Node `24.11.1` is recorded in `.node-version`.
 
 ```powershell
 npm ci
 npm run dev -- --background
 ```
 
-Open `http://localhost:4321`. Useful server commands:
-
-```powershell
-npm run dev:status
-npm run dev:logs
-npm run dev:stop
-```
-
-VS Code also exposes these as friendly tasks through **Terminal → Run Task**.
+Open `http://localhost:4321`. Use `npm run dev:status`, `npm run dev:logs`, and `npm run dev:stop` to manage the server.
 
 ## Write content
 
 Open `src/content` as an Obsidian vault. The committed settings use ordinary Markdown links, keep new notes in the Git-ignored `_drafts` folder, and provide templates for each content type.
 
-The full workflow is in [CONTENT_GUIDE.md](CONTENT_GUIDE.md). The shortest path is:
+The full workflow is in [CONTENT_GUIDE.md](CONTENT_GUIDE.md). Create a draft, write and preview it, check it for publication, then publish it only when complete. The helper scripts never commit or push.
 
-1. Run the VS Code task **Content: create draft**, or use an Obsidian template.
-2. Write and preview the Markdown note.
-3. Run **Content: check current file for publication**.
-4. Run **Content: publish current file** when it is complete.
-5. Review the diff, then commit it yourself. No helper script commits or pushes.
-
-Recurring public content lives in:
-
-- `src/content/writing`
-- `src/content/projects`
-- `src/content/books`
-- `src/content/quotes`
-
-The live identity and résumé fields are in `src/data/site.ts` and `src/data/resume.ts`. The placeholder `pages/home.md` and `pages/resume.md` files are writing worksheets; `pages/about.md` supplies the rendered About copy.
+Live identity and CV fields are in `src/data/site.ts` and `src/data/resume.ts`. The Home and CV Markdown files are writing worksheets; `pages/about.md` supplies the rendered About copy.
 
 ## Import an image
 
-Keep camera originals outside this repository. Use the VS Code task **Media: import image**, or:
+Keep camera originals outside this repository. Use:
 
 ```powershell
 npm run media:import -- "C:\path\to\original.jpg" --name lab-bench --alt "Oscilloscope and prototype board on a workbench"
@@ -60,13 +39,13 @@ The importer preserves the original, strips metadata, limits the long edge to 24
 npm run verify
 ```
 
-This validates content schemas, Markdown, formatting, local links, source assets, the production build, and generated-site budgets. Git hooks repeat fast checks before commits and pushes; GitHub Actions repeats the complete verification before deployment.
+This validates schemas, Markdown, formatting, local links, source and history assets, the production build, and generated-site budgets.
 
 ## Repository safety
 
 - Raw media, private drafts, dependencies, and generated output are ignored.
-- Source images are capped at 2 MiB; the résumé PDF at 3 MiB; ordinary files at 5 MiB.
-- The full tracked asset budget and generated-site budget are each 250 MiB—well below GitHub Pages' 1 GB limits.
+- Source images are capped at 2 MiB; the CV PDF at 3 MiB; ordinary files at 5 MiB.
+- Source, generated-site, and reachable-history budgets each hard-fail at 250 MiB, well below GitHub Pages' 1 GB limit.
 - Git LFS is intentionally not used because GitHub Pages does not support it for published assets.
 
-The repository is initialized locally on `main` with versioned hooks enabled. It has not been connected to, pushed to, or published on GitHub yet.
+The repository uses `main` with versioned hooks enabled and is configured for GitHub Pages deployment.

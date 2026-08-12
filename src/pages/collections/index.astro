@@ -1,0 +1,202 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import { site } from '../../data/site';
+import { isVisible } from '../../utils/content';
+
+const [prints, books, quotes] = await Promise.all([
+	getCollection('prints', ({ data }) => isVisible(data)),
+	getCollection('books', ({ data }) => isVisible(data)),
+	getCollection('quotes', ({ data }) => isVisible(data)),
+]);
+
+const collections = [
+	{
+		number: '01',
+		title: 'Prints',
+		description: 'Designed and printed objects, with build notes and downloadable models.',
+		href: '/prints/',
+		count: prints.length,
+		itemLabel: 'print',
+	},
+	{
+		number: '02',
+		title: 'Book notes',
+		description: 'Arguments, questions, and connections kept from reading.',
+		href: '/books/',
+		count: books.length,
+		itemLabel: 'note',
+	},
+	{
+		number: '03',
+		title: 'Quotations',
+		description: 'Lines worth returning to, kept with their sources when available.',
+		href: '/quotes/',
+		count: quotes.length,
+		itemLabel: 'quotation',
+	},
+].filter((collection) => site.preview || collection.count > 0);
+---
+
+<BaseLayout
+	title="Collections"
+	description="Browse prints, book notes, quotations, and subjects across the site."
+>
+	<div class="shell collections-page">
+		<PageIntro
+			eyebrow="Browse"
+			title="Collections"
+			description="Objects, reading notes, and saved lines—smaller bodies of work gathered by form."
+		/>
+		<ul class="collections-grid">
+			{
+				collections.map((collection) => (
+					<li>
+						<a href={collection.href}>
+							<span class="collections-grid__number">Collection {collection.number}</span>
+							<span class="collections-grid__title">{collection.title}</span>
+							<span class="collections-grid__description">{collection.description}</span>
+							<span class="collections-grid__count">
+								{collection.count} {collection.itemLabel}
+								{collection.count === 1 ? '' : 's'}
+							</span>
+							<span class="collections-grid__arrow" aria-hidden="true">
+								→
+							</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+		<div class="collections-tags">
+			<div>
+				<p class="eyebrow">Across collections</p>
+				<h2>Browse by subject</h2>
+				<p>Follow a topic across writing, projects, prints, and reading notes.</p>
+			</div>
+			<a href="/tags/">View all tags <span aria-hidden="true">→</span></a>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.collections-page {
+		padding-bottom: clamp(4rem, 9vw, 8rem);
+	}
+
+	.collections-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		margin: 0;
+		padding: 0;
+		border-top: 1px solid var(--line-strong);
+		border-bottom: 1px solid var(--line-strong);
+		list-style: none;
+	}
+
+	.collections-grid li + li {
+		border-left: 1px solid var(--line);
+	}
+
+	.collections-grid a {
+		position: relative;
+		display: grid;
+		grid-template-rows: auto auto 1fr auto;
+		min-height: 22rem;
+		padding: clamp(1.5rem, 3vw, 2.5rem);
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.collections-grid a:hover,
+	.collections-grid a:focus-visible {
+		background: var(--surface-raised);
+	}
+
+	.collections-grid__number,
+	.collections-grid__count {
+		color: var(--ink-soft);
+		font-family: var(--mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.collections-grid__title {
+		margin-top: 2.5rem;
+		font-family: var(--sans);
+		font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+		font-weight: 500;
+		letter-spacing: -0.035em;
+	}
+
+	.collections-grid__description {
+		max-width: 30ch;
+		margin-top: 1rem;
+		color: var(--ink-soft);
+		line-height: 1.6;
+	}
+
+	.collections-grid__count {
+		align-self: end;
+		margin-top: 2rem;
+	}
+
+	.collections-grid__arrow {
+		position: absolute;
+		right: 1.5rem;
+		bottom: 1.35rem;
+		color: var(--accent);
+	}
+
+	.collections-tags {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 2rem;
+		padding: clamp(2rem, 5vw, 4rem) 0;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.collections-tags h2,
+	.collections-tags p {
+		margin: 0;
+	}
+
+	.collections-tags h2 {
+		margin-bottom: 0.75rem;
+	}
+
+	.collections-tags p:not(.eyebrow) {
+		max-width: 50ch;
+		color: var(--ink-soft);
+	}
+
+	.collections-tags > a {
+		flex: 0 0 auto;
+		color: var(--accent);
+		font-size: 0.82rem;
+		font-weight: 500;
+	}
+
+	@media (max-width: 760px) {
+		.collections-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.collections-grid li + li {
+			border-top: 1px solid var(--line);
+			border-left: 0;
+		}
+
+		.collections-grid a {
+			min-height: 15rem;
+		}
+
+		.collections-tags {
+			align-items: start;
+			flex-direction: column;
+		}
+	}
+</style>

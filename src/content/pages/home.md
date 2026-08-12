@@ -27,4 +27,4 @@ Resolved: `brian1.jpg` (a close-up portrait), imported via `npm run media:import
 
 ## Domain decision
 
-Not yet decided. The site remains on the default GitHub Pages domain (`briansgithub.github.io`) with `site.preview = true` in `src/data/site.ts`, which keeps every page `noindex`. Flip `preview` to `false` only once the domain question is settled and the site is ready to be publicly indexed.
+Resolved: the site uses the custom domain [`bellsworth.dev`](https://bellsworth.dev). It remains in `site.preview = true` mode in `src/data/site.ts`, which keeps every page `noindex`. Flip `preview` to `false` only once the site is ready to be publicly indexed and all placeholder entries have been replaced or intentionally excluded.

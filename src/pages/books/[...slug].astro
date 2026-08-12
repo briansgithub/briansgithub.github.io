@@ -13,7 +13,7 @@ interface Props {
 	entry: CollectionEntry<'books'>;
 }
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 const meta = `${entry.data.author}${entry.data.rating ? ` · ${entry.data.rating}/5` : ''}`;
 ---
 
@@ -23,6 +23,9 @@ const meta = `${entry.data.author}${entry.data.rating ? ` · ${entry.data.rating
 	meta={meta}
 	tags={entry.data.tags}
 	placeholder={entry.data.placeholder}
+	headings={headings}
+	collectionHref="/books/"
+	collectionLabel="Book notes"
 >
 	<Content />
 </ContentLayout>

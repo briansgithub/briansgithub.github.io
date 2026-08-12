@@ -61,11 +61,24 @@ status: active | complete | archived
 year: number
 technologies: string[]
 featured: optional boolean
+cover: optional object containing image and alt text
 links: optional record of label to URL
 order: optional number
 draft: optional boolean
 placeholder: optional boolean
 ```
+
+Use a project cover only when an existing image adds useful context in project listings. Keep the
+image and its alternative text together in the nested `cover` field:
+
+```yaml
+cover:
+  image: ../../assets/images/project-name/cover.webp
+  alt: 'Describe the project image and the useful visual context it provides.'
+```
+
+The image path is relative to the project Markdown file. Astro validates and optimizes local cover
+images at build time. Projects without a cover continue to use the standard text-card layout.
 
 Example links when real URLs exist:
 
@@ -123,7 +136,7 @@ Before publishing real content:
 4. Set `draft: false`.
 5. Preview the rendered page and review the Git diff.
 
-Placeholder entries may remain visible during design work, but they should be excluded from RSS, search indexing, and the final sitemap until replaced.
+Placeholder entries remain visible only while `site.preview` is enabled. Public builds exclude them from lists, detail routes, tags, RSS, and the sitemap until replaced.
 
 ## 5. Create and write
 
@@ -161,6 +174,17 @@ Obsidian places attachments in an `images` folder beneath the current note's dir
 - keep an individual content image below 2 MB, preferably below 500 KB; and
 - write useful alt text in standard syntax: `![Description](images/example.webp)`.
 
+To present two related images as an evidence gallery, place their Markdown image lines directly
+next to each other with no blank line between them. Leave a blank line before and after the pair:
+
+```md
+![Front view](images/device-front.webp)
+![Back view](images/device-back.webp)
+```
+
+The site displays the pair side by side on wider screens and stacks it on mobile. A single image,
+or images separated by a blank line, keeps the normal full-width reading flow.
+
 Do not commit camera RAW files, PSDs, TIFFs, large GIFs, audio, or video. Use the **Media: import image** VS Code task to make a web-safe copy before an image enters Git history; it preserves the original outside the repository.
 
 ## 8. Privacy and backup
@@ -193,6 +217,6 @@ The initial content set covers every decision needed before launch:
 - **First writing:** `writing/first-writing.md` provides a readable article structure without presenting sample prose as the author's work.
 - **Quotes:** Two ordered quote entries are ready for genuine selections.
 - **Book note:** `books/first-book-note.md` provides the note structure without claiming the book was read.
-- **Domain:** `pages/home.md` records the GitHub Pages versus custom-domain decision. A placeholder domain must never be used as the canonical URL.
+- **Domain:** `bellsworth.dev` is the configured canonical domain. Keep `site.preview` enabled until the launch checklist is complete.
 
 Replace these items deliberately rather than deleting all placeholder content at once; they collectively exercise the site's major content layouts.
