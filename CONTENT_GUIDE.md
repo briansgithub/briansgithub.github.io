@@ -196,6 +196,66 @@ Placeholder entries remain visible only while `site.preview` is enabled. Public 
 
 ## 5. Create and write
 
+### Guided workflow (recommended)
+
+From PowerShell in the repository root, run:
+
+```powershell
+npm run content:workflow
+```
+
+Or, in Windows File Explorer, double-click `Start Website Content Workflow.cmd` in the
+repository's top-level folder. The launcher opens the same guided PowerShell workflow and
+pauses before closing so its result remains visible. The adjacent
+`Start Website Content Workflow.ps1` is the direct PowerShell entry point; Windows commonly
+opens `.ps1` files in an editor on a plain double-click, which is why the `.cmd` launcher is the
+reliable double-click target.
+
+The launcher keeps a restartable batch in the Git-ignored `.authoring-workflow/` directory.
+Choose one or more Blog posts, projects, 3D prints, book notes, quotes, the About page, site
+identity, or résumé data. New Blog entries map to the internal `writing` collection. The
+launcher can also open the content vault in Obsidian, but VS Code is the default editor.
+
+The workflow is deliberately split at human review points:
+
+1. **Prepare and edit:** create or select content, open every selected file in VS Code, and
+   exit. Write and save normally, then rerun `npm run content:workflow`.
+2. **Add assets and preview:** import body images through the safe media importer, insert a
+   project cover, attach an STL model to a 3D print, or replace the résumé PDF. The workflow
+   promotes checked private drafts into their public collections, starts the local Astro
+   server, opens the affected routes, and exits again if you want to revise them.
+3. **Validate and review:** run the complete verification gate and inspect the changed files
+   and diff. Promotion makes a draft visible to the local site and Git, but does not make it
+   live.
+4. **Publish:** verify once more, stage only the files recorded in the batch, and display the
+   staged diff, outgoing commits, binary sizes, and live routes. No commit or push occurs
+   unless you type the exact confirmation `PUBLISH`. After the push, the workflow watches
+   GitHub Pages and checks the live site before completing the session.
+
+An interrupted or failed session is intentionally retained. Rerun `npm run content:workflow`
+and choose the offered resume action. If GitHub deployment alone needs to be resumed, run the
+deployment watcher with the commit SHA shown by GitHub or `git log -1`:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/authoring/Watch-Deployment.ps1 -CommitSha <40-character-commit-sha>
+```
+
+Use the launcher's diagnostics mode for read-only prerequisite checks:
+
+```powershell
+npm run content:workflow -- -Diagnostics
+```
+
+The final publication phase also supports a Git-safe dry run. It does not change source files,
+session state, commits, references, or remotes; the verification gate may refresh ignored
+`dist/` and `.astro/` build output:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/authoring/Publish-Update.ps1 -WhatIf
+```
+
+### Manual workflow
+
 1. In Obsidian, create a note in `_drafts`.
 2. Insert the matching template: Writing, Project, Book, Print, Quote, or Page.
 3. Rename the file with a concise kebab-case slug.
