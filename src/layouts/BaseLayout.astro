@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets';
 import '../styles/global.css';
 import { navigation, site } from '../data/site';
+import brandMark from '../assets/images/brand/be-monogram.webp';
 
 interface Props {
 	title?: string;
@@ -26,19 +28,20 @@ const noIndex = site.preview || placeholder;
 		<link rel="canonical" href={canonical} />
 		<link
 			rel="preload"
-			href="/fonts/ubuntu-latin-400-normal.woff2"
+			href="/fonts/ibm-plex-sans-latin-400-normal.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin
 		/>
 		<link
 			rel="preload"
-			href="/fonts/ubuntu-latin-500-normal.woff2"
+			href="/fonts/ibm-plex-sans-latin-500-normal.woff2"
 			as="font"
 			type="font/woff2"
 			crossorigin
 		/>
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="apple-touch-icon" href={brandMark.src} />
 		<link rel="alternate" type="application/rss+xml" title={site.title} href="/rss.xml" />
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content={pageTitle} />
@@ -51,26 +54,29 @@ const noIndex = site.preview || placeholder;
 		<a class="skip-link" href="#main-content">Skip to content</a>
 		<header class="site-header">
 			<div class="shell site-header__inner">
-				<a class="wordmark" href="/" aria-label={`${site.name}, home`}>
-					<span aria-hidden="true">Build / Log</span>
-					<span class="wordmark__name">{site.name}</span>
-				</a>
-				<button
-					class="nav-toggle"
-					type="button"
-					aria-expanded="false"
-					aria-controls="primary-nav"
-					aria-label="Toggle navigation menu"
-				>
-					<span aria-hidden="true"></span>
-				</button>
+				<div class="site-brand">
+					<a class="site-brand__mark-link" href="/" aria-label={`${site.name}, home`}>
+						<Image
+							class="site-brand__mark"
+							src={brandMark}
+							alt=""
+							width={256}
+							height={256}
+							loading="eager"
+						/>
+					</a>
+					<span class="site-brand__copy">
+						<a class="site-brand__name" href="/">{site.name}</a>
+						<span class="site-brand__tagline">{site.tagline}</span>
+					</span>
+				</div>
 				<nav id="primary-nav" aria-label="Primary navigation">
-					<ul>
+					<ul class="primary-nav__list">
 						{
 							navigation.map((item) => {
 								const exact = Astro.url.pathname === item.href;
 								const childRoute =
-									Astro.url.pathname.startsWith(item.href) ||
+									(item.href !== '/' && Astro.url.pathname.startsWith(item.href)) ||
 									('matchPrefixes' in item &&
 										item.matchPrefixes.some((prefix) => Astro.url.pathname.startsWith(prefix)));
 								const current = exact ? 'page' : childRoute ? 'location' : undefined;
@@ -84,17 +90,17 @@ const noIndex = site.preview || placeholder;
 							})
 						}
 					</ul>
+					<ul class="primary-nav__utility" aria-label="Contact and subscription">
+						<li><a href={`mailto:${site.email}`}>Email</a></li>
+						<li><a href="/rss.xml">RSS feed</a></li>
+					</ul>
 				</nav>
-			</div>
-		</header>
-		<main id="main-content">
-			<slot />
-		</main>
-		<footer class="site-footer">
-			<div class="shell site-footer__inner">
-				<p>A running log of builds, notes, and work in progress.</p>
-				<div class="site-footer__links">
-					<a href={`mailto:${site.email}`} aria-label={`Email ${site.name}`}>
+				<div class="site-header__links" aria-label="Social and contact links">
+					<a
+						class="site-header__link--secondary"
+						href={`mailto:${site.email}`}
+						aria-label={`Email ${site.name}`}
+					>
 						<svg
 							viewBox="0 0 24 24"
 							fill="none"
@@ -161,7 +167,7 @@ const noIndex = site.preview || placeholder;
 							</a>
 						)
 					}
-					<a href="/rss.xml" aria-label="RSS Feed">
+					<a class="site-header__link--secondary" href="/rss.xml" aria-label="RSS Feed">
 						<svg
 							viewBox="0 0 24 24"
 							fill="none"
@@ -177,7 +183,16 @@ const noIndex = site.preview || placeholder;
 						</svg>
 					</a>
 				</div>
-				<p class="site-footer__meta">
+			</div>
+		</header>
+		<main id="main-content">
+			<slot />
+		</main>
+		<footer class="site-footer">
+			<div class="shell site-footer__inner">
+				<p>
+					<span>A running log of builds, notes, and work in progress.</span>
+					<span aria-hidden="true"> · </span>
 					{site.preview && <span class="preview-badge">Preview</span>}
 					{' '}
 					© {new Date().getFullYear()}
@@ -186,36 +201,5 @@ const noIndex = site.preview || placeholder;
 				</p>
 			</div>
 		</footer>
-		<script>
-			const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
-			const nav = document.getElementById('primary-nav');
-
-			if (toggle && nav) {
-				const closeMenu = () => {
-					toggle.setAttribute('aria-expanded', 'false');
-					nav.classList.remove('is-open');
-				};
-
-				toggle.addEventListener('click', () => {
-					const isOpen = nav.classList.toggle('is-open');
-					toggle.setAttribute('aria-expanded', String(isOpen));
-				});
-
-				nav.addEventListener('click', (event) => {
-					if ((event.target as HTMLElement).tagName === 'A') closeMenu();
-				});
-
-				document.addEventListener('keydown', (event) => {
-					if (event.key === 'Escape' && nav.classList.contains('is-open')) {
-						closeMenu();
-						toggle.focus();
-					}
-				});
-
-				window.matchMedia('(min-width: 861px)').addEventListener('change', (event) => {
-					if (event.matches) closeMenu();
-				});
-			}
-		</script>
 	</body>
 </html>

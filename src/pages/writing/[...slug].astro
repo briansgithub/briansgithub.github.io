@@ -1,30 +1,11 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import { getCollection, render } from 'astro:content';
-import ContentLayout from '../../layouts/ContentLayout.astro';
-import { contentSlug, formatDate, isVisible } from '../../utils/content';
+import { getCollection } from 'astro:content';
+import { contentSlug, isVisible } from '../../utils/content';
 
 export async function getStaticPaths() {
 	const entries = await getCollection('writing', ({ data }) => isVisible(data));
-	return entries.map((entry) => ({ params: { slug: contentSlug(entry.id) }, props: { entry } }));
+	return entries.map((entry) => ({ params: { slug: contentSlug(entry.id) } }));
 }
 
-interface Props {
-	entry: CollectionEntry<'writing'>;
-}
-const { entry } = Astro.props;
-const { Content, headings } = await render(entry);
+return Astro.redirect(`/blog/${Astro.params.slug}/`, 301);
 ---
-
-<ContentLayout
-	title={entry.data.title}
-	description={entry.data.description}
-	meta={formatDate(entry.data.publishedAt)}
-	tags={entry.data.tags}
-	placeholder={entry.data.placeholder}
-	headings={headings}
-	collectionHref="/writing/"
-	collectionLabel="Writing"
->
-	<Content />
-</ContentLayout>
