@@ -3,7 +3,7 @@ export const site = {
 	title: 'Brian Ellsworth — Projects & Notes',
 	description:
 		'Software and embedded engineer writing about hardware builds, physics, and the tools between them.',
-	tagline: 'Embedded and software engineer with a physics research background.',
+	tagline: 'Hardware & Software Engineer',
 	shortBio:
 		'I build embedded systems and write software, with a background in applied physics and electrical engineering. This site collects hardware projects, technical writing, book notes, and quotations.',
 	longBio:
@@ -18,13 +18,13 @@ export const site = {
 } as const;
 
 export const navigation = [
-	{ label: 'Projects', href: '/projects/' },
-	{ label: 'Writing', href: '/writing/' },
+	{ label: 'About', href: '/' },
+	{ label: 'Blog', href: '/blog/' },
 	{
 		label: 'Collections',
 		href: '/collections/',
 		matchPrefixes: ['/prints/', '/books/', '/quotes/', '/tags/'],
 	},
-	{ label: 'About', href: '/about/' },
+	{ label: 'Projects', href: '/projects/' },
 	{ label: 'Résumé', href: '/resume/' },
 ] as const;

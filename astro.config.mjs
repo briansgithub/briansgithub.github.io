@@ -10,7 +10,7 @@ export default defineConfig({
 	},
 	integrations: [
 		sitemap({
-			filter: (page) => !page.endsWith('/404/'),
+			filter: (page) => !page.endsWith('/404/') && !page.includes('/writing/'),
 		}),
 	],
 });

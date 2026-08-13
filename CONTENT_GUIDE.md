@@ -27,17 +27,33 @@ src/content/
   writing/        Essays, blog posts, tutorials, and project notes
   projects/       Stable project and case-study pages
   books/          Book notes
+  prints/         3D print entries, optionally with a viewable STL model
   quotes/         Individual favorite quotations
   pages/          About copy plus Home and Résumé writing worksheets
 ```
 
-The live site-wide identity fields are in `src/data/site.ts`, and the structured résumé displayed by the site is in `src/data/resume.ts`. The Home and Résumé Markdown files are safe worksheets for developing that copy; `pages/about.md` is rendered directly.
+The live site-wide identity fields are in `src/data/site.ts`, and the structured résumé displayed by the site is in `src/data/resume.ts`. The Home and Résumé Markdown files are safe worksheets for developing that copy; `pages/about.md` is rendered directly as the `/` homepage, with `/about/` redirecting there.
 
 Use lowercase kebab-case filenames, such as `measuring-oscillator-drift.md`. The filename becomes the stable content ID and usually the URL slug. Do not rename a published file without also arranging a redirect.
 
 ## 3. Frontmatter schemas
 
-Only use the fields listed for each collection. Optional fields can be omitted.
+[`src/content.config.ts`](src/content.config.ts) is the authoritative definition of
+every schema. This section describes it; where the two disagree, the code wins and
+this section needs fixing.
+
+Only use the fields listed for each collection. Unlisted fields are rejected rather
+than ignored — add the field to the schema first. Optional fields can be omitted.
+
+Three rules apply to every collection and cause most validation failures:
+
+- **`draft` defaults to `true`.** Omitting the field hides the entry instead of
+  publishing it. Publication always requires an explicit `draft: false`.
+- **Tags must be lowercase kebab-case**, matching `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
+  Capitals, spaces, and underscores fail the build.
+- **String fields are length-capped.** Titles allow 120 characters; descriptions,
+  summaries, and alt text allow 240; `material` allows 60. Copy that reads well on
+  the page can still fail validation, so check length before committing.
 
 ### Writing
 
@@ -60,6 +76,7 @@ summary: string
 status: active | complete | archived
 year: number
 technologies: string[]
+tags: string[]
 featured: optional boolean
 cover: optional object containing image and alt text
 links: optional record of label to URL
@@ -108,10 +125,49 @@ quote: string
 author: string
 source: optional string
 url: optional URL
+category: optional string
 order: optional number
 draft: optional boolean
 placeholder: optional boolean
 ```
+
+`category` drives the quotation category navigation. Reuse an existing category
+string exactly rather than introducing a near-duplicate spelling.
+
+### Prints
+
+```yaml
+title: string
+summary: string
+material: string
+printedAt: optional date
+tags: string[]
+featured: optional boolean
+order: optional number
+model: optional object containing file and sizeBytes
+links: optional record of label to URL
+draft: optional boolean
+placeholder: optional boolean
+```
+
+A print entry may attach an STL model, which the site renders in an interactive
+3D viewer:
+
+```yaml
+model:
+  file: /files/prints/sample-icosahedron.stl
+  sizeBytes: 68284
+```
+
+The `file` path is site-absolute and resolves inside `public/`, unlike project
+cover images, which are repository-relative and processed by Astro. `sizeBytes`
+must match the real file size; it is displayed before download so a visitor on a
+metered connection can decide.
+
+Keep STL files at or below 5 MiB. The viewer is a three.js bundle held to a
+documented 768 KB budget exception on the strict condition that it stays
+code-split and loads only on print pages — do not import it into a shared layout
+or any other route.
 
 ### Pages
 
@@ -141,7 +197,7 @@ Placeholder entries remain visible only while `site.preview` is enabled. Public 
 ## 5. Create and write
 
 1. In Obsidian, create a note in `_drafts`.
-2. Insert the matching template: Writing, Project, Book, Quote, or Page.
+2. Insert the matching template: Writing, Project, Book, Print, Quote, or Page.
 3. Rename the file with a concise kebab-case slug.
 4. Write in standard Markdown. Avoid Obsidian-only embeds, block references, and callouts.
 5. Use descriptive link text and fenced code blocks with a language label.
@@ -185,7 +241,11 @@ next to each other with no blank line between them. Leave a blank line before an
 The site displays the pair side by side on wider screens and stacks it on mobile. A single image,
 or images separated by a blank line, keeps the normal full-width reading flow.
 
-Do not commit camera RAW files, PSDs, TIFFs, large GIFs, audio, or video. Use the **Media: import image** VS Code task to make a web-safe copy before an image enters Git history; it preserves the original outside the repository.
+Do not commit camera RAW files, PSDs, TIFFs, large GIFs, audio, or video. Use the **Media: import image** VS Code task, or `npm run media:import`, to make a web-safe copy before an image enters Git history; it preserves the original outside the repository.
+
+These types are refused outright by `scripts/check-assets.mjs`, not merely discouraged: camera RAW and editing sources, every video and audio format, and every archive or disk image. The full list is in [`config/size-budgets.json`](config/size-budgets.json). Base64 media pasted into a source file is caught by a separate inline `data:` URI check, so encoding a file is not a way around the rule.
+
+**An oversized file is permanent once committed.** The repository enforces a budget on every blob reachable from Git history, alongside the working tree and the generated site. Deleting a large file in a later commit does not reclaim its history cost; only a history rewrite does. Check a binary's size before it enters a commit, not after.
 
 ## 8. Privacy and backup
 
@@ -201,22 +261,23 @@ Also keep these out of public content:
 - local absolute file paths; and
 - unstripped photograph metadata.
 
-## 9. Launch-content placeholders
+## 9. Identity data and remaining launch placeholders
 
-The initial content set covers every decision needed before launch:
+Site-wide identity is no longer placeholder material. [`src/data/site.ts`](src/data/site.ts) holds the real name, title, tagline, short and long biography, public email, and the GitHub, LinkedIn, and Instagram profiles. [`src/data/resume.ts`](src/data/resume.ts) holds the real résumé. Treat both as live personal information: correct them from material the site's owner supplies, and never invent employment, institutions, dates, credentials, or skills to fill a gap.
 
-- **Name:** `pages/home.md` contains the writing placeholder; transfer the approved version to `src/data/site.ts`.
-- **Tagline:** `pages/home.md` contains the writing placeholder; transfer the approved version to `src/data/site.ts`.
-- **Short bio:** `pages/home.md` contains the worksheet; `src/data/site.ts` drives the live home page.
-- **Long bio:** `pages/about.md` contains the longer biography structure.
-- **Contact:** Home, About, and Résumé include a public-email placeholder.
-- **Social links:** The supplied GitHub profile is real; all other social profiles remain labeled placeholders.
-- **Résumé:** `pages/resume.md` is the writing worksheet; `src/data/resume.ts` drives the structured live page without inventing employment, institutions, dates, or skills.
-- **Projects:** `projects/project-one.md` and `project-two.md` exercise featured, active, and complete project layouts without claiming real work.
-- **Portrait:** `pages/home.md` specifies the desired crop, format, size, metadata treatment, and alt-text requirement. No fake portrait is included.
-- **First writing:** `writing/first-writing.md` provides a readable article structure without presenting sample prose as the author's work.
-- **Quotes:** Two ordered quote entries are ready for genuine selections.
-- **Book note:** `books/first-book-note.md` provides the note structure without claiming the book was read.
-- **Domain:** `bellsworth.dev` is the configured canonical domain. Keep `site.preview` enabled until the launch checklist is complete.
+`pages/home.md` and `pages/resume.md` are writing worksheets that render nowhere. Editing them does not change the site — approved copy must be transferred into `src/data/site.ts` or `src/data/resume.ts`. `pages/about.md` is the exception and renders directly as the `/` homepage; `/about/` is retained as a redirect.
 
-Replace these items deliberately rather than deleting all placeholder content at once; they collectively exercise the site's major content layouts.
+To find what still carries scaffold material, search rather than trusting a list in this document:
+
+```powershell
+npm run content:list
+Select-String -Path src/content -Pattern "\[PLACEHOLDER\]" -Recurse
+```
+
+Entries under `_templates/` are supposed to match; they are Obsidian templates, not an Astro collection.
+
+`site.preview` in `src/data/site.ts` remains `true`. While it is enabled, placeholder entries stay visible for review and every page carries `noindex`. Public builds exclude placeholders from lists, detail routes, tags, RSS, and the sitemap. Turn it off only as a deliberate launch decision, once the remaining scaffold content is replaced and the owner agrees the site should be indexed.
+
+Replace remaining placeholders deliberately rather than deleting them all at once; they collectively exercise the site's major content layouts, and an emptied collection can hide a broken listing page.
+
+`bellsworth.dev` is the configured canonical domain, set in `astro.config.mjs` and `public/CNAME`.
