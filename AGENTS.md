@@ -116,7 +116,7 @@ npm run dev:stop
 Node is pinned to `>=24 <25` (`.node-version` records `24.11.1`). Install with
 `npm ci`, never `npm install`, so the lockfile is respected.
 
-Helper scripts never run Git, never commit, and never push:
+The low-level Node helpers never run Git, never commit, and never push:
 
 | Command                   | Purpose                                                                                    |
 | ------------------------- | ------------------------------------------------------------------------------------------ |
@@ -125,7 +125,16 @@ Helper scripts never run Git, never commit, and never push:
 | `npm run content:publish` | Validate one file and flip it to published                                                 |
 | `npm run media:import`    | Convert one image into a safe web master                                                   |
 
-Committing and pushing are always separate, deliberate, human-reviewed steps.
+`npm run content:workflow` is the explicitly approved PowerShell authoring orchestrator. It
+may manage a resumable batch, call the low-level helpers, preview, verify, stage exact recorded
+paths, commit, push `main`, and monitor GitHub Pages. It must show the changes for human review
+and require the exact typed confirmation `PUBLISH` before any commit or push. It must never use
+`git add .`, force-push, bypass hooks, or automatically resolve branch divergence. Its session
+state, logs, backups, and preferences belong only in the Git-ignored `.authoring-workflow/`
+directory.
+
+Outside that approved orchestrator, committing and pushing remain separate, deliberate,
+human-reviewed steps.
 
 ## Verification
 

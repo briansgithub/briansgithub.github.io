@@ -30,6 +30,13 @@
 			"problemMatcher": []
 		},
 		{
+			"label": "Content: guided update and publish",
+			"type": "process",
+			"command": "npm",
+			"args": ["run", "content:workflow"],
+			"problemMatcher": []
+		},
+		{
 			"label": "Content: create draft",
 			"type": "process",
 			"command": "node",

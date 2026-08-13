@@ -9,6 +9,9 @@ node_modules/
 media-inbox/
 media-originals/
 
+# Guided authoring session state, logs, backups, and local preferences
+.authoring-workflow/
+
 # Private Obsidian drafts. Keep the instructions, ignore every actual draft.
 src/content/_drafts/*
 !src/content/_drafts/README.md

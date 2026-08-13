@@ -21,7 +21,32 @@ Open `http://localhost:4321`. Use `npm run dev:status`, `npm run dev:logs`, and 
 
 Open `src/content` as an Obsidian vault. The committed settings use ordinary Markdown links, keep new notes in the Git-ignored `_drafts` folder, and provide templates for each content type.
 
-The full workflow is in [CONTENT_GUIDE.md](CONTENT_GUIDE.md). Create a draft, write and preview it, check it for publication, then publish it only when complete. The helper scripts never commit or push.
+The recommended guided workflow is:
+
+```powershell
+npm run content:workflow
+```
+
+For the simplest Windows workflow, double-click
+`Start Website Content Workflow.cmd` in File Explorer. Windows does not reliably execute a
+`.ps1` file on a plain double-click, so the `.cmd` launcher starts the tracked PowerShell entry
+point with the correct execution settings and keeps the window open long enough to read the
+result. `Start Website Content Workflow.ps1` is the corresponding direct PowerShell entry point.
+
+It creates or opens a batch of Blog posts, projects, 3D prints, book notes, quotes, About
+copy, site identity, or résumé data. It exits while you edit in VS Code, then resumes to
+import safe images, attach project covers or STL models, preview locally, validate, and
+publish. Rerun the same command after each editing pause; the Git-ignored
+`.authoring-workflow/` session remembers where the batch stopped.
+
+Nothing is live during editing, promotion, or local preview. The final phase shows the exact
+diff and files it will stage and requires you to type `PUBLISH` before it may commit and push.
+GitHub Pages publishes only after that push and the deployment checks succeed. If validation,
+push, or deployment fails, rerun the workflow to recover the retained session.
+
+The full guided and manual workflows are in [CONTENT_GUIDE.md](CONTENT_GUIDE.md). The
+low-level `content:*` and `media:import` helpers never use Git; only the guided workflow can
+stage, commit, and push after its review and confirmation gates.
 
 Live identity and CV fields are in `src/data/site.ts` and `src/data/resume.ts`. The Home and CV Markdown files are writing worksheets; `pages/about.md` supplies the About copy rendered on the homepage.
 
