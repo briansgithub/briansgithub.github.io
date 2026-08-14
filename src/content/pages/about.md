@@ -1,6 +1,6 @@
 ---
-title: 'About'
-description: 'A software and embedded engineer writing about hardware builds, physics, and the tools between them.'
+title: About
+description: Welcome to bellsworth.dev, the homepage of Brian Ellsworth!
 draft: false
 placeholder: false
 ---
@@ -16,9 +16,3 @@ This site collects project case studies, technical writing, book notes, and quot
 - Embedded firmware for resource-constrained, bare-metal systems.
 - Small hardware builds that pair a physical constraint with a software solution — solar power budgets, e-ink refresh rates, that kind of thing.
 - Where music theory, circadian biology, and plain procedural thinking overlap.
-
-## Elsewhere
-
-- **GitHub:** [briansgithub](https://github.com/briansgithub)
-- **LinkedIn:** [brian-ellsworth](https://www.linkedin.com/in/brian-ellsworth/)
-- **Contact:** [bellsworth137@gmail.com](mailto:bellsworth137@gmail.com)
