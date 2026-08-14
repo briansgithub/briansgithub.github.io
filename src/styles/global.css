@@ -453,6 +453,10 @@ h2 {
 	margin: 0;
 }
 
+.site-footer p.site-footer__disclaimer {
+	margin-top: 0.35rem;
+}
+
 .preview-badge {
 	display: inline-flex;
 	align-items: center;
