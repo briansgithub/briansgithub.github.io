@@ -125,15 +125,36 @@ The low-level Node helpers never run Git, never commit, and never push:
 | `npm run content:publish` | Validate one file and flip it to published                                                 |
 | `npm run media:import`    | Convert one image into a safe web master                                                   |
 
-`npm run content:workflow` is the explicitly approved PowerShell authoring orchestrator. It
-may manage a resumable batch, call the low-level helpers, preview, verify, stage exact recorded
-paths, commit, push `main`, and monitor GitHub Pages. It must show the changes for human review
-and require the exact typed confirmation `PUBLISH` before any commit or push. It must never use
-`git add .`, force-push, bypass hooks, or automatically resolve branch divergence. Its session
-state, logs, backups, and preferences belong only in the Git-ignored `.authoring-workflow/`
-directory.
+Two PowerShell orchestrators are explicitly approved to commit and push. Both must show the
+changes for human review and require the exact typed confirmation `PUBLISH` before any commit
+or push. Neither may use `git add .`, force-push, bypass hooks, or automatically resolve branch
+divergence.
 
-Outside that approved orchestrator, committing and pushing remain separate, deliberate,
+| Launcher                             | Entry point                             | Use it for                                                            |
+| ------------------------------------ | --------------------------------------- | --------------------------------------------------------------------- |
+| `Publish Website Changes.cmd`        | `scripts/authoring/Publish-Changes.ps1` | Publishing whatever is already edited — the default for routine edits |
+| `Start Website Content Workflow.cmd` | `npm run content:workflow`              | Scaffolding a new entry or importing media, as a resumable batch      |
+
+`Publish-Changes.ps1` treats the working tree itself as the unit of work. It derives its file
+list from `Get-WorkflowChangedPaths`, which honours `.gitignore`, so ignored paths cannot reach
+a commit; it then stages those exact paths. It formats the changed files with Prettier before
+verifying, because Obsidian reliably breaks the format check. It runs in one pass and keeps no
+session state.
+
+Its review step opens each staged change as a VS Code diff through `git difftool`, one file at
+a time, and waits for each tab to close. Pass `-TerminalDiff` to print the diff in the console
+instead; the console is also used automatically when VS Code is not on `PATH`. The difftool
+settings travel as `GIT_CONFIG_*` environment variables, not `git -c` arguments, because
+Windows PowerShell 5.1 does not escape the quotes around `$LOCAL` and `$REMOTE` when calling a
+native executable. The user's own `diff.tool` configuration is never modified.
+
+`npm run content:workflow` manages a resumable batch, calls the low-level helpers, previews,
+verifies, stages exact recorded paths, commits, pushes `main`, and monitors GitHub Pages. It
+refuses to publish changes that its batch does not record, so an edit made directly in Obsidian
+outside a batch belongs to the one-shot launcher instead. Its session state, logs, backups, and
+preferences belong only in the Git-ignored `.authoring-workflow/` directory.
+
+Outside those two approved orchestrators, committing and pushing remain separate, deliberate,
 human-reviewed steps.
 
 ## Verification
