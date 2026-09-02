@@ -1,0 +1,165 @@
+---
+import ContentLayout from '../../../layouts/ContentLayout.astro';
+
+const headings = [
+	{ depth: 2, slug: 'scope', text: 'About this policy' },
+	{ depth: 2, slug: 'microphone', text: 'Microphone and pitch detection' },
+	{ depth: 2, slug: 'device-data', text: 'Information stored on your device' },
+	{ depth: 2, slug: 'online-features', text: 'Online features and other services' },
+	{ depth: 2, slug: 'support', text: 'Support and privacy requests' },
+	{ depth: 2, slug: 'children', text: 'Children and families' },
+	{ depth: 2, slug: 'choices', text: 'Your choices and deletion' },
+	{ depth: 2, slug: 'changes', text: 'Changes to this policy' },
+];
+---
+
+<ContentLayout
+	title="Acquiring Privacy Policy"
+	description="How the Acquiring Android music-learning app handles microphone input, local data, online features, and support requests."
+	meta="Last updated September 2, 2026 · Android beta"
+	headings={headings}
+>
+	<h2 id="scope">About this policy</h2>
+	<p>
+		Acquiring is a music-theory and ear-training app provided by Brian Ellsworth. This policy covers
+		the Android app, including its beta releases, and support for that app. It does not make claims
+		about an iOS release or replace the policies of services you choose to visit. For questions,
+		contact <a href="mailto:bellsworth137@gmail.com">bellsworth137@gmail.com</a>.
+	</p>
+	<p>
+		The Android app does not require an Acquiring account. It has no advertising SDK, third-party
+		analytics SDK, or automatic third-party crash-reporting SDK. It does not sell personal
+		information or use microphone input for advertising.
+	</p>
+
+	<h2 id="microphone">Microphone and pitch detection</h2>
+	<p>
+		If you enable a microphone-based practice feature and grant Android microphone permission, the
+		app uses microphone input to estimate pitch and provide singing and vocal-range feedback. Audio
+		samples are processed in memory on your device. The app does not save these samples as audio
+		recordings or upload them to the developer or another service.
+	</p>
+	<p>
+		You can decline or revoke microphone permission. Features that listen to your voice will not
+		work without it, but browsing songs and listening to app-generated playback do not require
+		microphone access.
+	</p>
+
+	<h2 id="device-data">Information stored on your device</h2>
+	<p>
+		The app stores its song catalog and downloaded song information locally. It also stores
+		favorites, playlist entries, and recent song and artist history to support those features. The
+		app does not upload that local history or your favorites to an Acquiring account or
+		developer-operated synchronization service.
+	</p>
+	<p>
+		Android backup is enabled in the app. Depending on your device, operating system, and backup
+		settings, Android may back up or transfer app data through your device's backup provider. This
+		is separate from an Acquiring-operated service and is controlled through your device and account
+		settings.
+	</p>
+
+	<h2 id="online-features">Online features and other services</h2>
+	<p>
+		Some features make internet requests. The receiving service necessarily receives your IP address
+		and the requested resource, and may process technical request information under its own
+		policies:
+	</p>
+	<ul>
+		<li>
+			<strong>Catalog downloads:</strong> Download Full Library retrieves the catalog from GitHub's release-hosting
+			infrastructure.
+		</li>
+		<li>
+			<strong>Song retrieval:</strong> Harvesting a song requests the supplied page and retrieves song-section
+			data from Hooktheory. Those requests disclose the page or song sections being requested to the receiving
+			service.
+		</li>
+		<li>
+			<strong>External search and links:</strong> Opening a Hooktheory search sends the search text to
+			Hooktheory in your browser. Song-source links and YouTube links open external services, whose content,
+			cookies, account handling, and privacy practices are separate from the app.
+		</li>
+	</ul>
+	<p>
+		See the <a href="https://www.hooktheory.com/privacy">Hooktheory Privacy Policy</a>,
+		<a
+			href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+		>
+			GitHub Privacy Statement
+		</a>, and <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. External
+		services have their own eligibility and age requirements. Acquiring does not grant permission to
+		use a service contrary to those requirements.
+	</p>
+	<p>
+		Google Play handles app distribution and may process installation, testing, and diagnostic
+		information under its own settings and policies. This privacy-policy webpage is hosted by GitHub
+		Pages, which logs visitor IP addresses for security. The page does not add an advertising or
+		analytics tracker.
+	</p>
+
+	<h2 id="support">Support and privacy requests</h2>
+	<p>
+		If you email <a href="mailto:bellsworth137@gmail.com">bellsworth137@gmail.com</a>, the developer
+		receives your email address and whatever message, screenshots, or other information you choose
+		to send. Email is handled through Gmail. This information is used to respond to your request,
+		investigate problems, and maintain the app, not for advertising. Please do not send passwords,
+		sensitive personal information, or voice recordings.
+	</p>
+	<p>
+		Support correspondence is retained only as needed to handle the request, maintain relevant
+		support records, or meet legal obligations. You can ask the developer to access, correct, or
+		delete information you have sent. Requests are handled subject to applicable law; information
+		that must be retained for legal reasons may not be immediately deleted.
+	</p>
+
+	<h2 id="children">Children and families</h2>
+	<p>
+		Acquiring is intended for teens aged 13 and older and adults, not children under 13. The same
+		on-device microphone processing described above applies to all users. The app does not require
+		an Acquiring account or ask for a name, email address, or date of birth to use its local
+		music-learning features. This audience statement is not an in-app age verification mechanism.
+	</p>
+	<p>
+		Teens should review external services with a parent or guardian and follow those services'
+		eligibility rules. Hooktheory's policy requires users aged 13–17 to have parental permission.
+		Acquiring does not obtain that permission on a user's behalf or enroll users in Hooktheory's
+		separate educational-service arrangements.
+	</p>
+	<p>
+		If you believe a child has sent personal information to the developer, contact
+		<a href="mailto:bellsworth137@gmail.com">bellsworth137@gmail.com</a> to request review and deletion.
+		Do not include more information about the child than is needed to identify the relevant message.
+	</p>
+
+	<h2 id="choices">Your choices and deletion</h2>
+	<ul>
+		<li>Stop microphone practice or revoke microphone access in Android's app permissions.</li>
+		<li>
+			Avoid online downloads, harvesting, and external links if you do not want those requests made.
+		</li>
+		<li>
+			Clear Acquiring's app storage in Android settings or uninstall it to remove its local app
+			data. Clearing storage also removes downloaded music data, favorites, and history.
+		</li>
+		<li>
+			Manage any operating-system backups separately through your backup provider. Clearing local
+			storage does not necessarily delete an existing backup, and a restore may bring back
+			previously backed-up data.
+		</li>
+		<li>Contact the developer to request deletion of support correspondence.</li>
+	</ul>
+	<p>
+		Microphone audio buffers are temporary and are not retained as recordings. Other local data
+		remains until removed by you, replaced through normal app use, or cleared by the operating
+		system. Retention of external-service records and backups is controlled by those providers; the
+		developer cannot delete those records through the app.
+	</p>
+
+	<h2 id="changes">Changes to this policy</h2>
+	<p>
+		This policy may be updated as the app changes. Updates will be posted at this address with a
+		revised date. Material changes to data handling will be accompanied by any notice or consent
+		required before the new handling begins.
+	</p>
+</ContentLayout>
