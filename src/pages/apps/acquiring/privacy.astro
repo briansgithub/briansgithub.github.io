@@ -6,6 +6,7 @@ const headings = [
 	{ depth: 2, slug: 'microphone', text: 'Microphone and pitch detection' },
 	{ depth: 2, slug: 'device-data', text: 'Information stored on your device' },
 	{ depth: 2, slug: 'online-features', text: 'Online features and other services' },
+	{ depth: 2, slug: 'distribution', text: 'App distribution, beta testing, and diagnostics' },
 	{ depth: 2, slug: 'support', text: 'Support and privacy requests' },
 	{ depth: 2, slug: 'children', text: 'Children and families' },
 	{ depth: 2, slug: 'choices', text: 'Your choices and deletion' },
@@ -15,48 +16,54 @@ const headings = [
 
 <ContentLayout
 	title="Acquiring Privacy Policy"
-	description="How the Acquiring Android music-learning app handles microphone input, local data, online features, and support requests."
-	meta="Last updated September 2, 2026 · Android beta"
+	description="How the Acquiring music-learning app for Android and iOS handles microphone input, local data, online features, beta distribution, and support requests."
+	meta="Last updated September 5, 2026 · Android and iOS"
 	headings={headings}
 >
 	<h2 id="scope">About this policy</h2>
 	<p>
 		Acquiring is a music-theory and ear-training app provided by Brian Ellsworth. This policy covers
-		the Android app, including its beta releases, and support for that app. It does not make claims
-		about an iOS release or replace the policies of services you choose to visit. For questions,
-		contact <a href="mailto:bellsworth137@gmail.com">bellsworth137@gmail.com</a>.
+		the Android and iOS apps, including their beta releases distributed through Google Play testing
+		and Apple TestFlight, and support for those apps. It does not replace the policies of services
+		you choose to visit. For questions, contact
+		<a href="mailto:bellsworth137@gmail.com">bellsworth137@gmail.com</a>.
 	</p>
 	<p>
-		The Android app does not require an Acquiring account. It has no advertising SDK, third-party
-		analytics SDK, or automatic third-party crash-reporting SDK. It does not sell personal
-		information or use microphone input for advertising.
+		The app does not require an Acquiring account. It has no advertising SDK, third-party analytics
+		SDK, or automatic third-party crash-reporting SDK. It does not sell personal information or use
+		microphone input for advertising. Where the two platforms differ, this policy says so.
 	</p>
 
 	<h2 id="microphone">Microphone and pitch detection</h2>
 	<p>
-		If you enable a microphone-based practice feature and grant Android microphone permission, the
-		app uses microphone input to estimate pitch and provide singing and vocal-range feedback. Audio
-		samples are processed in memory on your device. The app does not save these samples as audio
-		recordings or upload them to the developer or another service.
+		If you enable a microphone-based practice feature and grant microphone permission, the app uses
+		microphone input to estimate pitch and provide singing and vocal-range feedback. Audio samples
+		are processed in memory on your device. The app does not save these samples as audio recordings
+		or upload them to the developer or another service. This applies equally on iOS: pitch analysis
+		runs entirely on the device, and no audio or derived pitch data leaves it.
 	</p>
 	<p>
-		You can decline or revoke microphone permission. Features that listen to your voice will not
-		work without it, but browsing songs and listening to app-generated playback do not require
-		microphone access.
+		Android asks for microphone permission when a listening feature starts; iOS asks the first time
+		the app requests microphone access. You can decline or revoke that permission at any time in
+		Android's app permissions or in iOS Settings. Features that listen to your voice will not work
+		without it, but browsing songs and listening to app-generated playback do not require microphone
+		access.
 	</p>
 
 	<h2 id="device-data">Information stored on your device</h2>
 	<p>
 		The app stores its song catalog and downloaded song information locally. It also stores
-		favorites, playlist entries, and recent song and artist history to support those features. The
-		app does not upload that local history or your favorites to an Acquiring account or
-		developer-operated synchronization service.
+		favorites, playlist entries, and recent song and artist history to support those features. On
+		neither platform does the app upload that local history or your favorites to an Acquiring
+		account or a developer-operated synchronization service.
 	</p>
 	<p>
-		Android backup is enabled in the app. Depending on your device, operating system, and backup
-		settings, Android may back up or transfer app data through your device's backup provider. This
-		is separate from an Acquiring-operated service and is controlled through your device and account
-		settings.
+		Operating-system backup is enabled in the app. On Android, depending on your device, operating
+		system, and backup settings, Android may back up or transfer app data through your device's
+		backup provider. On iOS, the app's local data is included in iCloud Backup and in backups made
+		through Finder or iTunes, according to your device and iCloud settings. In both cases the backup
+		is operated by the platform rather than by an Acquiring service, and is controlled through your
+		device and account settings.
 	</p>
 
 	<h2 id="online-features">Online features and other services</h2>
@@ -92,10 +99,43 @@ const headings = [
 		use a service contrary to those requirements.
 	</p>
 	<p>
-		Google Play handles app distribution and may process installation, testing, and diagnostic
-		information under its own settings and policies. This privacy-policy webpage is hosted by GitHub
-		Pages, which logs visitor IP addresses for security. The page does not add an advertising or
-		analytics tracker.
+		This privacy-policy webpage is hosted by GitHub Pages, which logs visitor IP addresses for
+		security. The page does not add an advertising or analytics tracker.
+	</p>
+
+	<h2 id="distribution">App distribution, beta testing, and diagnostics</h2>
+	<p>
+		Google Play handles Android distribution and may process installation, testing, and diagnostic
+		information under its own settings and policies.
+	</p>
+	<p>
+		Apple handles iOS distribution, and TestFlight handles iOS beta distribution. Joining a
+		TestFlight beta requires an Apple Account and the email address the invitation was sent to;
+		Apple processes those under its own policies. Through TestFlight the developer may receive:
+	</p>
+	<ul>
+		<li>
+			<strong>Crash and diagnostic reports:</strong> if you allow TestFlight to share app data with the
+			developer, Apple provides crash logs and basic technical details such as device model, operating-system
+			version, and app version.
+		</li>
+		<li>
+			<strong>Tester feedback:</strong> feedback you send from TestFlight — including any screenshot and
+			comments you attach, plus device, operating-system, app-version, and similar technical details Apple
+			includes — is delivered to the developer, along with your email address and tester name if you allow
+			TestFlight to share them.
+		</li>
+		<li>
+			<strong>Aggregate metrics:</strong> Apple reports aggregate installation and session statistics
+			for the beta in App Store Connect. The developer does not link these to an individual tester.
+		</li>
+	</ul>
+	<p>
+		Crash reports and feedback are used to fix problems and improve the app, not for advertising.
+		Sending TestFlight feedback is optional, and sharing app data with the developer can be turned
+		off in TestFlight. Apple's handling of this information is described in the
+		<a href="https://www.apple.com/legal/privacy/">Apple Privacy Policy</a>. TestFlight builds
+		expire, so a beta install is not a permanent way to keep the app.
 	</p>
 
 	<h2 id="support">Support and privacy requests</h2>
@@ -107,18 +147,20 @@ const headings = [
 		sensitive personal information, or voice recordings.
 	</p>
 	<p>
-		Support correspondence is retained only as needed to handle the request, maintain relevant
-		support records, or meet legal obligations. You can ask the developer to access, correct, or
-		delete information you have sent. Requests are handled subject to applicable law; information
-		that must be retained for legal reasons may not be immediately deleted.
+		Support correspondence and TestFlight feedback are retained only as needed to handle the
+		request, maintain relevant support records, or meet legal obligations. You can ask the developer
+		to access, correct, or delete information you have sent. Requests are handled subject to
+		applicable law; information that must be retained for legal reasons may not be immediately
+		deleted.
 	</p>
 
 	<h2 id="children">Children and families</h2>
 	<p>
 		Acquiring is intended for teens aged 13 and older and adults, not children under 13. The same
-		on-device microphone processing described above applies to all users. The app does not require
-		an Acquiring account or ask for a name, email address, or date of birth to use its local
-		music-learning features. This audience statement is not an in-app age verification mechanism.
+		on-device microphone processing described above applies to all users on both platforms. The app
+		does not require an Acquiring account or ask for a name, email address, or date of birth to use
+		its local music-learning features. This audience statement is not an in-app age verification
+		mechanism.
 	</p>
 	<p>
 		Teens should review external services with a parent or guardian and follow those services'
@@ -134,20 +176,30 @@ const headings = [
 
 	<h2 id="choices">Your choices and deletion</h2>
 	<ul>
-		<li>Stop microphone practice or revoke microphone access in Android's app permissions.</li>
+		<li>
+			Stop microphone practice or revoke microphone access in Android's app permissions, or in iOS
+			Settings under Privacy &amp; Security, then Microphone.
+		</li>
 		<li>
 			Avoid online downloads, harvesting, and external links if you do not want those requests made.
 		</li>
 		<li>
-			Clear Acquiring's app storage in Android settings or uninstall it to remove its local app
-			data. Clearing storage also removes downloaded music data, favorites, and history.
+			Clear Acquiring's app storage in Android settings, or delete the app on either platform, to
+			remove its local app data. That also removes downloaded music data, favorites, and history.
+			iOS offers no separate clear-storage control, and offloading the app on iOS keeps its data.
 		</li>
 		<li>
-			Manage any operating-system backups separately through your backup provider. Clearing local
-			storage does not necessarily delete an existing backup, and a restore may bring back
-			previously backed-up data.
+			Manage any operating-system backups separately through your backup provider or iCloud
+			settings. Clearing local storage does not necessarily delete an existing backup, and a restore
+			may bring back previously backed-up data.
 		</li>
-		<li>Contact the developer to request deletion of support correspondence.</li>
+		<li>
+			On iOS, turn off sharing app data with the developer in TestFlight, and decline to send
+			TestFlight feedback, if you do not want diagnostics or feedback delivered.
+		</li>
+		<li>
+			Contact the developer to request deletion of support correspondence or TestFlight feedback.
+		</li>
 	</ul>
 	<p>
 		Microphone audio buffers are temporary and are not retained as recordings. Other local data
