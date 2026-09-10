@@ -191,7 +191,9 @@ const noIndex = site.preview || placeholder;
 		<footer class="site-footer">
 			<div class="shell site-footer__inner">
 				<p>
-					<span>A running log of builds, notes, and work in progress.</span>
+					<span class="site-footer__disclaimer">
+						All written content is my own, unassisted work
+					</span>
 					<span aria-hidden="true"> · </span>
 					{site.preview && <span class="preview-badge">Preview</span>}
 					{' '}
@@ -199,7 +201,6 @@ const noIndex = site.preview || placeholder;
 					{' '}
 					{site.name}
 				</p>
-				<p class="site-footer__disclaimer">All written content is my own, unassisted work</p>
 			</div>
 		</footer>
 	</body>
