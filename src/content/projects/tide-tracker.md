@@ -37,16 +37,16 @@ The device plots tide height versus time for a given location and displays the p
 
 ## Constraints
 
-- **Monetary cost** — This constraint applies to most projects.
-- **Aesthetics** — The display had to be large enough to be readable and stand out, but not so large as to be prohibitively expensive. I used a black-and-white e-ink display rather than a multicolor one for cost and simplicity, and built a frame to enclose the electronics.
-- **Solar powered** — It seemed natural for a device that tracks tides to be solar powered. Being low-power also means it can run on battery alone, making it portable.
-- **Time frame** — The idea came together in September 2023. I didn't have materials until Black Friday in November, with a self-imposed deadline of Christmas.
+- **Monetary cost**: This constraint applies to most projects.
+- **Aesthetics**: The display had to be large enough to be readable and stand out, but not so large as to be prohibitively expensive. I used a black-and-white e-ink display rather than a multicolor one for cost and simplicity, and built a frame to enclose the electronics.
+- **Solar powered**: It seemed natural for a device that tracks tides to be solar powered. Being low-power also means it can run on battery alone, making it portable.
+- **Time frame**: The idea came together in September 2023. I didn't have materials until Black Friday in November, with a self-imposed deadline of Christmas.
 
 I ended up building two units rather than one:
 
 1. The two recipients live near different rivers.
 2. The picture frames ship from Amazon as a four-pack at a low unit price. To fit all the components into one enclosure, I stacked and glued two frames together. Two frames matched the lighter, sandy color scheme of my friend's house; the other two matched the darker, rustic scheme of my family member's house.
-3. Nearly 80% of the total time went into designing the physical layout and writing the code — a one-time cost. The work from the first unit could be reused for free on all subsequent units, aside from parts and assembly time.
+3. Nearly 80% of the total time went into designing the physical layout and writing the code, a one-time cost. The work from the first unit could be reused for free on all subsequent units, aside from parts and assembly time.
 
 ![Tide Tracker unit two, front view, in a dark rustic-toned frame enclosure](../../assets/images/tide-tracker/tide-tracker-2-front.webp)
 ![Tide Tracker unit two, back view showing the solar panel connectors](../../assets/images/tide-tracker/tide-tracker-2-back.webp)
@@ -66,7 +66,7 @@ A few notes on reading the chart:
 - **Sunrise** and **sunset** are shown in the upper-right corner and on the plot itself.
 - **High tide** and **low tide** times are labeled near the corresponding peaks and valleys.
 
-Height is measured relative to the mean lower low water (MLLW) level — the average low tide over roughly the past 19 years. "Now" is represented as a sweep along the curve rather than a single point, since a continuously refreshed point would defeat the purpose of a low-power, two-hour refresh interval.
+Height is measured relative to the mean lower low water (MLLW) level. That is, the average low tide over roughly the past 19 years. "Now" is represented as a sweep along the curve rather than a single point, since a continuously refreshed point would defeat the purpose of a low-power, two-hour refresh interval.
 
 ### Power
 
@@ -102,11 +102,3 @@ From a phone, the "tide-tracker" network becomes visible:
 Connecting opens a configuration page for entering Wi-Fi credentials and the NOAA station to track.
 
 ![Web-based configuration page for setting WiFi credentials and the NOAA station](../../assets/images/tide-tracker/tide-tracker-settings-page.webp)
-
-## Result
-
-Both units have been running unattended at their respective homes since early 2024, updating every two hours from live NOAA data. Full source is on [GitHub](https://github.com/briansgithub/TideTracker_repo), including the Wi-Fi fallback logic: on startup the device saves its current working connection, and if a new configuration attempt fails, it automatically reverts rather than leaving the recipient with a dead device.
-
-## Reflection
-
-Designing for two different recipients up front — rather than building one and improvising a second — meant the real engineering cost (enclosure design, code, the config webpage) was paid once. Building the failure path (no Wi-Fi, bad credentials, hotspot fallback) mattered as much as the happy path, since these devices are gifts I can't casually walk over and debug.
