@@ -1,18 +1,8 @@
 ---
 title: About
-description: Welcome to bellsworth.dev, the homepage of Brian Ellsworth!
+description: Computer engineer writing about topics he finds interesting
 draft: false
 placeholder: false
 ---
+I am a hardware engineer from New Jersey with experience in embedded software, manufacturing, start up companies, and project management. I am most proficient in Python and ANSI C. I have been using agentic tools to help me create closed-loop hardware test benches and develop in languages that I am unfamiliar with, such as Kotlin and Swift, in order to create fun and practical apps, like a 24-hour clock wallpaper (auto-synced daily with FitBit sleep data), heartrate-controlled software, and a powerful musical ear training practice app for iOS/Android.
 
-## Background
-
-I work across embedded software, project engineering, and hardware-software integration — most recently building bare-metal C/C++ firmware for RP2040-based devices at Prong Technologies, and before that managing the electromechanical manufacturing of products from prototype through production at Everson Tesla. My background is in applied physics and electrical/computer engineering from Rutgers, including undergraduate research in graphene material characterization.
-
-This site collects project case studies, technical writing, book notes, and quotations. Some entries are hardware builds documented start to finish; others are shorter notes on whatever I've been curious about — number systems, music theory, circadian rhythm, or the occasional detour into digital logic built one breadboard at a time.
-
-## Current interests
-
-- Embedded firmware for resource-constrained, bare-metal systems.
-- Small hardware builds that pair a physical constraint with a software solution — solar power budgets, e-ink refresh rates, that kind of thing.
-- Where music theory, circadian biology, and plain procedural thinking overlap.
