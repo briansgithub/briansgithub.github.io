@@ -29,9 +29,23 @@
 	max-width: 68ch;
 }
 
+/* Standalone Markdown images */
+.prose p:has(> img:only-child) {
+	max-width: 32rem;
+	margin-inline: auto;
+}
+
+.prose p > img:only-child {
+	display: block;
+	width: auto;
+	max-width: 100%;
+	max-height: 32rem;
+	margin-inline: auto;
+	height: auto;
+}
+
 /* Consecutive Markdown image lines become one paragraph. Treat runs of two or
-   more images as supporting evidence, while single images retain their normal
-   full-width presentation. */
+   more images as supporting evidence and display them side-by-side. */
 .prose p:has(> img + img) {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
