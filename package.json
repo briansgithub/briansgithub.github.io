@@ -50,5 +50,10 @@
 		"prettier": "^3.9.6",
 		"prettier-plugin-astro": "^0.14.1",
 		"typescript": "^5.9.3"
+	},
+	"overrides": {
+		"markdownlint-cli2": {
+			"smol-toml": "1.8.0"
+		}
 	}
 }
