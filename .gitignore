@@ -40,3 +40,4 @@ Desktop.ini
 
 # Interrupted atomic writes from local helper scripts
 *.tmp-*
+*.swp
