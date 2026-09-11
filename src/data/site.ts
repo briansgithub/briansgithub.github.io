@@ -18,7 +18,9 @@ export const site = {
 
 export const navigation = [
 	{ label: 'About', href: '/' },
-	{ label: 'Blog', href: '/blog/' },
+
+	// Temporarily hidden — edit privately; /blog/ still builds
+	// { label: 'Blog', href: '/blog/' },
 
 	// Temporarily hidden
 	// {

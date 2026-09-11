@@ -32,3 +32,13 @@ export function githubHref(links?: Record<string, string>) {
 	if (!links) return undefined;
 	return Object.values(links).find(isGithubUrl);
 }
+
+export function projectPageLinks(links?: Record<string, string>) {
+	if (!links) return [];
+	return Object.entries(links)
+		.map(([label, href]) => ({
+			label: isGithubUrl(href) ? 'GitHub' : label,
+			href,
+		}))
+		.sort((a, b) => Number(isGithubUrl(b.href)) - Number(isGithubUrl(a.href)));
+}

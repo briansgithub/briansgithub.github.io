@@ -12,7 +12,7 @@ interface Props {
 	headings?: MarkdownHeading[];
 	collectionHref?: string;
 	collectionLabel?: string;
-	github?: string;
+	links?: { label: string; href: string }[];
 }
 
 const {
@@ -24,7 +24,7 @@ const {
 	headings = [],
 	collectionHref,
 	collectionLabel,
-	github,
+	links = [],
 } = Astro.props;
 const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const hasToc = tocHeadings.length >= 3;
@@ -51,10 +51,12 @@ const hasToc = tocHeadings.length >= 3;
 				)
 			}
 			{
-				github && (
-					<p class="article-header__github">
-						<a href={github}>GitHub ↗</a>
-					</p>
+				links.length > 0 && (
+					<nav class="article-header__links" aria-label="Project links">
+						{links.map((link) => (
+							<a href={link.href}>{link.label} ↗</a>
+						))}
+					</nav>
 				)
 			}
 		</header>
@@ -92,12 +94,28 @@ const hasToc = tocHeadings.length >= 3;
 </BaseLayout>
 
 <style>
-	.article-header__github {
-		margin: 1.25rem 0 0;
+	.article-header__links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		margin: 1.6rem 0 0;
+	}
+
+	.article-header__links a {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.55rem 1rem;
+		border: 1px solid var(--accent);
+		background: color-mix(in srgb, var(--accent) 14%, var(--surface));
 		color: var(--accent);
 		font-family: var(--sans);
-		font-size: 0.82rem;
-		font-weight: 500;
+		font-size: 0.95rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.article-header__links a:hover {
+		background: color-mix(in srgb, var(--accent) 26%, var(--surface));
 	}
 
 	.article-body--with-toc {
