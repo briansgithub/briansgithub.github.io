@@ -1,20 +1,17 @@
 #requires -Version 5.1
 
 [CmdletBinding()]
-param(
-	[switch]$Diagnostics,
-	[switch]$WhatIf
-)
+param()
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$launcher = Join-Path $PSScriptRoot 'scripts\authoring\Start-ContentWorkflow.ps1'
+$launcher = Join-Path $PSScriptRoot 'scripts\authoring\launch-authoring-tools.mjs'
 if (-not (Test-Path -LiteralPath $launcher -PathType Leaf)) {
-	throw "The website content workflow launcher is missing: $launcher"
+	throw "The authoring tools launcher is missing: $launcher"
 }
 
-& $launcher @PSBoundParameters
+& node.exe $launcher @args
 $workflowSucceeded = $?
 $workflowExitCode = $LASTEXITCODE
 if (-not $workflowSucceeded) {
