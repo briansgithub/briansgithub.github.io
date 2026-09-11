@@ -95,7 +95,9 @@ placeholder.
 
 Live identity and résumé data are TypeScript, not Markdown:
 [`src/data/site.ts`](src/data/site.ts) and
-[`src/data/resume.ts`](src/data/resume.ts). The Markdown files
+[`src/data/resume.ts`](src/data/resume.ts). Primary nav is About, Projects, and
+Résumé. Blog and Collections stay commented out of `navigation` so they can be
+edited at their URLs without appearing in the public header. The Markdown files
 `src/content/pages/home.md` and `resume.md` are writing worksheets that render
 nowhere; `about.md` renders directly as the `/` homepage, and `/about/` redirects
 there. Editing a worksheet does not change the site.

@@ -2,7 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import ContentLayout from '../../layouts/ContentLayout.astro';
-import { contentSlug, githubHref, isGithubUrl, isVisible } from '../../utils/content';
+import { contentSlug, isVisible, projectPageLinks } from '../../utils/content';
 
 export async function getStaticPaths() {
 	const entries = await getCollection('projects', ({ data }) => isVisible(data));
@@ -14,8 +14,7 @@ interface Props {
 }
 const { entry } = Astro.props;
 const { Content, headings } = await render(entry);
-const github = githubHref(entry.data.links);
-const extraLinks = Object.entries(entry.data.links ?? {}).filter(([, href]) => !isGithubUrl(href));
+const links = projectPageLinks(entry.data.links);
 ---
 
 <ContentLayout
@@ -27,29 +26,7 @@ const extraLinks = Object.entries(entry.data.links ?? {}).filter(([, href]) => !
 	headings={headings}
 	collectionHref="/projects/"
 	collectionLabel="Projects"
-	github={github}
+	links={links}
 >
-	{
-		extraLinks.length > 0 && (
-			<nav class="project-links" aria-label="Project links">
-				{extraLinks.map(([label, href]) => (
-					<a href={href}>{label} ↗</a>
-				))}
-			</nav>
-		)
-	}
 	<Content />
 </ContentLayout>
-
-<style>
-	.project-links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.75rem 1.25rem;
-		margin-bottom: 2.5rem;
-		color: var(--accent);
-		font-family: var(--sans);
-		font-size: 0.82rem;
-		font-weight: 500;
-	}
-</style>

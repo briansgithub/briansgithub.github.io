@@ -104,9 +104,9 @@ gallery:
 Image paths are relative to the project Markdown file. Astro validates and optimizes them at
 build time. Projects without images continue to use the standard text-card layout.
 
-A `links` URL on github.com is shown as GitHub at the top of the project page
-and on the timeline card. Other links stay above the writeup. Omit GitHub when
-no public repository exists.
+A `links` URL on github.com is labeled GitHub and shown first. All project
+`links` render as prominent buttons in the project-page header; GitHub also
+appears on the timeline card. Omit GitHub when no public repository exists.
 
 Example links when real URLs exist:
 
