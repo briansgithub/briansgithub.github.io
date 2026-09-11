@@ -54,7 +54,7 @@ const hasToc = tocHeadings.length >= 3;
 				hasToc && (
 					<aside class="entry-toc">
 						<details open>
-							<summary>On this page</summary>
+							<summary>Index</summary>
 							<nav aria-label="Table of contents">
 								<ol>
 									{tocHeadings.map((heading) => (
@@ -73,8 +73,8 @@ const hasToc = tocHeadings.length >= 3;
 				{
 					collectionHref && collectionLabel && (
 						<nav class="entry-return" aria-label="Entry navigation">
-							<span>Continue exploring</span>
-							<a href={collectionHref}>Back to {collectionLabel} →</a>
+							<!-- <span>Continue exploring</span> -->
+							<a href={collectionHref}>← Back to {collectionLabel}</a>
 						</nav>
 					)
 				}
