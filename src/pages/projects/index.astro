@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import ContentCard from '../../components/ContentCard.astro';
-import { contentSlug, githubHref, isVisible } from '../../utils/content';
+import { contentSlug, isVisible } from '../../utils/content';
 
 const projects = (await getCollection('projects', ({ data }) => isVisible(data))).sort(
 	(a, b) =>
@@ -30,11 +30,7 @@ function statusLabel(status: string) {
 
 <BaseLayout title="Projects" description="Selected builds, investigations, and technical work.">
 	<div class="shell">
-		<PageIntro
-			eyebrow="Index 02"
-			title="Projects"
-			description="Selected builds and investigations, documented with the decisions, tradeoffs, and evidence that shaped them."
-		/>
+		<PageIntro eyebrow="Index 02" title="Projects" />
 		{
 			timeline.length > 0 ? (
 				<>
@@ -56,15 +52,9 @@ function statusLabel(status: string) {
 										const cover = project.data.cover;
 										const shots = project.data.gallery;
 										const hasGallery = Boolean(cover) || shots.length > 0;
-										const github = githubHref(project.data.links);
 										return (
 											<li class="timeline-entry">
 												<div class="timeline-entry__card">
-													{github && (
-														<a class="timeline-entry__github" href={github}>
-															GitHub ↗
-														</a>
-													)}
 													<ContentCard
 														href={href}
 														title={project.data.title}
@@ -325,6 +315,7 @@ function statusLabel(status: string) {
 
 	.timeline-year--label-left .timeline-entry__gallery {
 		grid-area: end;
+		justify-self: start;
 	}
 
 	.timeline-year--label-left .timeline-entry__track {
@@ -338,8 +329,6 @@ function statusLabel(status: string) {
 	.timeline-year--label-right .timeline-entry__gallery {
 		grid-area: start;
 		justify-self: end;
-		width: max-content;
-		max-width: 100%;
 	}
 
 	.timeline-year--label-right .timeline-entry__track {
@@ -349,15 +338,6 @@ function statusLabel(status: string) {
 
 	.timeline-year--label-right .timeline-entry__shots {
 		direction: rtl;
-	}
-
-	.timeline-entry__github {
-		display: inline-block;
-		margin-bottom: 0.4rem;
-		color: var(--accent);
-		font-family: var(--sans);
-		font-size: 0.72rem;
-		font-weight: 500;
 	}
 
 	.timeline-entry__card :global(.content-card) {
@@ -390,9 +370,13 @@ function statusLabel(status: string) {
 	}
 
 	.timeline-entry__gallery {
+		align-self: center;
+		box-sizing: border-box;
+		width: 66.67%;
+		max-width: 66.67%;
 		height: 0;
-		min-height: 100%;
-		max-width: 100%;
+		min-height: 66.67%;
+		max-height: 66.67%;
 		overflow-x: auto;
 		overflow-y: hidden;
 		overscroll-behavior-x: contain;
@@ -499,9 +483,9 @@ function statusLabel(status: string) {
 		.timeline-year--label-left .timeline-entry__gallery,
 		.timeline-year--label-right .timeline-entry__gallery {
 			grid-area: gallery;
-			justify-self: stretch;
-			width: auto;
-			max-width: none;
+			justify-self: start;
+			width: 66.67%;
+			max-width: 66.67%;
 		}
 
 		.timeline-year--label-left .timeline-entry__track,
@@ -515,9 +499,10 @@ function statusLabel(status: string) {
 		}
 
 		.timeline-entry__gallery {
-			height: 12rem;
+			align-self: start;
+			height: 8rem;
 			min-height: 0;
-			max-height: 12rem;
+			max-height: 8rem;
 		}
 
 		.timeline-entry__card :global(.content-card__link) {
@@ -547,6 +532,24 @@ function statusLabel(status: string) {
 	const canvas = document.querySelector<HTMLCanvasElement>('.timeline-beacon__particles');
 	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+	const GALLERY_SCALE = 2 / 3;
+
+	const sizeGalleries = () => {
+		for (const entry of document.querySelectorAll<HTMLElement>('.timeline-entry')) {
+			const card = entry.querySelector<HTMLElement>('.content-card');
+			const gallery = entry.querySelector<HTMLElement>('.timeline-entry__gallery');
+			if (!card || !gallery) continue;
+			const { width, height } = card.getBoundingClientRect();
+			const nextWidth = Math.min(width, width * GALLERY_SCALE);
+			const nextHeight = Math.min(height, height * GALLERY_SCALE);
+			gallery.style.width = `${nextWidth}px`;
+			gallery.style.maxWidth = `${width}px`;
+			gallery.style.height = `${nextHeight}px`;
+			gallery.style.minHeight = `${nextHeight}px`;
+			gallery.style.maxHeight = `${height}px`;
+		}
+	};
+
 	const pinSpineGalleries = () => {
 		if (window.matchMedia('(max-width: 56rem)').matches) return;
 		for (const gallery of document.querySelectorAll<HTMLElement>(
@@ -556,17 +559,22 @@ function statusLabel(status: string) {
 		}
 	};
 
-	if (timeline) {
-		const spineGalleryImages = timeline.querySelectorAll<HTMLImageElement>(
-			'.timeline-year--label-right .timeline-entry__gallery img',
-		);
+	const fitGalleries = () => {
+		sizeGalleries();
 		pinSpineGalleries();
-		window.addEventListener('resize', pinSpineGalleries);
-		for (const img of spineGalleryImages) {
+	};
+
+	if (timeline) {
+		const galleryImages = timeline.querySelectorAll<HTMLImageElement>(
+			'.timeline-entry__gallery img',
+		);
+		fitGalleries();
+		window.addEventListener('resize', fitGalleries);
+		for (const img of galleryImages) {
 			if (img.complete) {
-				pinSpineGalleries();
+				fitGalleries();
 			} else {
-				img.addEventListener('load', pinSpineGalleries);
+				img.addEventListener('load', fitGalleries);
 			}
 		}
 	}

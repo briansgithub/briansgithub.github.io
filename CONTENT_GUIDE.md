@@ -88,8 +88,8 @@ placeholder: optional boolean
 
 The projects index is a year timeline of equal text cards. A `cover` image is the
 representative (higher-priority) photo on the opposite side of the spine. Extra shots go in
-`gallery` and share that same bordered box, which scrolls horizontally when the set is wider
-than the column. Omit both to keep the opposite side empty. Project pages do not repeat the
+`gallery` and share that same bordered box, sized to about two-thirds of the facing card,
+which scrolls horizontally when the set is wider than the box. Omit both to keep the opposite side empty. Project pages do not repeat the
 frontmatter gallery; keep photos in the writeup where they belong.
 
 ```yaml
@@ -105,8 +105,8 @@ Image paths are relative to the project Markdown file. Astro validates and optim
 build time. Projects without images continue to use the standard text-card layout.
 
 A `links` URL on github.com is labeled GitHub and shown first. All project
-`links` render as prominent buttons in the project-page header; GitHub also
-appears on the timeline card. Omit GitHub when no public repository exists.
+`links` render as prominent buttons in the project-page header. The timeline
+does not repeat them. Omit GitHub when no public repository exists.
 
 Example links when real URLs exist:
 

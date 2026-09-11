@@ -1,5 +1,5 @@
 ---
-title: 'Circle of Fifths Reinvented'
+title: 'Circle of Fifths Investigation'
 summary: 'An interactive p5.js visualization of parity patterns in the circle of fifths, paired with a written procedural method for remembering key signatures.'
 status: complete
 year: 2025
@@ -35,13 +35,10 @@ gallery:
     alt: 'Circle of fifths marked with accidental counts, note numbers, and n-minus-a differences of 0, 6, or 12'
 links:
   Sketch: 'https://editor.p5js.org/remote-files/full/-n651WXmu'
-  Notes: 'https://drive.google.com/file/d/1Oyi2s9HowefMtI3-I5A7z10VlDjL4lfJ/view'
+  Write Up: 'https://drive.google.com/file/d/1Oyi2s9HowefMtI3-I5A7z10VlDjL4lfJ/view'
 draft: false
 placeholder: false
 ---
-
-- [Interactive sketch](https://editor.p5js.org/remote-files/full/-n651WXmu)
-- [Paper (PDF)](https://drive.google.com/file/d/1Oyi2s9HowefMtI3-I5A7z10VlDjL4lfJ/view)
 
 ## A Procedural Method for Remembering Key Signatures
 
