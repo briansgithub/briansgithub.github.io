@@ -28,11 +28,6 @@ export function isGithubUrl(href: string) {
 	}
 }
 
-export function githubHref(links?: Record<string, string>) {
-	if (!links) return undefined;
-	return Object.values(links).find(isGithubUrl);
-}
-
 export function projectPageLinks(links?: Record<string, string>) {
 	if (!links) return [];
 	return Object.entries(links)
