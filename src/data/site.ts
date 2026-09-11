@@ -1,8 +1,7 @@
 export const site = {
 	name: 'bellsworth.dev',
 	title: 'About Brian Ellsworth',
-	description:
-		'Computer engineer writing about topics he finds interesting.',
+	description: 'Computer engineer writing about topics he finds interesting.',
 	// tagline: 'Firmware Engineer',
 	shortBio:
 		'My background is in applied physics and computer engineering. This site is a collection of things I have done and that I enjoy: projects, technical writing, book notes, and quotations.',
