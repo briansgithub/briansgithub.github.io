@@ -27,4 +27,4 @@ Resolved: `brian1.jpg` (a close-up portrait), imported via `npm run media:import
 
 ## Domain decision
 
-Resolved: the site uses the custom domain [`bellsworth.dev`](https://bellsworth.dev). It remains in `site.preview = true` mode in `src/data/site.ts`, which keeps every page `noindex`. Flip `preview` to `false` only once the site is ready to be publicly indexed and all placeholder entries have been replaced or intentionally excluded.
+Resolved: the site uses the custom domain [`bellsworth.dev`](https://bellsworth.dev). `site.preview` is `false` in `src/data/site.ts`, so placeholder entries stay hidden and pages are eligible for indexing.

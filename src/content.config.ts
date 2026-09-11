@@ -38,6 +38,15 @@ const projects = defineCollection({
 					alt: z.string().min(1).max(240),
 				})
 				.optional(),
+			gallery: z
+				.array(
+					z.object({
+						image: image(),
+						alt: z.string().min(1).max(240),
+					}),
+				)
+				.max(16)
+				.default([]),
 			links: z.record(z.string(), z.url()).optional(),
 			order: z.number().int().optional(),
 			...editorialFields,

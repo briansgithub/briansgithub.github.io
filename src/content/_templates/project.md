@@ -6,10 +6,13 @@ year: { { date:YYYY } }
 technologies:
   - '[PLACEHOLDER] Technology'
 featured: false
-# Optional cover for project listings:
+# Optional cover and extra timeline shots:
 # cover:
 #   image: ../../assets/images/project-name/cover.webp
 #   alt: 'Describe the project image and the useful visual context it provides.'
+# gallery:
+#   - image: ../../assets/images/project-name/detail.webp
+#     alt: 'Describe the extra shot.'
 draft: true
 placeholder: true
 ---
