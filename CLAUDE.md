@@ -83,11 +83,15 @@ Schema rules that are easy to violate:
   240, alt text 240, `material` 60. Copy that reads well can still fail
   validation.
 - **Unlisted fields are rejected.** Add the field to the schema first.
+- **Project photos:** `cover` is the representative timeline image; `gallery` holds extra
+  shots (max 16). Both need `image` plus alt text (max 240). Timeline galleries scroll
+  horizontally. Project pages do not repeat that gallery; writeup images stay in the body.
 
 Visibility is decided by [`src/utils/visibility.ts`](src/utils/visibility.ts):
 a draft is never visible, and a placeholder is visible only while `site.preview`
-is `true`. `site.preview` also drives the `noindex` metadata that keeps the site
-out of search results before launch. Leave it enabled until launch is agreed.
+is `true`. `site.preview` is currently `false`: placeholder entries are hidden,
+and pages are eligible for indexing unless an individual entry is still marked
+placeholder.
 
 Live identity and résumé data are TypeScript, not Markdown:
 [`src/data/site.ts`](src/data/site.ts) and
@@ -125,37 +129,26 @@ The low-level Node helpers never run Git, never commit, and never push:
 | `npm run content:publish` | Validate one file and flip it to published                                                 |
 | `npm run media:import`    | Convert one image into a safe web master                                                   |
 
-Two PowerShell orchestrators are explicitly approved to commit and push. Both must show the
-changes for human review and require the exact typed confirmation `PUBLISH` before any commit
-or push. Neither may use `git add .`, force-push, bypass hooks, or automatically resolve branch
-divergence.
+The only commit/push orchestrator is **Review and Publish** in the sibling
+`personal-website-authoring-tools` checkout. Website shortcuts are shims into that workflow. It
+must show the changes for human review and require the exact typed confirmation `PUBLISH` before
+any commit or push. It may not use `git add .`, force-push, bypass hooks, or automatically resolve
+branch divergence.
 
-| Launcher                             | Entry point                             | Use it for                                                            |
-| ------------------------------------ | --------------------------------------- | --------------------------------------------------------------------- |
-| `Publish Website Changes.cmd`        | `scripts/authoring/Publish-Changes.ps1` | Publishing whatever is already edited — the default for routine edits |
-| `Start Website Content Workflow.cmd` | `npm run content:workflow`              | Scaffolding a new entry or importing media, as a resumable batch      |
+| Launcher                             | Entry point                           | Use it for                                                       |
+| ------------------------------------ | ------------------------------------- | ---------------------------------------------------------------- |
+| `Write Website Content.cmd`          | tools `npm run author`                | Authoring Home: drafts, assets, previews, publish-set recording  |
+| `Review and Publish Website.cmd`     | tools `npm run publish:content`       | Verify, stage the session file set, `PUBLISH`, push, watch Pages |
+| `Start Website Content Workflow.cmd` | `npm run content:workflow`            | Shim: choose Write or Publish                                    |
+| `Publish Website Changes.cmd`        | `npm run content:workflow -- publish` | Shim: Review and Publish only                                    |
 
-`Publish-Changes.ps1` treats the working tree itself as the unit of work. It derives its file
-list from `Get-WorkflowChangedPaths`, which honours `.gitignore`, so ignored paths cannot reach
-a commit; it then stages those exact paths. It formats the changed files with Prettier before
-verifying, because Obsidian reliably breaks the format check. It runs in one pass and keeps no
-session state.
+The publisher stages only paths recorded in the authoring-tools runtime session (created drafts,
+imported assets, Site essentials, and entries included from Authoring Home). Git-visible leftovers
+require typing `INCLUDE` once. After `PUBLISH` it watches the GitHub Actions Pages workflow and
+does not report a successful deployment until that run and the live smoke tests pass.
 
-Its review step opens each staged change as a VS Code diff through `git difftool`, one file at
-a time, and waits for each tab to close. Pass `-TerminalDiff` to print the diff in the console
-instead; the console is also used automatically when VS Code is not on `PATH`. The difftool
-settings travel as `GIT_CONFIG_*` environment variables, not `git -c` arguments, because
-Windows PowerShell 5.1 does not escape the quotes around `$LOCAL` and `$REMOTE` when calling a
-native executable. The user's own `diff.tool` configuration is never modified.
-
-`npm run content:workflow` manages a resumable batch, calls the low-level helpers, previews,
-verifies, stages exact recorded paths, commits, pushes `main`, and monitors GitHub Pages. It
-refuses to publish changes that its batch does not record, so an edit made directly in Obsidian
-outside a batch belongs to the one-shot launcher instead. Its session state, logs, backups, and
-preferences belong only in the Git-ignored `.authoring-workflow/` directory.
-
-Outside those two approved orchestrators, committing and pushing remain separate, deliberate,
-human-reviewed steps.
+Low-level `content:*` and `media:import` helpers still never use Git. Outside Review and Publish,
+committing and pushing remain separate, deliberate, human-reviewed steps.
 
 ## Verification
 

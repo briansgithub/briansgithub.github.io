@@ -20,8 +20,37 @@ order: 1
 cover:
   image: ../../assets/images/tide-tracker/tide-tracker-1-front.webp
   alt: 'A working Tide Tracker in a sandy wood frame, displaying a tide-height chart on its e-ink screen.'
+gallery:
+  - image: ../../assets/images/tide-tracker/tide-tracker-1-back.webp
+    alt: 'Tide Tracker unit one, back view showing the solar panel connectors'
+  - image: ../../assets/images/tide-tracker/tide-tracker-2-front.webp
+    alt: 'Tide Tracker unit two, front view, in a dark rustic-toned frame enclosure'
+  - image: ../../assets/images/tide-tracker/tide-tracker-2-back.webp
+    alt: 'Tide Tracker unit two, back view showing the solar panel connectors'
+  - image: ../../assets/images/tide-tracker/tide-tracker-plot-snapshot.webp
+    alt: 'E-ink display plot of tide height versus time, with sunrise and sunset markers'
+  - image: ../../assets/images/tide-tracker/tide-tracker-solar-panels-1.webp
+    alt: 'Solar panel array wired to the Tide Tracker enclosure'
+  - image: ../../assets/images/tide-tracker/tide-tracker-solar-panels-2.webp
+    alt: 'Second angle of the solar panel array setup'
+  - image: ../../assets/images/tide-tracker/tide-tracker-solar-stand-1.webp
+    alt: 'Resin-printed stand holding a solar panel at an angle'
+  - image: ../../assets/images/tide-tracker/tide-tracker-solar-stand-2.webp
+    alt: 'Second resin-printed solar panel stand design'
+  - image: ../../assets/images/tide-tracker/tide-tracker-internals.webp
+    alt: 'Internal electronics of the Tide Tracker enclosure, including the Raspberry Pi Zero and battery'
+  - image: ../../assets/images/tide-tracker/tide-tracker-no-wifi-photo.webp
+    alt: 'Tide Tracker display showing a no-WiFi connection error screen'
+  - image: ../../assets/images/tide-tracker/tide-tracker-no-wifi-screen.webp
+    alt: 'Close-up of the no-WiFi setup instructions shown on the e-ink display'
+  - image: ../../assets/images/tide-tracker/tide-tracker-internal-switch.webp
+    alt: 'Internal setup switch used to enter WiFi configuration mode'
+  - image: ../../assets/images/tide-tracker/tide-tracker-wifi-network.webp
+    alt: 'Mobile WiFi settings screen showing the tide-tracker network'
+  - image: ../../assets/images/tide-tracker/tide-tracker-settings-page.webp
+    alt: 'Web-based configuration page for setting WiFi credentials and the NOAA station'
 links:
-  Source: 'https://github.com/briansgithub/TideTracker_repo'
+  GitHub: 'https://github.com/briansgithub/TideTracker_repo'
 draft: false
 placeholder: false
 ---

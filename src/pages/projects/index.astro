@@ -1,21 +1,31 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageIntro from '../../components/PageIntro.astro';
 import ContentCard from '../../components/ContentCard.astro';
-import FeaturedProject from '../../components/FeaturedProject.astro';
-import { contentSlug, isVisible } from '../../utils/content';
+import { contentSlug, githubHref, isVisible } from '../../utils/content';
 
 const projects = (await getCollection('projects', ({ data }) => isVisible(data))).sort(
 	(a, b) =>
-		Number(b.data.featured) - Number(a.data.featured) ||
+		b.data.year - a.data.year ||
 		(a.data.order ?? 99) - (b.data.order ?? 99) ||
-		b.data.year - a.data.year,
+		a.data.title.localeCompare(b.data.title),
 );
-const leadProject = projects.find((project) => project.data.cover);
-const remainingProjects = leadProject
-	? projects.filter((project) => project.id !== leadProject.id)
-	: projects;
+
+const timeline = Object.entries(Object.groupBy(projects, (project) => project.data.year))
+	.map(([yearValue, entries]) => {
+		const year = Number(yearValue);
+		return {
+			year,
+			projects: entries ?? [],
+		};
+	})
+	.sort((a, b) => b.year - a.year);
+
+function statusLabel(status: string) {
+	return status.charAt(0).toUpperCase() + status.slice(1);
+}
 ---
 
 <BaseLayout title="Projects" description="Selected builds, investigations, and technical work.">
@@ -26,31 +36,93 @@ const remainingProjects = leadProject
 			description="Selected builds and investigations, documented with the decisions, tradeoffs, and evidence that shaped them."
 		/>
 		{
-			projects.length > 0 ? (
+			timeline.length > 0 ? (
 				<>
-					{leadProject?.data.cover && (
-						<FeaturedProject
-							href={`/projects/${contentSlug(leadProject.id)}/`}
-							title={leadProject.data.title}
-							description={leadProject.data.summary}
-							meta={`${leadProject.data.year} · ${leadProject.data.status}`}
-							technologies={leadProject.data.technologies}
-							cover={leadProject.data.cover}
-							placeholder={leadProject.data.placeholder}
-						/>
-					)}
-					<div class:list={['content-grid', { 'project-grid--secondary': leadProject }]}>
-						{remainingProjects.map((project) => (
-							<ContentCard
-								href={`/projects/${contentSlug(project.id)}/`}
-								title={project.data.title}
-								description={project.data.summary}
-								meta={`${project.data.year} · ${project.data.status}`}
-								tags={project.data.technologies}
-								tagLabel="Technologies"
-								placeholder={project.data.placeholder}
-							/>
+					<ol class="project-timeline">
+						{timeline.map((group, index) => (
+							<li
+								class:list={[
+									'timeline-year',
+									index % 2 === 0 ? 'timeline-year--label-left' : 'timeline-year--label-right',
+								]}
+							>
+								<div class="timeline-year__axis" aria-hidden="true">
+									<span class="timeline-year__dot" />
+								</div>
+								<h2 class="timeline-year__label">{group.year}</h2>
+								<ol class="timeline-year__entries">
+									{group.projects.map((project) => {
+										const href = `/projects/${contentSlug(project.id)}/`;
+										const cover = project.data.cover;
+										const shots = project.data.gallery;
+										const hasGallery = Boolean(cover) || shots.length > 0;
+										const github = githubHref(project.data.links);
+										return (
+											<li class="timeline-entry">
+												<div class="timeline-entry__card">
+													{github && (
+														<a class="timeline-entry__github" href={github}>
+															GitHub ↗
+														</a>
+													)}
+													<ContentCard
+														href={href}
+														title={project.data.title}
+														description={project.data.summary}
+														meta={statusLabel(project.data.status)}
+														tags={project.data.technologies}
+														tagLabel="Technologies"
+														headingLevel={3}
+														placeholder={project.data.placeholder}
+													/>
+												</div>
+												{hasGallery && (
+													<div class="timeline-entry__gallery">
+														<div class="timeline-entry__track">
+															{cover && (
+																<a
+																	class="timeline-entry__photo timeline-entry__photo--hero"
+																	href={href}
+																>
+																	<Image
+																		src={cover.image}
+																		alt={cover.alt}
+																		widths={[240, 360, 480]}
+																		sizes="(max-width: 56rem) 8rem, 12rem"
+																	/>
+																</a>
+															)}
+															{shots.length > 0 && (
+																<div class="timeline-entry__shots">
+																	{shots.map((shot) => (
+																		<a
+																			class="timeline-entry__photo timeline-entry__photo--shot"
+																			href={href}
+																		>
+																			<Image
+																				src={shot.image}
+																				alt={shot.alt}
+																				widths={[160, 240, 320]}
+																				sizes="6rem"
+																			/>
+																		</a>
+																	))}
+																</div>
+															)}
+														</div>
+													</div>
+												)}
+											</li>
+										);
+									})}
+								</ol>
+							</li>
 						))}
+					</ol>
+					<div class="timeline-beacon" aria-hidden="true">
+						<canvas class="timeline-beacon__particles" />
+						<span class="timeline-beacon__rail" />
+						<span class="timeline-beacon__core" />
 					</div>
 				</>
 			) : (
@@ -61,7 +133,604 @@ const remainingProjects = leadProject
 </BaseLayout>
 
 <style>
-	.project-grid--secondary {
-		border-top: 0;
+	.project-timeline {
+		position: relative;
+		margin: 0;
+		padding: 1.25rem 0 2rem;
+		padding-inline-start: 0;
+		list-style: none;
+	}
+
+	.project-timeline::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 50%;
+		z-index: 0;
+		width: 1px;
+		background: var(--line-strong);
+		transform: translateX(-50%);
+		pointer-events: none;
+	}
+
+	.timeline-beacon {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		z-index: 4;
+		width: 5.5rem;
+		height: 11rem;
+		pointer-events: none;
+		opacity: 0;
+		transform: translate(-50%, -50%);
+		transition: opacity 220ms ease;
+	}
+
+	.timeline-beacon.is-active {
+		opacity: 1;
+	}
+
+	.timeline-beacon__particles {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.timeline-beacon__rail {
+		position: absolute;
+		top: 1.1rem;
+		bottom: 1.1rem;
+		left: 50%;
+		width: 2px;
+		border-radius: 999px;
+		background: linear-gradient(
+			180deg,
+			transparent,
+			color-mix(in srgb, var(--accent) 55%, transparent) 18%,
+			var(--accent) 50%,
+			color-mix(in srgb, var(--accent) 55%, transparent) 82%,
+			transparent
+		);
+		box-shadow:
+			0 0 10px color-mix(in srgb, var(--accent) 45%, transparent),
+			0 0 22px color-mix(in srgb, var(--accent-soft) 28%, transparent);
+		transform: translateX(-50%);
+	}
+
+	.timeline-beacon__core {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0.7rem;
+		height: 0.7rem;
+		border-radius: 999px;
+		background: #fff;
+		box-shadow:
+			0 0 0 1px color-mix(in srgb, var(--accent) 80%, #fff),
+			0 0 12px var(--accent),
+			0 0 28px color-mix(in srgb, var(--accent-soft) 70%, transparent);
+		transform: translate(-50%, -50%);
+		animation: beacon-pulse 2.8s ease-in-out infinite;
+	}
+
+	@keyframes beacon-pulse {
+		0%,
+		100% {
+			transform: translate(-50%, -50%) scale(1);
+			opacity: 0.92;
+		}
+
+		50% {
+			transform: translate(-50%, -50%) scale(1.18);
+			opacity: 1;
+		}
+	}
+
+	.timeline-year {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 2.75rem minmax(0, 1fr);
+		grid-template-rows: auto auto;
+		align-items: start;
+		column-gap: 0.75rem;
+		row-gap: 0.45rem;
+		list-style: none;
+	}
+
+	.timeline-year + .timeline-year {
+		margin-top: 1.25rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.timeline-year__axis {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		grid-column: 2;
+		grid-row: 1;
+		height: 1.15em;
+	}
+
+	.timeline-year__dot {
+		width: 0.55rem;
+		height: 0.55rem;
+		border: 1px solid var(--accent);
+		border-radius: 999px;
+		background: var(--surface);
+		transition:
+			background-color 180ms ease,
+			box-shadow 180ms ease,
+			transform 180ms ease;
+	}
+
+	.timeline-year.is-current .timeline-year__dot {
+		background: #fff;
+		border-color: color-mix(in srgb, var(--accent) 80%, #fff);
+		box-shadow:
+			0 0 10px var(--accent),
+			0 0 22px color-mix(in srgb, var(--accent-soft) 70%, transparent);
+		transform: scale(1.35);
+	}
+
+	.timeline-year__label {
+		margin: 0;
+		color: var(--ink);
+		font-family: var(--sans);
+		font-size: clamp(1.625rem, 4vw, 3.25rem);
+		font-weight: 500;
+		letter-spacing: -0.04em;
+		line-height: 1;
+	}
+
+	.timeline-year--label-left .timeline-year__label {
+		grid-column: 1;
+		grid-row: 1;
+		justify-self: stretch;
+		text-align: right;
+	}
+
+	.timeline-year--label-right .timeline-year__label {
+		grid-column: 3;
+		grid-row: 1;
+		justify-self: stretch;
+		text-align: left;
+	}
+
+	.timeline-year__entries {
+		grid-column: 1 / -1;
+		grid-row: 2;
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.timeline-entry {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 2.75rem minmax(0, 1fr);
+		grid-template-areas: 'start axis end';
+		align-items: stretch;
+		column-gap: 0.75rem;
+	}
+
+	.timeline-year--label-left .timeline-entry__card {
+		grid-area: start;
+	}
+
+	.timeline-year--label-left .timeline-entry__gallery {
+		grid-area: end;
+	}
+
+	.timeline-year--label-left .timeline-entry__track {
+		flex-direction: row;
+	}
+
+	.timeline-year--label-right .timeline-entry__card {
+		grid-area: end;
+	}
+
+	.timeline-year--label-right .timeline-entry__gallery {
+		grid-area: start;
+		justify-self: end;
+		width: max-content;
+		max-width: 100%;
+	}
+
+	.timeline-year--label-right .timeline-entry__track {
+		flex-direction: row-reverse;
+		margin-inline-start: auto;
+	}
+
+	.timeline-year--label-right .timeline-entry__shots {
+		direction: rtl;
+	}
+
+	.timeline-entry__github {
+		display: inline-block;
+		margin-bottom: 0.4rem;
+		color: var(--accent);
+		font-family: var(--sans);
+		font-size: 0.72rem;
+		font-weight: 500;
+	}
+
+	.timeline-entry__card :global(.content-card) {
+		border: 1px solid var(--line);
+	}
+
+	.timeline-entry__card :global(.content-card__link) {
+		min-height: 0;
+		padding: 0.85rem 1rem 2rem;
+	}
+
+	.timeline-entry__card :global(.content-card__topline) {
+		min-height: 0;
+	}
+
+	.timeline-entry__card :global(.content-card h3) {
+		max-width: none;
+		margin: 0.4rem 0 0.35rem;
+	}
+
+	.timeline-entry__card :global(.card-chip-list) {
+		gap: 0.3rem;
+		margin-top: 0.65rem;
+	}
+
+	.timeline-entry__card :global(.content-card__arrow) {
+		right: 0.85rem;
+		bottom: 0.7rem;
+		font-size: 1rem;
+	}
+
+	.timeline-entry__gallery {
+		height: 0;
+		min-height: 100%;
+		max-width: 100%;
+		overflow-x: auto;
+		overflow-y: hidden;
+		overscroll-behavior-x: contain;
+		border: 1px solid var(--line);
+		background: var(--surface);
+		scrollbar-width: thin;
+	}
+
+	.timeline-entry__track {
+		display: flex;
+		align-items: stretch;
+		gap: 2px;
+		width: max-content;
+		height: 100%;
+		min-height: 100%;
+	}
+
+	.timeline-entry__photo {
+		display: block;
+		flex: 0 0 auto;
+		min-width: auto;
+		min-height: 0;
+		height: 100%;
+	}
+
+	.timeline-entry__shots {
+		display: grid;
+		flex: 0 0 auto;
+		grid-auto-flow: column;
+		grid-template-rows: 1fr 1fr;
+		grid-auto-columns: max-content;
+		gap: 2px;
+		height: 100%;
+		min-width: max-content;
+	}
+
+	.timeline-entry__photo :global(img) {
+		display: block;
+		width: auto;
+		max-width: none;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	@media (max-width: 56rem) {
+		.project-timeline {
+			padding: 1rem 0 1.5rem;
+		}
+
+		.project-timeline::before {
+			left: 0.85rem;
+		}
+
+		.timeline-beacon {
+			left: 0.85rem;
+			transform: translate(-50%, -50%);
+		}
+
+		.timeline-year {
+			grid-template-columns: 1.7rem minmax(0, 1fr);
+			column-gap: 0.55rem;
+			row-gap: 0.35rem;
+		}
+
+		.timeline-year + .timeline-year {
+			margin-top: 1rem;
+			padding-top: 1rem;
+		}
+
+		.timeline-year__axis {
+			grid-column: 1;
+			grid-row: 1;
+		}
+
+		.timeline-year--label-left .timeline-year__label,
+		.timeline-year--label-right .timeline-year__label {
+			grid-column: 2;
+			grid-row: 1;
+			text-align: left;
+		}
+
+		.timeline-year--label-right .timeline-year__label {
+			text-align: right;
+		}
+
+		.timeline-year__entries {
+			grid-column: 2;
+			grid-row: 2;
+		}
+
+		.timeline-entry {
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-areas:
+				'card'
+				'gallery';
+			row-gap: 0.45rem;
+		}
+
+		.timeline-year--label-left .timeline-entry__card,
+		.timeline-year--label-right .timeline-entry__card {
+			grid-area: card;
+		}
+
+		.timeline-year--label-left .timeline-entry__gallery,
+		.timeline-year--label-right .timeline-entry__gallery {
+			grid-area: gallery;
+			justify-self: stretch;
+			width: auto;
+			max-width: none;
+		}
+
+		.timeline-year--label-left .timeline-entry__track,
+		.timeline-year--label-right .timeline-entry__track {
+			flex-direction: row;
+			margin-inline-start: 0;
+		}
+
+		.timeline-year--label-right .timeline-entry__shots {
+			direction: ltr;
+		}
+
+		.timeline-entry__gallery {
+			height: 12rem;
+			min-height: 0;
+			max-height: 12rem;
+		}
+
+		.timeline-entry__card :global(.content-card__link) {
+			padding: 0.75rem 0.85rem 1.75rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.timeline-beacon__core {
+			animation: none;
+		}
+
+		.timeline-beacon__particles {
+			display: none;
+		}
+
+		.timeline-year__dot {
+			transition: none;
+		}
 	}
 </style>
+
+<script>
+	const timeline = document.querySelector<HTMLOListElement>('.project-timeline');
+	const beacon = document.querySelector<HTMLDivElement>('.timeline-beacon');
+	const rail = document.querySelector<HTMLSpanElement>('.timeline-beacon__rail');
+	const canvas = document.querySelector<HTMLCanvasElement>('.timeline-beacon__particles');
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	const pinSpineGalleries = () => {
+		if (window.matchMedia('(max-width: 56rem)').matches) return;
+		for (const gallery of document.querySelectorAll<HTMLElement>(
+			'.timeline-year--label-right .timeline-entry__gallery',
+		)) {
+			gallery.scrollLeft = gallery.scrollWidth;
+		}
+	};
+
+	if (timeline) {
+		const spineGalleryImages = timeline.querySelectorAll<HTMLImageElement>(
+			'.timeline-year--label-right .timeline-entry__gallery img',
+		);
+		pinSpineGalleries();
+		window.addEventListener('resize', pinSpineGalleries);
+		for (const img of spineGalleryImages) {
+			if (img.complete) {
+				pinSpineGalleries();
+			} else {
+				img.addEventListener('load', pinSpineGalleries);
+			}
+		}
+	}
+
+	if (timeline && beacon) {
+		beacon.style.clipPath = '';
+		const years = [...timeline.querySelectorAll<HTMLLIElement>('.timeline-year')];
+		let frame = 0;
+		let visible = false;
+		let currentYear: HTMLLIElement | null = null;
+
+		const updatePresence = () => {
+			const rect = timeline.getBoundingClientRect();
+			const inView =
+				rect.bottom > window.innerHeight * 0.18 && rect.top < window.innerHeight * 0.82;
+			if (inView !== visible) {
+				visible = inView;
+				beacon.classList.toggle('is-active', inView);
+			}
+
+			const centerY = window.innerHeight / 2;
+			let nextYear: HTMLLIElement | null = null;
+			if (visible && years[0]) {
+				const firstTop = years[0].getBoundingClientRect().top;
+				const last = years[years.length - 1];
+				const lastBottom = last.getBoundingClientRect().bottom;
+				if (centerY < firstTop) {
+					nextYear = years[0];
+				} else if (centerY >= lastBottom) {
+					nextYear = last;
+				} else {
+					for (const [index, year] of years.entries()) {
+						const yearRect = year.getBoundingClientRect();
+						const nextRect = years[index + 1]?.getBoundingClientRect();
+						const start = yearRect.top;
+						const end = nextRect ? nextRect.top : yearRect.bottom;
+						if (centerY >= start && centerY < end) {
+							nextYear = year;
+							break;
+						}
+					}
+				}
+			}
+
+			if (nextYear !== currentYear) {
+				currentYear?.classList.remove('is-current');
+				nextYear?.classList.add('is-current');
+				currentYear = nextYear;
+			}
+
+			const dot = nextYear?.querySelector<HTMLElement>('.timeline-year__dot');
+			const firstDot = years[0]?.querySelector<HTMLElement>('.timeline-year__dot');
+			const lastDot = years[years.length - 1]?.querySelector<HTMLElement>('.timeline-year__dot');
+			const half = beacon.offsetHeight / 2;
+			let coreY = centerY;
+			if (dot) {
+				const currentRect = dot.getBoundingClientRect();
+				coreY = Math.max(centerY, currentRect.top + currentRect.height / 2);
+			}
+			if (lastDot) {
+				const lastRect = lastDot.getBoundingClientRect();
+				coreY = Math.min(coreY, lastRect.top + lastRect.height / 2);
+			}
+			beacon.style.top = `${coreY}px`;
+			if (rail) {
+				let clipTop = 0;
+				let clipBottom = 0;
+				if (firstDot) {
+					const firstRect = firstDot.getBoundingClientRect();
+					clipTop = Math.max(0, firstRect.top - (coreY - half));
+				}
+				if (lastDot) {
+					const lastRect = lastDot.getBoundingClientRect();
+					clipBottom = Math.max(0, coreY + half - lastRect.bottom);
+				}
+				const railClipTop = Math.max(0, clipTop - rail.offsetTop);
+				const railClipBottom = Math.max(
+					0,
+					clipBottom - (beacon.offsetHeight - rail.offsetTop - rail.offsetHeight),
+				);
+				rail.style.clipPath =
+					railClipTop > 0.5 || railClipBottom > 0.5
+						? `inset(${railClipTop}px 0 ${railClipBottom}px 0)`
+						: '';
+			}
+		};
+
+		const requestUpdate = () => {
+			if (frame) return;
+			frame = requestAnimationFrame(() => {
+				frame = 0;
+				updatePresence();
+			});
+		};
+
+		window.addEventListener('scroll', requestUpdate, { passive: true });
+		window.addEventListener('resize', requestUpdate);
+		updatePresence();
+	}
+
+	if (timeline && beacon && canvas && !reduceMotion.matches) {
+		const context = canvas.getContext('2d');
+		if (context) {
+			const particles = Array.from({ length: 18 }, () => ({
+				x: 0.5,
+				y: 0.5,
+				vx: 0,
+				vy: 0,
+				life: 0,
+				maxLife: 1,
+				size: 1,
+			}));
+
+			const resetParticle = (particle: (typeof particles)[number], randomLife: boolean) => {
+				const angle = (Math.random() - 0.5) * Math.PI;
+				const speed = 0.00035 + Math.random() * 0.0007;
+				particle.x = 0.46 + Math.random() * 0.08;
+				particle.y = 0.42 + Math.random() * 0.16;
+				particle.vx = Math.sin(angle) * speed;
+				particle.vy = -Math.abs(Math.cos(angle)) * speed * 1.4;
+				particle.maxLife = 70 + Math.random() * 90;
+				particle.life = randomLife ? Math.random() * particle.maxLife : particle.maxLife;
+				particle.size = 0.7 + Math.random() * 1.3;
+			};
+
+			const fitCanvas = () => {
+				const ratio = Math.min(window.devicePixelRatio || 1, 2);
+				const width = canvas.clientWidth;
+				const height = canvas.clientHeight;
+				canvas.width = Math.max(1, Math.round(width * ratio));
+				canvas.height = Math.max(1, Math.round(height * ratio));
+				context.setTransform(ratio, 0, 0, ratio, 0, 0);
+			};
+
+			particles.forEach((particle) => resetParticle(particle, true));
+			fitCanvas();
+
+			const tick = () => {
+				const width = canvas.clientWidth;
+				const height = canvas.clientHeight;
+				context.clearRect(0, 0, width, height);
+
+				if (beacon.classList.contains('is-active')) {
+					for (const particle of particles) {
+						particle.life -= 1;
+						particle.x += particle.vx;
+						particle.y += particle.vy;
+						if (particle.life <= 0 || particle.y < 0.04 || particle.x < 0.12 || particle.x > 0.88) {
+							resetParticle(particle, false);
+						}
+
+						const fade = particle.life / particle.maxLife;
+						context.beginPath();
+						context.fillStyle = `rgba(122, 169, 255, ${(0.16 + fade * 0.28).toFixed(3)})`;
+						context.arc(particle.x * width, particle.y * height, particle.size, 0, Math.PI * 2);
+						context.fill();
+					}
+				}
+
+				requestAnimationFrame(tick);
+			};
+
+			window.addEventListener('resize', fitCanvas);
+			requestAnimationFrame(tick);
+		}
+	}
+</script>

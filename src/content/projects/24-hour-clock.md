@@ -15,7 +15,7 @@ tags:
 featured: true
 order: 3
 links:
-  Source: 'https://github.com/briansgithub/24-hr_clock_widget'
+  GitHub: 'https://github.com/briansgithub/24-hr_clock_widget'
 draft: false
 placeholder: false
 ---

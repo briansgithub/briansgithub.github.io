@@ -13,7 +13,7 @@ export const site = {
 	email: 'bellsworth137@gmail.com',
 	linkedin: 'https://www.linkedin.com/in/brian-ellsworth/',
 	instagram: 'https://www.instagram.com/bellsworth137/',
-	preview: true,
+	preview: false,
 } as const;
 
 export const navigation = [

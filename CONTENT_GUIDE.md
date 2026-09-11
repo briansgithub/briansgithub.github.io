@@ -79,29 +79,40 @@ technologies: string[]
 tags: string[]
 featured: optional boolean
 cover: optional object containing image and alt text
+gallery: optional array of image and alt objects, at most 16
 links: optional record of label to URL
 order: optional number
 draft: optional boolean
 placeholder: optional boolean
 ```
 
-Use a project cover only when an existing image adds useful context in project listings. Keep the
-image and its alternative text together in the nested `cover` field:
+The projects index is a year timeline of equal text cards. A `cover` image is the
+representative (higher-priority) photo on the opposite side of the spine. Extra shots go in
+`gallery` and share that same bordered box, which scrolls horizontally when the set is wider
+than the column. Omit both to keep the opposite side empty. Project pages do not repeat the
+frontmatter gallery; keep photos in the writeup where they belong.
 
 ```yaml
 cover:
   image: ../../assets/images/project-name/cover.webp
   alt: 'Describe the project image and the useful visual context it provides.'
+gallery:
+  - image: ../../assets/images/project-name/detail.webp
+    alt: 'Describe the extra shot.'
 ```
 
-The image path is relative to the project Markdown file. Astro validates and optimizes local cover
-images at build time. Projects without a cover continue to use the standard text-card layout.
+Image paths are relative to the project Markdown file. Astro validates and optimizes them at
+build time. Projects without images continue to use the standard text-card layout.
+
+A `links` URL on github.com is shown as GitHub at the top of the project page
+and on the timeline card. Other links stay above the writeup. Omit GitHub when
+no public repository exists.
 
 Example links when real URLs exist:
 
 ```yaml
 links:
-  Source: 'https://github.com/owner/repository'
+  GitHub: 'https://github.com/owner/repository'
   Demo: 'https://example.com'
 ```
 
@@ -196,63 +207,29 @@ Placeholder entries remain visible only while `site.preview` is enabled. Public 
 
 ## 5. Create and write
 
-### Guided workflow (recommended)
+### Authoring tools (recommended)
 
-From PowerShell in the repository root, run:
+Write and publish from the sibling `personal-website-authoring-tools` checkout, not from a second
+PowerShell batch in this repository.
+
+1. Double-click `Write Website Content.cmd` in `personal-website-authoring-tools`.
+2. Create or open content in Authoring Home. Creating a draft, adding files, opening Site essentials,
+   or choosing **Include in next publish** records those paths in the tools `.runtime/` publish set.
+3. Write in Obsidian. Reload Authoring Home after saving to refresh readiness.
+4. Double-click `Review and Publish Website.cmd`. Select ready drafts, review the session files, type
+   `INCLUDE` only if leftover Git-visible files should join this run, then type `PUBLISH`.
+5. Wait until the publisher reports that GitHub Pages deployed. A successful push is not a successful
+   deployment.
+
+From this website checkout, the same workflow is:
 
 ```powershell
 npm run content:workflow
 ```
 
-Or, in Windows File Explorer, double-click `Start Website Content Workflow.cmd` in the
-repository's top-level folder. The launcher opens the same guided PowerShell workflow and
-pauses before closing so its result remains visible. The adjacent
-`Start Website Content Workflow.ps1` is the direct PowerShell entry point; Windows commonly
-opens `.ps1` files in an editor on a plain double-click, which is why the `.cmd` launcher is the
-reliable double-click target.
-
-The launcher keeps a restartable batch in the Git-ignored `.authoring-workflow/` directory.
-Choose one or more Blog posts, projects, 3D prints, book notes, quotes, the About page, site
-identity, or résumé data. New Blog entries map to the internal `writing` collection. The
-launcher can also open the content vault in Obsidian, but VS Code is the default editor.
-
-The workflow is deliberately split at human review points:
-
-1. **Prepare and edit:** create or select content, open every selected file in VS Code, and
-   exit. Write and save normally, then rerun `npm run content:workflow`.
-2. **Add assets and preview:** import body images through the safe media importer, insert a
-   project cover, attach an STL model to a 3D print, or replace the résumé PDF. The workflow
-   promotes checked private drafts into their public collections, starts the local Astro
-   server, opens the affected routes, and exits again if you want to revise them.
-3. **Validate and review:** run the complete verification gate and inspect the changed files
-   and diff. Promotion makes a draft visible to the local site and Git, but does not make it
-   live.
-4. **Publish:** verify once more, stage only the files recorded in the batch, and display the
-   staged diff, outgoing commits, binary sizes, and live routes. No commit or push occurs
-   unless you type the exact confirmation `PUBLISH`. After the push, the workflow watches
-   GitHub Pages and checks the live site before completing the session.
-
-An interrupted or failed session is intentionally retained. Rerun `npm run content:workflow`
-and choose the offered resume action. If GitHub deployment alone needs to be resumed, run the
-deployment watcher with the commit SHA shown by GitHub or `git log -1`:
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/authoring/Watch-Deployment.ps1 -CommitSha <40-character-commit-sha>
-```
-
-Use the launcher's diagnostics mode for read-only prerequisite checks:
-
-```powershell
-npm run content:workflow -- -Diagnostics
-```
-
-The final publication phase also supports a Git-safe dry run. It does not change source files,
-session state, commits, references, or remotes; the verification gate may refresh ignored
-`dist/` and `.astro/` build output:
-
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/authoring/Publish-Update.ps1 -WhatIf
-```
+`Start Website Content Workflow.cmd` and `Publish Website Changes.cmd` are shims into that tools
+workflow. Dry-run a publication with `npm run publish:content -- --dry-run` from the tools directory.
+Diagnostics are `npm run author:status` and `npm run content:status` there.
 
 ### Manual workflow
 
@@ -267,17 +244,22 @@ For a quick correction to an already published entry, edit the public file direc
 
 ## 6. Publish
 
-There is no content database and no required CMS action.
+There is no content database and no required CMS action. Prefer Review and Publish from
+`personal-website-authoring-tools` so Markdown lint, Prettier, and `astro check` run before GitHub
+sees the commit.
+
+If you ever commit by hand:
 
 1. Finish the private draft and complete its metadata.
 2. Move it from `_drafts` into the matching collection.
 3. Remove all placeholder material.
 4. Confirm `draft: false` and `placeholder: false`.
 5. Preview the page locally.
-6. Review changed files in VS Code Source Control.
-7. Commit and sync only after the rendered page and diff are correct.
+6. Run `npm run verify`.
+7. Commit and sync only after the rendered page, diff, and verification gate are correct.
 
-A file committed with `draft: true` is not private: its source remains readable in a public GitHub repository even if Astro omits it from the website.
+A file committed with `draft: true` is not private: its source remains readable in a public GitHub
+repository even if Astro omits it from the website.
 
 ## 7. Images and other media
 
@@ -336,7 +318,7 @@ Select-String -Path src/content -Pattern "\[PLACEHOLDER\]" -Recurse
 
 Entries under `_templates/` are supposed to match; they are Obsidian templates, not an Astro collection.
 
-`site.preview` in `src/data/site.ts` remains `true`. While it is enabled, placeholder entries stay visible for review and every page carries `noindex`. Public builds exclude placeholders from lists, detail routes, tags, RSS, and the sitemap. Turn it off only as a deliberate launch decision, once the remaining scaffold content is replaced and the owner agrees the site should be indexed.
+`site.preview` in `src/data/site.ts` is `false`. Placeholder entries are hidden from lists, detail routes, tags, RSS, and the sitemap, and pages are eligible for indexing unless an individual entry is still marked placeholder. Re-enable preview only if scaffold content needs to be reviewed on the live site again.
 
 Replace remaining placeholders deliberately rather than deleting them all at once; they collectively exercise the site's major content layouts, and an emptied collection can hide a broken listing page.
 

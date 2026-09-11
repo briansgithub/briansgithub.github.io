@@ -12,6 +12,7 @@ interface Props {
 	headings?: MarkdownHeading[];
 	collectionHref?: string;
 	collectionLabel?: string;
+	github?: string;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
 	headings = [],
 	collectionHref,
 	collectionLabel,
+	github,
 } = Astro.props;
 const tocHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 const hasToc = tocHeadings.length >= 3;
@@ -46,6 +48,13 @@ const hasToc = tocHeadings.length >= 3;
 							</li>
 						))}
 					</ul>
+				)
+			}
+			{
+				github && (
+					<p class="article-header__github">
+						<a href={github}>GitHub ↗</a>
+					</p>
 				)
 			}
 		</header>
@@ -83,6 +92,14 @@ const hasToc = tocHeadings.length >= 3;
 </BaseLayout>
 
 <style>
+	.article-header__github {
+		margin: 1.25rem 0 0;
+		color: var(--accent);
+		font-family: var(--sans);
+		font-size: 0.82rem;
+		font-weight: 500;
+	}
+
 	.article-body--with-toc {
 		display: grid;
 		grid-template-columns: minmax(0, var(--measure)) minmax(11rem, 14rem);

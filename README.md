@@ -2,7 +2,7 @@
 
 A static personal site for writing, projects, book notes, quotations, and a CV. It is built with Astro, authored primarily in Markdown, and deployed to `bellsworth.dev` with GitHub Pages.
 
-The site is currently in **content preview mode**: `site.preview` is enabled in `src/data/site.ts`, so remaining placeholder material stays visible for review and every page includes `noindex` metadata. Site-wide identity and the résumé are already real; a few content entries still carry labeled scaffold material. See [CONTENT_GUIDE.md](CONTENT_GUIDE.md) for how to find and replace them.
+`site.preview` is off in `src/data/site.ts`, so placeholder entries stay hidden and pages are eligible for search indexing. See [CONTENT_GUIDE.md](CONTENT_GUIDE.md) for remaining scaffold content that still lives at unused collection URLs.
 
 Working on this repository with an AI agent? Start from [AGENTS.md](AGENTS.md).
 
@@ -21,32 +21,29 @@ Open `http://localhost:4321`. Use `npm run dev:status`, `npm run dev:logs`, and 
 
 Open `src/content` as an Obsidian vault. The committed settings use ordinary Markdown links, keep new notes in the Git-ignored `_drafts` folder, and provide templates for each content type.
 
-The recommended guided workflow is:
+The recommended workflow lives in the sibling `personal-website-authoring-tools` directory:
+
+- Double-click `Write Website Content.cmd` to open Authoring Home.
+- Double-click `Review and Publish Website.cmd` to verify, type `PUBLISH`, push, and watch GitHub Pages.
+
+From this website checkout, the same tools are also reachable as shims:
 
 ```powershell
 npm run content:workflow
 ```
 
-For the simplest Windows workflow, double-click
-`Start Website Content Workflow.cmd` in File Explorer. Windows does not reliably execute a
-`.ps1` file on a plain double-click, so the `.cmd` launcher starts the tracked PowerShell entry
-point with the correct execution settings and keeps the window open long enough to read the
-result. `Start Website Content Workflow.ps1` is the corresponding direct PowerShell entry point.
+That command asks whether to write or publish. `Publish Website Changes.cmd` and
+`Start Website Content Workflow.cmd` are the File Explorer equivalents. The publisher records a
+publish set in the tools `.runtime/` directory, stages only those files, and treats leftover
+Git-visible edits as requiring an explicit `INCLUDE`.
 
-It creates or opens a batch of Blog posts, projects, 3D prints, book notes, quotes, About
-copy, site identity, or résumé data. It exits while you edit in VS Code, then resumes to
-import safe images, attach project covers or STL models, preview locally, validate, and
-publish. Rerun the same command after each editing pause; the Git-ignored
-`.authoring-workflow/` session remembers where the batch stopped.
+Nothing is live during editing, promotion, or local preview. GitHub Pages publishes only after the
+push and the deployment checks succeed.
 
-Nothing is live during editing, promotion, or local preview. The final phase shows the exact
-diff and files it will stage and requires you to type `PUBLISH` before it may commit and push.
-GitHub Pages publishes only after that push and the deployment checks succeed. If validation,
-push, or deployment fails, rerun the workflow to recover the retained session.
-
-The full guided and manual workflows are in [CONTENT_GUIDE.md](CONTENT_GUIDE.md). The
-low-level `content:*` and `media:import` helpers never use Git; only the guided workflow can
-stage, commit, and push after its review and confirmation gates.
+The full creator workflow is in `personal-website-authoring-tools/docs/CONTENT_GUIDE.md`
+(local sibling checkout) and this repository's [CONTENT_GUIDE.md](CONTENT_GUIDE.md). The low-level
+`content:*` and `media:import` helpers never use Git; only Review and Publish may stage, commit, and
+push after its review and confirmation gates.
 
 Live identity and CV fields are in `src/data/site.ts` and `src/data/resume.ts`. The Home and CV Markdown files are writing worksheets; `pages/about.md` supplies the About copy rendered on the homepage.
 
