@@ -3,23 +3,21 @@ setlocal
 cd /d "%~dp0"
 title Publish Website Changes
 
-set "workflow_script=%~dp0scripts\authoring\Publish-Changes.ps1"
-
-if not exist "%workflow_script%" (
+if not exist "%~dp0scripts\authoring\launch-authoring-tools.mjs" (
 	echo.
-	echo The publishing script is missing.
-	echo Expected: %workflow_script%
+	echo The authoring tools launcher is missing.
+	echo Expected: %~dp0scripts\authoring\launch-authoring-tools.mjs
 	if not "%WEBSITE_WORKFLOW_NO_PAUSE%"=="1" pause
 	exit /b 1
 )
 
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%workflow_script%" %*
+node "%~dp0scripts\authoring\launch-authoring-tools.mjs" publish %*
 set "workflow_exit=%ERRORLEVEL%"
 
 echo.
 if not "%workflow_exit%"=="0" (
 	echo Publishing stopped with an error.
-	echo Nothing was pushed. Read the message above, then run this launcher again when ready.
+	echo Nothing was claimed as deployed. Read the message above, then run this launcher again when ready.
 ) else (
 	echo Done.
 )

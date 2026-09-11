@@ -32,7 +32,7 @@
 		"content:new": "node scripts/new-content.mjs",
 		"content:publish": "node scripts/publish-content.mjs",
 		"content:list": "node scripts/publish-content.mjs --list",
-		"content:workflow": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File scripts/authoring/Start-ContentWorkflow.ps1",
+		"content:workflow": "node scripts/authoring/launch-authoring-tools.mjs",
 		"media:import": "node scripts/import-media.mjs",
 		"setup:hooks": "git config core.hooksPath .githooks"
 	},
