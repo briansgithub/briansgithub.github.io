@@ -1,4 +1,4 @@
-di---
+---
 import { getEntry, render } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -14,29 +14,29 @@ const Content = rendered?.Content;
 	description={page?.data.description ?? site.shortBio}
 	placeholder={page?.data.placeholder ?? true}
 >
-<div class="shell about-grid">
-	<aside>
-		<Image
-			class="about-mark"
-			src={portrait}
-			alt="Brian Ellsworth smiling, wearing glasses"
-			widths={[400, 800, 1200]}
-			sizes="(max-width: 760px) 20rem, 30vw"
-			loading="eager"
-			fetchpriority="high"
-		/>
-	</aside>
+	<div class="shell about-grid">
+		<aside>
+			<Image
+				class="about-mark"
+				src={portrait}
+				alt="Brian Ellsworth smiling, wearing glasses"
+				widths={[400, 800, 1200]}
+				sizes="(max-width: 760px) 20rem, 30vw"
+				loading="eager"
+				fetchpriority="high"
+			/>
+		</aside>
 
-	<div class="about-content">
-		<header>
-			<h1>Brian Ellsworth</h1>
-		</header>
+		<div class="about-content">
+			<header>
+				<h1>Brian Ellsworth</h1>
+			</header>
 
-		<div class="prose about-copy">
-			{Content ? <Content /> : <p>{site.longBio}</p>}
+			<div class="prose about-copy">
+				{Content ? <Content /> : <p>{site.longBio}</p>}
+			</div>
 		</div>
 	</div>
-</div>>
 </BaseLayout>
 
 <style>
@@ -86,8 +86,6 @@ const Content = rendered?.Content;
 	:global(.about-copy > h2:first-child) {
 		margin-top: 0;
 	}
-
-
 
 	@media (max-width: 760px) {
 		.about-grid {

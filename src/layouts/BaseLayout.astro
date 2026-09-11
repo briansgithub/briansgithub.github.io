@@ -14,6 +14,8 @@ const { title = site.title, description = site.description, placeholder = false 
 const pageTitle = title === site.title ? title : `${title} — ${site.name}`;
 const canonical = new URL(Astro.url.pathname, site.url);
 const noIndex = site.preview || placeholder;
+const tagline = 'tagline' in site ? String((site as { tagline?: string }).tagline ?? '') : '';
+type NavigationItem = (typeof navigation)[number] & { matchPrefixes?: readonly string[] };
 ---
 
 <!doctype html>
@@ -67,7 +69,7 @@ const noIndex = site.preview || placeholder;
 					</a>
 					<span class="site-brand__copy">
 						<a class="site-brand__name" href="/">{site.name}</a>
-						<span class="site-brand__tagline">{site.tagline}</span>
+						{tagline && <span class="site-brand__tagline">{tagline}</span>}
 					</span>
 				</div>
 				<nav id="primary-nav" aria-label="Primary navigation">
@@ -75,10 +77,10 @@ const noIndex = site.preview || placeholder;
 						{
 							navigation.map((item) => {
 								const exact = Astro.url.pathname === item.href;
+								const prefixes = (item as NavigationItem).matchPrefixes ?? [];
 								const childRoute =
 									(item.href !== '/' && Astro.url.pathname.startsWith(item.href)) ||
-									('matchPrefixes' in item &&
-										item.matchPrefixes.some((prefix) => Astro.url.pathname.startsWith(prefix)));
+									prefixes.some((prefix) => Astro.url.pathname.startsWith(prefix));
 								const current = exact ? 'page' : childRoute ? 'location' : undefined;
 								return (
 									<li>
