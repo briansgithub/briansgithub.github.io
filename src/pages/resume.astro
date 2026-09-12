@@ -30,6 +30,7 @@ import { site } from '../data/site';
 					},
 					{ label: 'Email', href: `mailto:${site.email}` },
 					{ label: 'GitHub', href: site.github },
+					{ label: 'LinkedIn', href: site.linkedin },
 				]}
 			/>
 		</div>
@@ -46,6 +47,31 @@ import { site } from '../data/site';
 									<span>
 										{item.period} · {item.location}
 									</span>
+								</>
+							</header>
+							<ul>
+								{item.highlights.map((highlight) => (
+									<li>{highlight}</li>
+								))}
+							</ul>
+						</article>
+					))
+				}
+			</div>
+		</section>
+		<section class="resume-section" aria-labelledby="projects-heading">
+			<h2 id="projects-heading">Selected projects</h2>
+			<div>
+				{
+					resume.projects.map((item) => (
+						<article class="resume-item">
+							<header>
+								<>
+									<h3>
+										{'href' in item && item.href ? <a href={item.href}>{item.name}</a> : item.name}
+									</h3>
+									<p>{item.summary}</p>
+									<span>{item.period}</span>
 								</>
 							</header>
 							<ul>
