@@ -122,37 +122,94 @@ Let `n` be the note number and `a` be the number of accidentals in that note's m
 
 The number of added accidentals in a key signature corresponds to a positive number for sharps and a negative number for flats.
 
+<div class="key-sig-board">
+
+| Accidentals | Tonic | Note number |
+| ----------- | ----- | ----------- |
+
+<div class="key-sig-pair">
+
 | Accidentals | Tonic | Note number |
 | ----------- | ----- | ----------- |
 | 0           | C     | 0           |
 | +1          | G     | 7           |
-| +2          | D     | 2           |
-| +3          | A     | 9           |
-| +4          | E     | 4           |
-| +5          | B     | 11          |
-| +6          | F♯    | 6           |
-| -1          | F     | 5           |
-| -2          | B♭    | 10          |
-| -3          | E♭    | 3           |
-| -4          | A♭    | 8           |
-| -5          | D♭    | 1           |
-| -6          | G♭    | 6           |
 
 ![Treble-clef staff with no sharps or flats, the key signature of C major](../../assets/images/circle-of-fifths-reinvented/staff-c.webp)
-
 ![Treble-clef staff with one sharp, the key signature of G major](../../assets/images/circle-of-fifths-reinvented/staff-g.webp)
+
+</div>
+
+<div class="key-sig-pair">
+
+| Accidentals | Tonic | Note number |
+| ----------- | ----- | ----------- |
+| +2          | D     | 2           |
+| +3          | A     | 9           |
+
 ![Treble-clef staff with two sharps, the key signature of D major](../../assets/images/circle-of-fifths-reinvented/staff-d.webp)
 ![Treble-clef staff with three sharps, the key signature of A major](../../assets/images/circle-of-fifths-reinvented/staff-a.webp)
+
+</div>
+
+<div class="key-sig-pair">
+
+| Accidentals | Tonic | Note number |
+| ----------- | ----- | ----------- |
+| +4          | E     | 4           |
+| +5          | B     | 11          |
+
 ![Treble-clef staff with four sharps, the key signature of E major](../../assets/images/circle-of-fifths-reinvented/staff-e.webp)
 ![Treble-clef staff with five sharps, the key signature of B major](../../assets/images/circle-of-fifths-reinvented/staff-b.webp)
-![Treble-clef staff with six sharps, the key signature of F-sharp major](../../assets/images/circle-of-fifths-reinvented/staff-f-sharp.webp)
 
+</div>
+
+<div class="key-sig-pair">
+
+| Accidentals | Tonic | Note number |
+| ----------- | ----- | ----------- |
+| +6          | F♯    | 6           |
+| -1          | F     | 5           |
+
+![Treble-clef staff with six sharps, the key signature of F-sharp major](../../assets/images/circle-of-fifths-reinvented/staff-f-sharp.webp)
 ![Treble-clef staff with one flat, the key signature of F major](../../assets/images/circle-of-fifths-reinvented/staff-f.webp)
+
+</div>
+
+<div class="key-sig-pair">
+
+| Accidentals | Tonic | Note number |
+| ----------- | ----- | ----------- |
+| -2          | B♭    | 10          |
+| -3          | E♭    | 3           |
+
 ![Treble-clef staff with two flats, the key signature of B-flat major](../../assets/images/circle-of-fifths-reinvented/staff-b-flat.webp)
 ![Treble-clef staff with three flats, the key signature of E-flat major](../../assets/images/circle-of-fifths-reinvented/staff-e-flat.webp)
+
+</div>
+
+<div class="key-sig-pair">
+
+| Accidentals | Tonic | Note number |
+| ----------- | ----- | ----------- |
+| -4          | A♭    | 8           |
+| -5          | D♭    | 1           |
+
 ![Treble-clef staff with four flats, the key signature of A-flat major](../../assets/images/circle-of-fifths-reinvented/staff-a-flat.webp)
 ![Treble-clef staff with five flats, the key signature of D-flat major](../../assets/images/circle-of-fifths-reinvented/staff-d-flat.webp)
+
+</div>
+
+<div class="key-sig-pair key-sig-pair--single">
+
+| Accidentals | Tonic | Note number |
+| ----------- | ----- | ----------- |
+| -6          | G♭    | 6           |
+
 ![Treble-clef staff with six flats, the key signature of G-flat major](../../assets/images/circle-of-fifths-reinvented/staff-g-flat.webp)
+
+</div>
+
+</div>
 
 ### Derivation
 
