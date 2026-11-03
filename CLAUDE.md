@@ -86,6 +86,9 @@ Schema rules that are easy to violate:
 - **Project photos:** `cover` is the representative timeline image; `gallery` holds extra
   shots (max 16). Both need `image` plus alt text (max 240). Timeline galleries scroll
   horizontally. Project pages do not repeat that gallery; writeup images stay in the body.
+- **Launchable projects:** an optional `app` object makes a visible project appear on `/apps/`.
+  Its type controls the action label, its URL must be absolute, and its note is capped at 240
+  characters. Keep source code in the project's own repository.
 
 Visibility is decided by [`src/utils/visibility.ts`](src/utils/visibility.ts):
 a draft is never visible, and a placeholder is visible only while `site.preview`
@@ -95,8 +98,8 @@ placeholder.
 
 Live identity and résumé data are TypeScript, not Markdown:
 [`src/data/site.ts`](src/data/site.ts) and
-[`src/data/resume.ts`](src/data/resume.ts). Primary nav is About, Projects, and
-Résumé. Blog and Collections stay commented out of `navigation` so they can be
+[`src/data/resume.ts`](src/data/resume.ts). Primary nav is About, Projects, Apps, and Résumé. Blog
+and Collections stay commented out of `navigation` so they can be
 edited at their URLs without appearing in the public header. The Markdown files
 `src/content/pages/home.md` and `resume.md` are writing worksheets that render
 nowhere; `about.md` renders directly as the `/` homepage, and `/about/` redirects

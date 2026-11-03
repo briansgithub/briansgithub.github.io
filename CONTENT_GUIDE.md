@@ -81,6 +81,7 @@ featured: optional boolean
 cover: optional object containing image and alt text
 gallery: optional array of image and alt objects, at most 16
 links: optional record of label to URL
+app: optional object containing type, absolute url, and optional note
 order: optional number
 draft: optional boolean
 placeholder: optional boolean
@@ -107,6 +108,24 @@ build time. Projects without images continue to use the standard text-card layou
 A `links` URL on github.com is labeled GitHub and shown first. All project
 `links` render as prominent buttons in the project-page header. The timeline
 does not repeat them. Omit GitHub when no public repository exists.
+
+An `app` object marks a project as software that visitors can open, install, or
+download. It places the project on `/apps/` and adds its app action before GitHub
+in the project-page header. Supported types are `pwa`, `web-app`,
+`chrome-extension`, `android`, `ios`, `desktop`, and `cli`. The URL must be
+absolute; `note` is optional and capped at 240 characters.
+
+Each app, extension, or tool stays in its own source repository. A web app can
+publish from that repository to `https://bellsworth.dev/<repo>/`; native apps
+and extensions should link to their store or release listing. Add one Projects
+entry with an `app` object so the Apps hub and technical write-up stay connected.
+
+```yaml
+app:
+  type: pwa
+  url: 'https://bellsworth.dev/COLA-Maps/'
+  note: 'Installable on Android through Chrome.'
+```
 
 Example links when real URLs exist:
 
