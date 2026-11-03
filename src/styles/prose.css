@@ -120,6 +120,78 @@
 	font-weight: 500;
 }
 
+.key-sig-board {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.key-sig-board > table,
+.key-sig-pair table {
+	display: table;
+	table-layout: fixed;
+	width: 20rem;
+	max-width: 100%;
+	margin: 0;
+	overflow: visible;
+}
+
+.key-sig-board th,
+.key-sig-board td {
+	padding: 0.35rem 0.65rem;
+	text-align: right;
+	white-space: nowrap;
+}
+
+.key-sig-pair {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: 0.55rem 0.75rem;
+}
+
+.key-sig-pair thead {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+}
+
+.key-sig-pair + .key-sig-pair tbody tr:first-child td {
+	border-top: 0;
+}
+
+.key-sig-pair p {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: 0.3rem;
+	max-width: none;
+	margin: 0;
+	margin-inline: 0;
+}
+
+.key-sig-pair p:has(> img + img),
+.key-sig-pair p:has(> img:only-child) {
+	display: flex;
+	grid-template-columns: none;
+	max-width: none;
+	margin-inline: 0;
+}
+
+.key-sig-pair img,
+.key-sig-pair p > img:only-child,
+.key-sig-pair p:has(> img + img) img {
+	display: block;
+	width: 5.5rem;
+	height: 4.25rem;
+	max-width: 5.5rem;
+	max-height: 4.25rem;
+	margin: 0;
+	object-fit: contain;
+}
+
 @media (max-width: 560px) {
 	.prose p:has(> img + img) {
 		grid-template-columns: 1fr;
