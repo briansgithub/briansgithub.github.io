@@ -28,12 +28,41 @@ export function isGithubUrl(href: string) {
 	}
 }
 
-export function projectPageLinks(links?: Record<string, string>) {
-	if (!links) return [];
-	return Object.entries(links)
+export type ProjectAppType =
+	'pwa' | 'web-app' | 'chrome-extension' | 'android' | 'ios' | 'desktop' | 'cli';
+
+export interface ProjectApp {
+	type: ProjectAppType;
+	url: string;
+	note?: string;
+}
+
+export function appTypeLabel(type: ProjectAppType) {
+	const labels: Record<ProjectAppType, string> = {
+		pwa: 'Progressive Web App',
+		'web-app': 'Web App',
+		'chrome-extension': 'Chrome Extension',
+		android: 'Android App',
+		ios: 'iOS App',
+		desktop: 'Desktop App',
+		cli: 'Command-Line Tool',
+	};
+	return labels[type];
+}
+
+export function appActionLabel(type: ProjectAppType) {
+	if (type === 'chrome-extension') return 'Install extension';
+	if (type === 'android' || type === 'ios' || type === 'desktop') return 'Get app';
+	if (type === 'cli') return 'Get tool';
+	return 'Open app';
+}
+
+export function projectPageLinks(links?: Record<string, string>, app?: ProjectApp) {
+	const projectLinks = Object.entries(links ?? {})
 		.map(([label, href]) => ({
 			label: isGithubUrl(href) ? 'GitHub' : label,
 			href,
 		}))
 		.sort((a, b) => Number(isGithubUrl(b.href)) - Number(isGithubUrl(a.href)));
+	return app ? [{ label: appActionLabel(app.type), href: app.url }, ...projectLinks] : projectLinks;
 }

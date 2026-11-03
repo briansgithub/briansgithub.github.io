@@ -1,0 +1,216 @@
+---
+import { getCollection } from 'astro:content';
+import ActionLinks from '../../components/ActionLinks.astro';
+import PageIntro from '../../components/PageIntro.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+	appActionLabel,
+	appTypeLabel,
+	contentSlug,
+	isGithubUrl,
+	isVisible,
+	type ProjectAppType,
+} from '../../utils/content';
+
+const projects = (await getCollection('projects', ({ data }) => isVisible(data)))
+	.filter((project) => project.data.app)
+	.sort(
+		(a, b) =>
+			b.data.year - a.data.year ||
+			(a.data.order ?? 99) - (b.data.order ?? 99) ||
+			a.data.title.localeCompare(b.data.title),
+	);
+
+const groupDefinitions: {
+	title: string;
+	description: string;
+	types: ProjectAppType[];
+}[] = [
+	{
+		title: 'Web apps and PWAs',
+		description: 'Software that runs in a browser and can often be installed directly on a device.',
+		types: ['pwa', 'web-app'],
+	},
+	{
+		title: 'Browser extensions',
+		description: 'Tools that add focused capabilities to a web browser.',
+		types: ['chrome-extension'],
+	},
+	{
+		title: 'Software',
+		description: 'Native mobile, desktop, and command-line applications.',
+		types: ['android', 'ios', 'desktop', 'cli'],
+	},
+];
+
+const groups = groupDefinitions
+	.map((group) => ({
+		...group,
+		projects: projects.filter(
+			(project) => project.data.app && group.types.includes(project.data.app.type),
+		),
+	}))
+	.filter((group) => group.projects.length > 0);
+---
+
+<BaseLayout
+	title="Apps"
+	description="Apps, browser extensions, and software built by Brian Ellsworth."
+>
+	<div class="shell">
+		<PageIntro
+			eyebrow="Index 03"
+			title="Apps"
+			description="Things you can open, install, or run. Each project keeps its own source repository and technical write-up."
+		/>
+
+		{
+			groups.length > 0 ? (
+				<div class="app-groups">
+					{groups.map((group) => (
+						<section class="app-group">
+							<header class="app-group__header">
+								<h2>{group.title}</h2>
+								<p>{group.description}</p>
+							</header>
+							<div class="app-grid">
+								{group.projects.map((project) => {
+									const app = project.data.app!;
+									const github = Object.values(project.data.links ?? {}).find(isGithubUrl);
+									const writeup = `/projects/${contentSlug(project.id)}/`;
+									const actions = [
+										{
+											label: appActionLabel(app.type),
+											href: app.url,
+											variant: 'primary' as const,
+										},
+										...(github ? [{ label: 'GitHub', href: github }] : []),
+										{ label: 'Write-up', href: writeup },
+									];
+									return (
+										<article class="app-card">
+											<div class="app-card__topline">
+												<span>{appTypeLabel(app.type)}</span>
+												<span>{project.data.year}</span>
+											</div>
+											<h3>
+												<a href={writeup}>{project.data.title}</a>
+											</h3>
+											<p>{project.data.summary}</p>
+											{app.note && <small>{app.note}</small>}
+											<ActionLinks actions={actions} label={`${project.data.title} actions`} />
+										</article>
+									);
+								})}
+							</div>
+						</section>
+					))}
+				</div>
+			) : (
+				<p class="empty-state">No apps published yet.</p>
+			)
+		}
+	</div>
+</BaseLayout>
+
+<style>
+	.app-groups {
+		display: grid;
+		gap: 4rem;
+		padding-bottom: 5rem;
+	}
+
+	.app-group {
+		display: grid;
+		grid-template-columns: minmax(12rem, 0.35fr) minmax(0, 1fr);
+		gap: clamp(1.5rem, 5vw, 4.5rem);
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--line-strong);
+	}
+
+	.app-group__header h2 {
+		margin: 0;
+		font-size: clamp(1.6rem, 3vw, 2.4rem);
+		line-height: 1.1;
+	}
+
+	.app-group__header p {
+		margin: 0.8rem 0 0;
+		color: var(--ink-soft);
+		font-size: 0.9rem;
+		line-height: 1.55;
+	}
+
+	.app-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.app-card {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		padding: 1.35rem;
+		border: 1px solid var(--line);
+		background: var(--surface-raised);
+	}
+
+	.app-card__topline {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		color: var(--accent);
+		font-size: 0.75rem;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.app-card h3 {
+		margin: 0.8rem 0 0.55rem;
+		font-size: 1.45rem;
+		line-height: 1.2;
+	}
+
+	.app-card h3 a {
+		text-decoration: none;
+	}
+
+	.app-card > p {
+		flex: 1;
+		margin: 0;
+		color: var(--ink-soft);
+		font-size: 0.94rem;
+		line-height: 1.6;
+	}
+
+	.app-card > small {
+		display: block;
+		margin-top: 1rem;
+		color: var(--ink-soft);
+		line-height: 1.45;
+	}
+
+	.app-card :global(.action-links) {
+		margin-top: 1.25rem;
+	}
+
+	.app-card :global(.action-links__link) {
+		min-height: 2.45rem;
+		padding: 0.5rem 0.75rem;
+		font-size: 0.76rem;
+	}
+
+	@media (max-width: 56rem) {
+		.app-group {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 40rem) {
+		.app-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { projectAppSchema } from './utils/project-app';
 
 const tag = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
 const editorialFields = {
@@ -48,6 +49,7 @@ const projects = defineCollection({
 				.max(16)
 				.default([]),
 			links: z.record(z.string(), z.url()).optional(),
+			app: projectAppSchema.optional(),
 			order: z.number().int().optional(),
 			...editorialFields,
 		}),
